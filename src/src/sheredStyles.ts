@@ -17,3 +17,8 @@ export const resetButtonStyle = css`
     background-color: transparent;
     cursor: pointer;
 `
+
+export const resetInputStyle = css`
+    border: none;
+    outline: none;
+`

@@ -25,12 +25,13 @@ const Dashboard = () => {
                     description='Contagem com saldo > 0'
                 />
 
-                <CardComponent
-                    onClick={() => console.log('Cliquei :)')}
-                    title='Clientes vencidos'
-                    data='3'
-                    description='Contagem de clientes com titulos vencidos'
-                />
+                <sh.CleanReacrLink to={'/TabelaDeClientesEmAtrazo'}>
+                    <CardComponent
+                        title='Clientes vencidos'
+                        data='3'
+                        description='Contagem de clientes com titulos vencidos'
+                    />
+                </sh.CleanReacrLink>
 
                 <CardComponent
                     title='Próxima cobrança'

@@ -43,6 +43,9 @@ export const GlobalTextColor = {
     Warn: '#d97706',
     InfoBlue: '#3498db',
     White: '#ffffff',
+
+    MintGreen: '#2e8b57',
+    SoftRed: '#c0392b'
 };
 
 export const GlobalTextSize = {
@@ -74,4 +77,5 @@ export const GlobalSpacing = {
 
     Padding6x10: '6px 10px',
     Padding8x14: '8px 14px',
+    Padding14x16: '14px 16px',
 };
