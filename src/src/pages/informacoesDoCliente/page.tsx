@@ -1,8 +1,17 @@
+import PageTitle from '../../components/pageTitle/component';
+import * as sh from '../sheredPageStyles'
+
 const InformacoesDoCliente = () => {
     return (
-        <div>
-            INFORMAÇÕES DO CLIENTE PAGE
-        </div>
+        <sh.MainPageContainer>
+            <PageTitle
+                titulo='Informações do cliente - [NOME]'
+                buttons={[
+                    { label: 'Registrar movimentação', onClick: () => { } },
+                    { label: 'Exportar lista', onClick: () => { } },
+                ]}
+            />
+        </sh.MainPageContainer>
     )
 }
 

@@ -9,4 +9,11 @@ export const flexCenter = css`
 export const flexColumn = css`
     display: flex;
     flex-direction:column;
-` 
+`
+
+export const resetButtonStyle = css`
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+`

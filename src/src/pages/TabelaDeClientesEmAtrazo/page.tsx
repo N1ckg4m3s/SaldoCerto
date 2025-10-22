@@ -1,8 +1,16 @@
+import PageTitle from '../../components/pageTitle/component';
+import * as sh from '../sheredPageStyles'
+
 const TabelaDeClientesEmAtrazo = () => {
     return (
-        <div>
-            TABELA DE CLIENTES EM ATRAZO PAGE
-        </div>
+        <sh.MainPageContainer>
+            <PageTitle
+                titulo='Tabela de clientes em atrazo'
+                buttons={[
+                    { label: 'Exportar', onClick: () => { } },
+                ]}
+            />
+        </sh.MainPageContainer>
     )
 }
 

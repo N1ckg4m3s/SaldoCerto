@@ -7,6 +7,7 @@ export const GlobalBackgroundColor = {
     Success: '#16a34a',
     Warn: '#d97706',
     Danger: '#dc2626',
+    Button: '#007bff',
 
     White: '#ffffff',
     LightGray: '#f5f6fa',

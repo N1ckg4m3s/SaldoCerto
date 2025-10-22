@@ -1,11 +1,6 @@
 import { GlobalSpacing } from "../../globalStyleInformations";
 import styled from "styled-components";
 
-export const Warp = styled.div`
-    max-width: 1200px;
-    margin: 0 auto;
-`
-
 export const gridCard4x2 = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);

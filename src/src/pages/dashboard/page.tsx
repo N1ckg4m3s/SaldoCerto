@@ -10,7 +10,7 @@ const Dashboard = () => {
     const mockValRecent = []
 
     return (
-        <s.Warp>
+        <sh.MainPageContainer>
             <PageTitle titulo='Dashboard - Controle de Fiado' />
 
             <s.gridCard4x2>
@@ -74,7 +74,7 @@ const Dashboard = () => {
                     />)}
                 </ListComponent>
             </s.gridCard2x1>
-        </s.Warp>
+        </sh.MainPageContainer>
     )
 }
 
