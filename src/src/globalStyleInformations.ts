@@ -31,6 +31,7 @@ export const GlobalBorderColor = {
 
 export const GlobalTextColor = {
     Black: '#000000',
+    Accent: '#1f2937',
     AlmostBlack: '#111111',
     DarkerGray: '#222222',
     DarkGray: '#333333',

@@ -9,7 +9,7 @@ import HistoricoDeLancamentos from './pages/historicoDeLancamentos/page';
 import InformacoesDoCliente from './pages/informacoesDoCliente/page';
 import ListaDeClientesCadastrados from './pages/listaDeClientesCadastrados/page';
 import TabelaDeClientesEmAtrazo from './pages/TabelaDeClientesEmAtrazo/page';
-import BarraDeNavegacao from './component/navBar/component';
+import BarraDeNavegacao from './components/navBar/component';
 
 const App = () => (<>
   <HashRouter>

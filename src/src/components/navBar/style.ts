@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { flexCenter } from "../../sheredStyles";
 import styled, { css } from "styled-components";
-import { GlobalSpacing } from "../..//globalStyleInformations";
+import { GlobalSpacing } from "../../globalStyleInformations";
 
 export const NavBarContainer = styled.header`
     width: 100%;
