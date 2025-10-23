@@ -5,3 +5,5 @@ node_modules
 /prisma/*.db
 /electron/*
 /build/*
+
+/Tasks.md
