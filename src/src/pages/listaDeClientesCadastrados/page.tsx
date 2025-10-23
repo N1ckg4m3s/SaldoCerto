@@ -62,66 +62,66 @@ const ListaDeClientesCadastrados = () => {
                 </s.filterSelect>
             </s.filtrosContainer>
 
-            <s.tableContainer>
+            <sh.tableContainer>
                 <thead>
-                    <s.tableRow>
-                        <s.tableTh>Nome</s.tableTh>
+                    <sh.tableRow>
+                        <sh.tableTh>Nome</sh.tableTh>
 
-                        <s.tableTh
+                        <sh.tableTh
                             onClick={() => TableHeadDataClick('TotalDivida')}
                             clickable>
                             Total em dívida
-                        </s.tableTh>
+                        </sh.tableTh>
 
-                        <s.tableTh
+                        <sh.tableTh
                             onClick={() => TableHeadDataClick('PagamentoProximo')}
                             clickable>
                             Próximo pagamento
-                        </s.tableTh>
+                        </sh.tableTh>
 
-                        <s.tableTh
+                        <sh.tableTh
                             onClick={() => TableHeadDataClick('ValorCobrar')}
                             clickable>
                             Valor a cobrar
-                        </s.tableTh>
+                        </sh.tableTh>
 
-                        <s.tableTh>
+                        <sh.tableTh>
                             Situação
-                        </s.tableTh>
+                        </sh.tableTh>
 
-                        <s.tableTh>Ações</s.tableTh>
+                        <sh.tableTh>Ações</sh.tableTh>
 
-                    </s.tableRow>
+                    </sh.tableRow>
                 </thead>
                 <tbody>
                     {mockData.map((value, index) => {
 
                         return (
-                            <s.tableRow>
-                                <s.tableData>{value.nome}</s.tableData>
-                                <s.tableData>{value.SomaTotal}</s.tableData>
-                                <s.tableData>{value.ProximoPagamento}</s.tableData>
-                                <s.tableData>{value.ValorProximaNota}</s.tableData>
-                                <s.tableData>
-                                    <s.situacaoCliente
+                            <sh.tableRow>
+                                <sh.tableData>{value.nome}</sh.tableData>
+                                <sh.tableData>{value.SomaTotal}</sh.tableData>
+                                <sh.tableData>{value.ProximoPagamento}</sh.tableData>
+                                <sh.tableData>{value.ValorProximaNota}</sh.tableData>
+                                <sh.tableData>
+                                    <sh.situacaoCliente
                                         situacao={value.Situacao}>
                                         {value.Situacao}
-                                    </s.situacaoCliente>
-                                </s.tableData>
-                                <s.tableData>
-                                    <s.smallbutton onClick={() => { }}>
+                                    </sh.situacaoCliente>
+                                </sh.tableData>
+                                <sh.tableData>
+                                    <sh.smallTableButton onClick={() => { }}>
                                         🔍
-                                    </s.smallbutton>
-                                </s.tableData>
-                            </s.tableRow>
+                                    </sh.smallTableButton>
+                                </sh.tableData>
+                            </sh.tableRow>
                         )
                     })}
                 </tbody>
-            </s.tableContainer>
+            </sh.tableContainer>
 
-            <s.AcoesFooter>
-                <s.Botao> Exportar </s.Botao>
-            </s.AcoesFooter>
+            <sh.AcoesFooter>
+                <sh.FooterBotao> Exportar </sh.FooterBotao>
+            </sh.AcoesFooter>
         </sh.MainPageContainer>
     )
 }

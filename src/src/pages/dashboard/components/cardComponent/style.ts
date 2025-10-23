@@ -1,4 +1,4 @@
-import { flexColumn } from "../../../../sheredStyles";
+import { cardBrackgroundBase, flexColumn } from "../../../../sheredStyles";
 import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
 import styled, { css } from "styled-components";
 
@@ -7,10 +7,7 @@ interface CardProps {
 }
 
 export const cardContainer = styled.div<CardProps>`
-    background-color: ${GlobalBackgroundColor.Card};
-    padding: ${GlobalSpacing.Large};
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+    ${cardBrackgroundBase};
     ${flexColumn}
     justify-content: space-between;
 

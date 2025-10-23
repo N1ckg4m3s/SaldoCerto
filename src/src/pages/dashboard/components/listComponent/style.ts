@@ -1,12 +1,9 @@
-import { flexColumn } from "../../../../sheredStyles";
+import { cardBrackgroundBase, flexColumn } from "../../../../sheredStyles";
 import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
 import styled, { css } from "styled-components";
 
 export const painelContainer = styled.div`
-    background-color: ${GlobalBackgroundColor.Card};
-    padding: ${GlobalSpacing.MediumLarge};
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+    ${cardBrackgroundBase};
 `
 
 export const painelTitle = styled.h3`

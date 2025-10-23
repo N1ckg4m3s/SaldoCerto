@@ -19,10 +19,25 @@ const Dashboard = () => {
                     data='R$ 12.450,00'
                     description='Soma de todos os lançamentos em aberto'
                 />
+
                 <CardComponent
-                    title='Clientes com fiado ativo'
-                    data='7'
-                    description='Contagem com saldo > 0'
+                    title='Valor vencido (R$)'
+                    data='R$ 1.520,00'
+                    description='Clique para ver uma tabela detalhada'
+                />
+
+                <sh.CleanReacrLink to={"/listaDeClientesCadastrados"}>
+                    <CardComponent
+                        title='Clientes com fiado ativo'
+                        data='7'
+                        description='Contagem com saldo > 0'
+                    />
+                </sh.CleanReacrLink>
+
+                <CardComponent
+                    title='Top devedor'
+                    data='R$ 3.838,00'
+                    description='Wesley'
                 />
 
                 <sh.CleanReacrLink to={'/TabelaDeClientesEmAtrazo'}>
@@ -38,21 +53,13 @@ const Dashboard = () => {
                     data='Em 2d - 24/10'
                     description='[NOME] (R$: valor)'
                 />
-                <CardComponent
-                    title='Valor vencido (R$)'
-                    data='R$ 1.520,00'
-                    description='Clique para ver uma tabela detalhada'
-                />
-                <CardComponent
-                    title='Top devedor'
-                    data='R$ 3.838,00'
-                    description='Wesley'
-                />
+
                 <CardComponent
                     title='Clientes com vencimento em 7d'
                     data='4'
                     description='Alerta de curto praso'
                 />
+
                 <CardComponent
                     title='Entrada nos ultimos 7 dias'
                     data='9'
@@ -68,7 +75,7 @@ const Dashboard = () => {
                     />)}
                 </ListComponent>
 
-                <ListComponent title='Movimentações recentes' >
+                <ListComponent title='Movimentações dos ultimos 7 dias' >
                     {Array.from({ length: 10 }).map(() => <RowItemList
                         type='Val.Recent'
                         data={[]}
