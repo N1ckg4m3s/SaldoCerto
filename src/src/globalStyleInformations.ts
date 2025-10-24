@@ -79,3 +79,13 @@ export const GlobalSpacing = {
     Padding8x14: '8px 14px',
     Padding14x16: '14px 16px',
 };
+
+
+export const HeaderTitleButtonColors = [
+    "#007bff", // azul
+    "#28a745", // verde
+    "#6f42c1", // roxo
+    "#fd7e14", // laranja
+    "#17a2b8", // ciano
+    "#dc3545", // vermelho
+];

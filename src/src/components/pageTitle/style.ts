@@ -13,21 +13,23 @@ export const TitleH1 = styled.h1`
   font-size: ${GlobalTextSize.Heading};
 `
 
-export const HeaderButton = styled.button`
+export const HeaderButton = styled.button<{ color: string }>`
   ${resetButtonStyle}
 
-  background-color: ${GlobalBackgroundColor.Button};
+  background-color: ${({ color }) => color};
   color: ${GlobalTextColor.White};
 
   padding: ${GlobalSpacing.Padding8x14};
   border-radius: 8px;
   font-weight: 500;
-  transition:  0.2s;
+  transition: 0.2s;
+  cursor: pointer;
 
-  &:hover{
-    background-color: #0056b3;
+  &:hover {
+    filter: brightness(1.1);
   }
-`
+`;
+
 
 export const ButtonGroup = styled.div`
     display: flex;

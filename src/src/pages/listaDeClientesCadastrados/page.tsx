@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import PageTitle from '../../components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 
@@ -10,6 +11,8 @@ interface ClientInformationMock {
 }
 
 const ListaDeClientesCadastrados = () => {
+    const navigate = useNavigate();
+
     const mockData: ClientInformationMock[] = [
         {
             nome: "João da Silva",
@@ -33,6 +36,10 @@ const ListaDeClientesCadastrados = () => {
             Situacao: 'quitado',
         }
     ]
+
+    const handleOpenClientInformations = () => {
+        navigate('/informacoesDoCliente');
+    }
 
     const TableHeadDataClick = (filter: string) => {
 
@@ -108,7 +115,7 @@ const ListaDeClientesCadastrados = () => {
                                     </sh.situacaoCliente>
                                 </sh.tableData>
                                 <sh.tableData>
-                                    <sh.smallTableButton onClick={() => { }}>
+                                    <sh.smallTableButton onClick={handleOpenClientInformations}>
                                         🔍
                                     </sh.smallTableButton>
                                 </sh.tableData>

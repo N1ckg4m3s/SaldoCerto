@@ -1,3 +1,4 @@
+import { HeaderTitleButtonColors } from '../../globalStyleInformations';
 import * as s from './style';
 
 interface ButtonProps {
@@ -15,12 +16,20 @@ const PageTitle: React.FC<PageTitleProps> = ({ titulo, buttons = [] }) => {
         <s.TitleContainer>
             <s.TitleH1>{titulo}</s.TitleH1>
             <s.ButtonGroup>
-                {buttons.map((button, index) => (
-                    <s.HeaderButton key={index} onClick={button.onClick}>
-                        {button.label}
-                    </s.HeaderButton>
-                ))}
+                {buttons.map((button, index) => {
+                    const color = HeaderTitleButtonColors[index % HeaderTitleButtonColors.length] || '';
+                    return (
+                        <s.HeaderButton
+                            key={index}
+                            color={color}
+                            onClick={button.onClick}
+                        >
+                            {button.label}
+                        </s.HeaderButton>
+                    );
+                })}
             </s.ButtonGroup>
+
         </s.TitleContainer>
     );
 };
