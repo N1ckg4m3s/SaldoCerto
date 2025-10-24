@@ -1,7 +1,8 @@
 {
   "name": "appfiados",
+  "productName": "SaldoCerto",
   "version": "1.0.0",
-  "description": "",
+  "description": "Controle simples e organizado de fiado e movimentações",
   "main": "build/electron/main.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npx electron -r ts-node/register/transpile-only electron/main.ts\"",

@@ -11,6 +11,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1024,
         height: 768,
+        title: 'Saldo Certo',
+        icon: path.join(__dirname, 'assets', 'IconeSaldoCerto.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,

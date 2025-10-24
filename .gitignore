@@ -3,7 +3,6 @@ node_modules
 /generated/prisma
 
 /prisma/*.db
-/electron/*
 /build/*
 
 /Tasks.md
