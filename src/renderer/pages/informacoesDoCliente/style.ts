@@ -1,5 +1,5 @@
-import { GlobalSpacing, GlobalTextSize } from "../..//globalStyleInformations";
-import { cardBrackgroundBase, flexColumn } from "../..//sheredStyles";
+import { GlobalSpacing, GlobalTextSize } from "../../globalStyleInformations";
+import { cardBrackgroundBase, flexColumn } from "../../sheredStyles";
 import styled from "styled-components";
 
 export const HistoryContainer = styled.div`
