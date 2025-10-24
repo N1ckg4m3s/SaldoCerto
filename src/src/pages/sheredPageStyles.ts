@@ -54,6 +54,10 @@ type situacaoClienteProps = {
     situacao: 'ativo' | 'vencido' | 'quitado'
 }
 
+type tipoNotaProps = {
+    situacao: 'Pedido' | 'Pagamento'
+}
+
 export const situacaoCliente = styled.span<situacaoClienteProps>`
     font-weight: 600;
     padding: ${GlobalSpacing.Padding6x10};
@@ -80,6 +84,24 @@ export const situacaoCliente = styled.span<situacaoClienteProps>`
     }
 `
 
+export const tipoNota = styled.span<tipoNotaProps>`
+    font-weight: 600;
+    padding: ${GlobalSpacing.Padding6x10};
+    border-radius: 8px;
+    font-size: ${GlobalTextSize.XS};
+
+    ${props => props.situacao == "Pedido" ?
+        css`
+            background-color: ${GlobalBackgroundColor.SoftRed};
+            color: ${GlobalTextColor.SoftRed};
+            ` :
+        css`
+            background-color: ${GlobalBackgroundColor.MintGreen};
+            color: ${GlobalTextColor.MintGreen};
+        `
+    }
+`
+
 export const smallTableButton = styled.button`
     ${resetButtonStyle};
     background-color: ${GlobalBackgroundColor.GrayNeutral};
@@ -93,7 +115,6 @@ export const smallTableButton = styled.button`
 `
 
 /* footer */
-
 export const FooterBotao = styled.button`
     ${resetButtonStyle}
     background-color: ${GlobalBackgroundColor.Button};
