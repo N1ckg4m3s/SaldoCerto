@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
-import type { ClienteAtrazoView, NumberFilterType } from 'src/renderer/shered/viewTypes';
+import type { ClienteAtrazoView, NumberFilterType, PaginacaoView } from 'src/renderer/shered/viewTypes';
 import { nextNumberFilterType } from '@renderer/controler/auxiliar';
+import { Paginacao } from '@renderer/components/pagination/component';
 
 interface TableHeadFilterProps {
     ValorVencido: NumberFilterType;
@@ -32,6 +33,11 @@ const TabelaDeClientesEmAtrazo = () => {
         }
     ])
 
+    const [page, setPage] = useState<PaginacaoView>({
+        currentPage: 0,
+        totalPages: 5
+    });
+
     const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
         ValorVencido: null,
         DiasDeAtrazo: null,
@@ -52,6 +58,10 @@ const TabelaDeClientesEmAtrazo = () => {
             };
         });
     };
+
+    const handleChangePage = (page: number) => {
+
+    }
 
     useEffect(() => {
         console.log('Buscar itens:', TableHeadFilter)
@@ -108,6 +118,13 @@ const TabelaDeClientesEmAtrazo = () => {
                     ))}
                 </tbody>
             </sh.tableContainer>
+
+            <Paginacao
+                currentPage={page.currentPage}
+                onPageChange={handleChangePage}
+                totalPages={page.totalPages}
+            />
+
         </sh.MainPageContainer>
     )
 }

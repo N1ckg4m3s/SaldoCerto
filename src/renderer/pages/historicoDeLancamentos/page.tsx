@@ -1,18 +1,15 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
-import type { HistoricoDeLancamentoView } from '@renderer/shered/viewTypes';
-
-type mockTipoNota = 'Pedido' | 'Pagamento'
-
-interface mockInterface {
-    data: string,
-    cliente: string,
-    tipo: mockTipoNota,
-    valor: number,
-    codigo: string | undefined,
-}
+import type { HistoricoDeLancamentoView, PaginacaoView } from '@renderer/shered/viewTypes';
+import { Paginacao } from '@renderer/components/pagination/component';
+import { useState } from 'react';
 
 const HistoricoDeLancamentos = () => {
+    const [page, setPage] = useState<PaginacaoView>({
+        currentPage: 0,
+        totalPages: 5
+    });
+
     const mockData: HistoricoDeLancamentoView[] = [
         {
             id: '',
@@ -55,6 +52,10 @@ const HistoricoDeLancamentos = () => {
 
         // retorna formatado
         return `$${stringToNumber.toFixed(2)}`
+    }
+
+    const handleChangePage = (page: number) => {
+
     }
 
     return (
@@ -129,6 +130,12 @@ const HistoricoDeLancamentos = () => {
                     }
                 </tbody>
             </sh.tableContainer>
+
+            <Paginacao
+                currentPage={page.currentPage}
+                onPageChange={handleChangePage}
+                totalPages={page.totalPages}
+            />
 
         </sh.MainPageContainer>
     )

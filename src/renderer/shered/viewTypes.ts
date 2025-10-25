@@ -25,32 +25,7 @@ export type DashboardTableRowView = {
     AdicionalInformation: string
 }
 
-/*
-export interface Cliente {
-    id: string,
-    nome: string,
-    telefone: string,
-    contrato: ContratoInformations;
+export type PaginacaoView = {
+    currentPage: number
+    totalPages: number
 }
-export interface Movimentacao {
-    id: string,
-    ClientId: string,
-    tipo: TipoMovimentacao,
-    data: string,
-    vencimento?: string,
-    valor: number,
-    valorAbatido?: number,
-    codigo: string,
-}
-
-// o que preciso
-interface mockInterface {
-    id: string
-    ClientId: string,
-    data: string,
-    nome: string,
-    tipo: mockTipoNota,
-    valor: number,
-    codigo: string | undefined,
-}
-*/

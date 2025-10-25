@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import { useEffect, useState } from 'react';
-import type { ListaClienteView, NumberFilterType } from '@renderer/shered/viewTypes';
+import type { ListaClienteView, NumberFilterType, PaginacaoView } from '@renderer/shered/viewTypes';
 import { nextNumberFilterType } from '@renderer/controler/auxiliar';
+import { Paginacao } from '@renderer/components/pagination/component';
 
 interface TableHeadFilterProps {
     SomaTotal: NumberFilterType;
@@ -13,6 +14,10 @@ interface TableHeadFilterProps {
 
 const ListaDeClientesCadastrados = () => {
     const navigate = useNavigate();
+    const [page, setPage] = useState<PaginacaoView>({
+        currentPage: 0,
+        totalPages: 5
+    });
 
     const mockData: ListaClienteView[] = [
         {
@@ -61,6 +66,10 @@ const ListaDeClientesCadastrados = () => {
 
     const handleOpenClientInformations = () => {
         navigate('/informacoesDoCliente');
+    }
+
+    const handleChangePage = (page: number) => {
+
     }
 
     useEffect(() => { }, [TableHeadFilter])
@@ -137,6 +146,12 @@ const ListaDeClientesCadastrados = () => {
                     })}
                 </tbody>
             </sh.tableContainer>
+
+            <Paginacao
+                currentPage={page.currentPage}
+                onPageChange={handleChangePage}
+                totalPages={page.totalPages}
+            />
 
             <sh.AcoesFooter>
                 <sh.FooterBotao> Exportar </sh.FooterBotao>

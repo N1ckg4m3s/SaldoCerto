@@ -1,9 +1,16 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import * as s from './style'
-import type { InformacoesDoClienteView } from '@renderer/shered/viewTypes';
+import type { InformacoesDoClienteView, PaginacaoView } from '@renderer/shered/viewTypes';
+import { useState } from 'react';
+import { Paginacao } from '@renderer/components/pagination/component';
 
 const InformacoesDoCliente = () => {
+    const [page, setPage] = useState<PaginacaoView>({
+        currentPage: 0,
+        totalPages: 5
+    });
+
     const mockData: InformacoesDoClienteView[] = [
         {
             id: '',
@@ -31,6 +38,10 @@ const InformacoesDoCliente = () => {
 
         // retorna formatado
         return valor.toFixed(2)
+    }
+
+    const handleChangePage = (page: number) => {
+
     }
 
     return (
@@ -91,6 +102,13 @@ const InformacoesDoCliente = () => {
                     </tbody>
                 </sh.tableContainer>
             </s.HistoryContainer>
+
+            <Paginacao
+                currentPage={page.currentPage}
+                onPageChange={handleChangePage}
+                totalPages={page.totalPages}
+            />
+
         </sh.MainPageContainer>
     )
 }
