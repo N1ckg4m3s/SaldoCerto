@@ -15,9 +15,15 @@ export type ListaClienteView = Pick<Cliente, 'nome'> & {
     Situacao: SituacaoCliente
 }
 
-export type InformacoesDoCliente = Omit<Movimentacao, 'ClientId'>
+export type InformacoesDoClienteView = Omit<Movimentacao, 'ClientId'>
 
-export type HistoricoDeLancamento = Omit<Movimentacao, 'vencimento' | 'valorAbatido'> & Pick<Cliente, 'nome'>
+export type HistoricoDeLancamentoView = Omit<Movimentacao, 'vencimento' | 'valorAbatido'> & Pick<Cliente, 'nome'>
+
+export type DashboardTableRowView = {
+    Title: string
+    FloatInfo: string
+    AdicionalInformation: string
+}
 
 /*
 export interface Cliente {

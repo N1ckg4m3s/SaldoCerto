@@ -1,12 +1,13 @@
+import type { DashboardTableRowView } from '@renderer/shered/viewTypes'
 import * as s from './style'
 
 interface props {
     type: 'Prox.Cobran' | 'Val.Recent',
-    data: any[],
+    data: DashboardTableRowView[],
 }
 
 export const RowItemList: React.FC<props> = ({ type, data }) => {
-    let RowInformations = {
+    let RowInformations: DashboardTableRowView = {
         Title: "1. João",
         FloatInfo: '2d',
         AdicionalInformation: 'R$ 280 - 12/04',

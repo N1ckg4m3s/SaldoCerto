@@ -1,10 +1,10 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import * as s from './style'
-import type { InformacoesDoCliente } from '@renderer/shered/viewTypes';
+import type { InformacoesDoClienteView } from '@renderer/shered/viewTypes';
 
 const InformacoesDoCliente = () => {
-    const mockData: InformacoesDoCliente[] = [
+    const mockData: InformacoesDoClienteView[] = [
         {
             id: '',
             tipo: 'Pedido',

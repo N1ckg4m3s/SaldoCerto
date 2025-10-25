@@ -1,6 +1,6 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
-import type { HistoricoDeLancamento } from '@renderer/shered/viewTypes';
+import type { HistoricoDeLancamentoView } from '@renderer/shered/viewTypes';
 
 type mockTipoNota = 'Pedido' | 'Pagamento'
 
@@ -13,7 +13,7 @@ interface mockInterface {
 }
 
 const HistoricoDeLancamentos = () => {
-    const mockData: HistoricoDeLancamento[] = [
+    const mockData: HistoricoDeLancamentoView[] = [
         {
             id: '',
             data: "10/10/2025",
