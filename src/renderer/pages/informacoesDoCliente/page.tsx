@@ -1,4 +1,4 @@
-import PageTitle from '../../components/pageTitle/component';
+import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import * as s from './style'
 

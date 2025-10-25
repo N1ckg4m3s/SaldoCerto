@@ -1,9 +1,9 @@
 import * as s from './style'
 import * as sh from '../sheredPageStyles'
 import { CardComponent } from './components/cardComponent/component';
-import PageTitle from '../../components/pageTitle/component';
 import { ListComponent } from './components/listComponent/component';
 import { RowItemList } from './components/listComponent/rowList';
+import PageTitle from '@renderer/components/pageTitle/component';
 
 const Dashboard = () => {
     const mockProxCobram = []

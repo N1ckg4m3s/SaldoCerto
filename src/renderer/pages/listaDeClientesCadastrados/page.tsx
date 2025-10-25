@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import PageTitle from '../../components/pageTitle/component';
+import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 
 interface ClientInformationMock {

@@ -19,11 +19,19 @@
     "outDir": "build",
     "esModuleInterop": true,
     "baseUrl": "./",
+    "paths": {
+      "@renderer/*": [
+        "src/renderer/*"
+      ],
+      "@shared/*": [
+        "src/shered/*"
+      ]
+    }
   },
   "include": [
     "src",
     "electron",
     "vite.config.ts",
     "eslint.config.js"
-  ]
+  ],
 }

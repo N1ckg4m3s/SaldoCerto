@@ -1,9 +1,16 @@
-import PageTitle from '../../components/pageTitle/component';
+import { useEffect, useState } from 'react';
+import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
+import type { ClienteAtrazoView, NumberFilterType } from 'src/renderer/shered/viewTypes';
+
+interface TableHeadFilterProps {
+    ValorVencido: NumberFilterType;
+    DiasDeAtrazo: NumberFilterType;
+    NumeroDeNotas: NumberFilterType;
+}
 
 const TabelaDeClientesEmAtrazo = () => {
-
-    const mockData = [
+    const [ClientesEmAtrazo, setClientesEmAtrazo] = useState<ClienteAtrazoView[]>([
         {
             nome: "João da Silva",
             ValorVencido: 450,
@@ -22,12 +29,40 @@ const TabelaDeClientesEmAtrazo = () => {
             DiasDeAtrazo: 20,
             NumeroDeNotas: 5,
         }
-    ]
+    ])
 
+    const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
+        ValorVencido: null,
+        DiasDeAtrazo: null,
+        NumeroDeNotas: null
+    });
 
-    const TableHeadDataClick = (filter: string) => {
+    const nextFilter = (current: NumberFilterType): NumberFilterType => {
+        switch (current) {
+            case null: return 'Biggest';
+            case 'Biggest': return 'Lowest';
+            case 'Lowest': return null;
+        }
+    };
 
-    }
+    const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
+        setTableHeadFilter(prev => {
+            const next = nextFilter(prev[column]);
+            return {
+                // colunas atuais
+                ValorVencido: null,
+                DiasDeAtrazo: null,
+                NumeroDeNotas: null,
+
+                // coluna que vai ser alterada
+                [column]: next,
+            };
+        });
+    };
+
+    useEffect(() => {
+        console.log('Buscar itens:', TableHeadFilter)
+    }, [TableHeadFilter])
 
     return (
         <sh.MainPageContainer>
@@ -51,46 +86,33 @@ const TabelaDeClientesEmAtrazo = () => {
                 <thead>
                     <sh.tableRow>
                         <sh.tableTh>Nome</sh.tableTh>
-
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('TotalVencido')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('ValorVencido')} clickable>
                             Total vencido
                         </sh.tableTh>
-
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('DiasAtrazo')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('DiasDeAtrazo')} clickable >
                             Dias em atrazo
                         </sh.tableTh>
-
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('NumeroNotas')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('NumeroDeNotas')} clickable >
                             Nº Notas
                         </sh.tableTh>
 
                         <sh.tableTh>Ações</sh.tableTh>
-
                     </sh.tableRow>
                 </thead>
                 <tbody>
-                    {mockData.map((value, index) => {
-
-                        return (
-                            <sh.tableRow>
-                                <sh.tableData>{value.nome}</sh.tableData>
-                                <sh.tableData>{value.ValorVencido}</sh.tableData>
-                                <sh.tableData>{value.DiasDeAtrazo}</sh.tableData>
-                                <sh.tableData>{value.NumeroDeNotas}</sh.tableData>
-                                <sh.tableData>
-                                    <sh.smallTableButton onClick={() => { }}>
-                                        🔍
-                                    </sh.smallTableButton>
-                                </sh.tableData>
-                            </sh.tableRow>
-                        )
-                    })}
+                    {ClientesEmAtrazo.map((value, index) => (
+                        <sh.tableRow>
+                            <sh.tableData>{value.nome}</sh.tableData>
+                            <sh.tableData>{value.ValorVencido}</sh.tableData>
+                            <sh.tableData>{value.DiasDeAtrazo}</sh.tableData>
+                            <sh.tableData>{value.NumeroDeNotas}</sh.tableData>
+                            <sh.tableData>
+                                <sh.smallTableButton onClick={() => { }}>
+                                    🔍
+                                </sh.smallTableButton>
+                            </sh.tableData>
+                        </sh.tableRow>
+                    ))}
                 </tbody>
             </sh.tableContainer>
         </sh.MainPageContainer>
