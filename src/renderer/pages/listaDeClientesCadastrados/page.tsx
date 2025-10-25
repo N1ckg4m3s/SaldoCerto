@@ -1,19 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
+import { useEffect, useState } from 'react';
+import type { ListaClienteView, NumberFilterType } from '@renderer/shered/viewTypes';
+import { nextNumberFilterType } from '@renderer/controler/auxiliar';
 
-interface ClientInformationMock {
-    nome: string,
-    SomaTotal: number,
-    ProximoPagamento: string,
-    ValorProximaNota: number,
-    Situacao: 'ativo' | 'vencido' | 'quitado',
+interface TableHeadFilterProps {
+    SomaTotal: NumberFilterType;
+    ProximoPagamento: NumberFilterType;
+    ValorProximaNota: NumberFilterType;
 }
 
 const ListaDeClientesCadastrados = () => {
     const navigate = useNavigate();
 
-    const mockData: ClientInformationMock[] = [
+    const mockData: ListaClienteView[] = [
         {
             nome: "João da Silva",
             SomaTotal: 320,
@@ -37,13 +38,32 @@ const ListaDeClientesCadastrados = () => {
         }
     ]
 
+    const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
+        SomaTotal: null,
+        ProximoPagamento: null,
+        ValorProximaNota: null,
+    });
+
+    const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
+        setTableHeadFilter(prev => {
+            const next = nextNumberFilterType(prev[column]);
+            return {
+                // colunas atuais
+                SomaTotal: null,
+                ProximoPagamento: null,
+                ValorProximaNota: null,
+
+                // coluna que vai ser alterada
+                [column]: next,
+            };
+        });
+    };
+
     const handleOpenClientInformations = () => {
         navigate('/informacoesDoCliente');
     }
 
-    const TableHeadDataClick = (filter: string) => {
-
-    }
+    useEffect(() => { }, [TableHeadFilter])
 
     return (
         <sh.MainPageContainer>
@@ -73,21 +93,15 @@ const ListaDeClientesCadastrados = () => {
                     <sh.tableRow>
                         <sh.tableTh>Nome</sh.tableTh>
 
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('TotalDivida')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('SomaTotal')} clickable>
                             Total em dívida
                         </sh.tableTh>
 
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('PagamentoProximo')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('ProximoPagamento')} clickable>
                             Próximo pagamento
                         </sh.tableTh>
 
-                        <sh.tableTh
-                            onClick={() => TableHeadDataClick('ValorCobrar')}
-                            clickable>
+                        <sh.tableTh onClick={() => TableHeadDataClick('ValorProximaNota')} clickable>
                             Valor a cobrar
                         </sh.tableTh>
 
@@ -96,7 +110,6 @@ const ListaDeClientesCadastrados = () => {
                         </sh.tableTh>
 
                         <sh.tableTh>Ações</sh.tableTh>
-
                     </sh.tableRow>
                 </thead>
                 <tbody>

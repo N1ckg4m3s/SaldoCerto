@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import type { ClienteAtrazoView, NumberFilterType } from 'src/renderer/shered/viewTypes';
+import { nextNumberFilterType } from '@renderer/controler/auxiliar';
 
 interface TableHeadFilterProps {
     ValorVencido: NumberFilterType;
@@ -37,17 +38,9 @@ const TabelaDeClientesEmAtrazo = () => {
         NumeroDeNotas: null
     });
 
-    const nextFilter = (current: NumberFilterType): NumberFilterType => {
-        switch (current) {
-            case null: return 'Biggest';
-            case 'Biggest': return 'Lowest';
-            case 'Lowest': return null;
-        }
-    };
-
     const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
         setTableHeadFilter(prev => {
-            const next = nextFilter(prev[column]);
+            const next = nextNumberFilterType(prev[column]);
             return {
                 // colunas atuais
                 ValorVencido: null,

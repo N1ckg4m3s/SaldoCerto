@@ -17,7 +17,7 @@ export interface ContratoInformations {
 
 export type TipoMovimentacao = 'Pedido' | 'Pagamento' 
 
-export type SituacaoCliente = 'Ativo' | 'Vencido' | 'Quitado' 
+export type SituacaoCliente = 'ativo' | 'vencido' | 'quitado'
 
 // Classe simples sobre o cliente
 export interface Cliente {
