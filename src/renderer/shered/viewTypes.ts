@@ -15,9 +15,17 @@ export type ListaClienteView = Pick<Cliente, 'nome'> & {
     Situacao: SituacaoCliente
 }
 
-export type InformacoesDoCliente = Omit<Movimentacao, 'ClientId' >
+export type InformacoesDoCliente = Omit<Movimentacao, 'ClientId'>
+
+export type HistoricoDeLancamento = Omit<Movimentacao, 'vencimento' | 'valorAbatido'> & Pick<Cliente, 'nome'>
 
 /*
+export interface Cliente {
+    id: string,
+    nome: string,
+    telefone: string,
+    contrato: ContratoInformations;
+}
 export interface Movimentacao {
     id: string,
     ClientId: string,
@@ -28,20 +36,15 @@ export interface Movimentacao {
     valorAbatido?: number,
     codigo: string,
 }
-{
-    Tipo: 'Pedido',
-    Data: '10/10/2025',
-    Vencimento: '10/11/2025',
-    Valor: '150',
-    ValorAbatido: '100',
-    Codigo: '01-023C',
-},
-{
-    Tipo: 'Pagamento',
-    Data: '12/10/2025',
-    Vencimento: '-',
-    Valor: '100',
-    ValorAbatido: '-',
-    Codigo: '-',
-},
+
+// o que preciso
+interface mockInterface {
+    id: string
+    ClientId: string,
+    data: string,
+    nome: string,
+    tipo: mockTipoNota,
+    valor: number,
+    codigo: string | undefined,
+}
 */

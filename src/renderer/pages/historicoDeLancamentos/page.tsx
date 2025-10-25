@@ -1,5 +1,6 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
+import type { HistoricoDeLancamento } from '@renderer/shered/viewTypes';
 
 type mockTipoNota = 'Pedido' | 'Pagamento'
 
@@ -12,24 +13,30 @@ interface mockInterface {
 }
 
 const HistoricoDeLancamentos = () => {
-    const mockData: mockInterface[] = [
+    const mockData: HistoricoDeLancamento[] = [
         {
+            id: '',
             data: "10/10/2025",
-            cliente: "João Silva",
+            ClientId: '',
+            nome: "João Silva",
             tipo: "Pedido",
             valor: 250,
             codigo: '0-001c',
         },
         {
+            id: '',
             data: "12/10/2025",
-            cliente: "João Silva",
+            ClientId: '',
+            nome: "João Silva",
             tipo: "Pagamento",
             valor: 100,
-            codigo: undefined,
+            codigo: '-',
         },
         {
+            id: '',
             data: "15/10/2025",
-            cliente: "Maria Oliveira",
+            ClientId: '',
+            nome: "Maria Oliveira",
             tipo: "Pedido",
             valor: 350,
             codigo: '0-005c',
@@ -103,7 +110,7 @@ const HistoricoDeLancamentos = () => {
                         mockData.map((value, index) => (
                             <sh.tableRow>
                                 <sh.tableData>{value.data}</sh.tableData>
-                                <sh.tableData>{value.cliente}</sh.tableData>
+                                <sh.tableData>{value.nome}</sh.tableData>
                                 <sh.tableData>
                                     <sh.tipoNota
                                         situacao={value.tipo}>
