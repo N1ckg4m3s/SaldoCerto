@@ -1,39 +1,36 @@
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import * as s from './style'
+import type { InformacoesDoCliente } from '@renderer/shered/viewTypes';
 
 const InformacoesDoCliente = () => {
-    const mockData = [
+    const mockData: InformacoesDoCliente[] = [
         {
-            Tipo: 'Pedido',
-            Data: '10/10/2025',
-            Vencimento: '10/11/2025',
-            Valor: '150',
-            ValorAbatido: '100',
-            Codigo: '01-023C',
+            id: '',
+            tipo: 'Pedido',
+            data: '10/10/2025',
+            vencimento: '10/11/2025',
+            valor: 150,
+            valorAbatido: 100,
+            codigo: '01-023C',
         },
         {
-            Tipo: 'Pagamento',
-            Data: '12/10/2025',
-            Vencimento: '-',
-            Valor: '100',
-            ValorAbatido: '-',
-            Codigo: '-',
+            id: '',
+            tipo: 'Pagamento',
+            data: '12/10/2025',
+            vencimento: '-',
+            valor: 100,
+            valorAbatido: 0,
+            codigo: '-',
         },
     ]
 
-    const formatValue = (valor: string | undefined): string => {
+    const formatValue = (valor?: number): string => {
         // se não tiver valor retorna '-'
-        if (!valor) return '-';
-
-        // tenta transformar em numero
-        const stringToNumber = Number(valor);
-        if (isNaN(stringToNumber)) {
-            return '-' // nulo
-        }
+        if (!valor || valor == 0) return '-';
 
         // retorna formatado
-        return `$${stringToNumber.toFixed(2)}`
+        return valor.toFixed(2)
     }
 
     return (
@@ -76,13 +73,13 @@ const InformacoesDoCliente = () => {
                     <tbody>
                         {mockData.map((value, index) => {
                             return (
-                                <sh.tableRow>
-                                    <sh.tableData>{value.Tipo}</sh.tableData>
-                                    <sh.tableData>{value.Data}</sh.tableData>
-                                    <sh.tableData>{value.Vencimento}</sh.tableData>
-                                    <sh.tableData>{formatValue(value.Valor)}</sh.tableData>
-                                    <sh.tableData>{formatValue(value.ValorAbatido)}</sh.tableData>
-                                    <sh.tableData>{value.Codigo}</sh.tableData>
+                                <sh.tableRow key={index}>
+                                    <sh.tableData>{value.tipo}</sh.tableData>
+                                    <sh.tableData>{value.data}</sh.tableData>
+                                    <sh.tableData>{value.vencimento}</sh.tableData>
+                                    <sh.tableData>{formatValue(value.valor)}</sh.tableData>
+                                    <sh.tableData>{formatValue(value.valorAbatido)}</sh.tableData>
+                                    <sh.tableData>{value.codigo}</sh.tableData>
                                     <sh.tableData>
                                         <sh.smallTableButton onClick={() => { }}>
                                             🔍

@@ -15,7 +15,7 @@ export interface ContratoInformations {
     dia: string
 }
 
-export type TipoMovimentacao = 'Pedido' | 'Pagamento' 
+export type TipoMovimentacao = 'Pedido' | 'Pagamento'
 
 export type SituacaoCliente = 'ativo' | 'vencido' | 'quitado'
 
@@ -36,7 +36,7 @@ export interface Cliente {
  * 
  * codigo (apenas para pedidos): Caso haja algun controle sobre id.
 */
-export interface Movimentacao {
+export type Movimentacao = {
     id: string,
     ClientId: string,
     tipo: TipoMovimentacao,
