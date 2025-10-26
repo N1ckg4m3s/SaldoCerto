@@ -53,8 +53,8 @@
 - [x] - Exibir: Nome, Contato, Ciclo de pagamento, Situação
 - [x] - Melhorar campo “Situação” (usar: “Em dia”, “Em atraso”, etc.)
 - [x] - Adicionar input de filtro / busca
-- [1/3] - Funcionalidades:  
-  - [ ] - Paginação (máx. 20 por página)  
+- [2/3] - Funcionalidades:  
+  - [x] - Paginação (máx. 20 por página)  
   - [x] - Ordenação por nome ou situação  
   - [ ] - Ação de clique → abrir detalhes do cliente (página 3)
 
@@ -66,7 +66,7 @@
 - [x] - Exibir dados principais (Nome, Contato, Ciclo, Situação)
 - [x] - Criar tabela de lançamentos do cliente  
   - [x] - Colunas: Tipo | Data | Vencimento | Valor | Código  
-  - [ ] - Máx. 20 itens + paginação  
+  - [x] - Máx. 20 itens + paginação  
 - [ ] - Implementar ação de clique → abrir FloatGui com detalhes
 - [ ] - Adicionar botão “Apagar lançamento” (sem edição)
 - [ ] - Integrar cálculo de total do cliente (futuro backend)
@@ -134,7 +134,7 @@ Usar quando a operação for rápida e contextual à página atual.
 
 Usar quando envolver navegação dedicada, filtros amplos ou histórico detalhado.
 
-- [ ] Abrir cliente individual → precisa de URL própria
+- [-] Abrir cliente individual → precisa de URL própria
 - [ ] Ver vencidos / lançamentos → grandes tabelas e filtros próprios
 - [ ] Relatórios ou exportações detalhadas → visualização separada
 
