@@ -16,12 +16,6 @@ enum TipoMovimentacao {
   Pagamento
 }
 
-enum SituacaoCliente {
-  ativo
-  vencido
-  quitado
-}
-
 enum TipoContrato {
   praso
   fechamento
@@ -32,39 +26,22 @@ enum TipoContrato {
 // MODELS
 // --------------------------------------------
 model Cliente {
-  id             String               @id @default(cuid())
-  nome           String
-  telefone       String
-  situacao       SituacaoCliente      @default(ativo)
-
-  contrato       ContratoInformations @relation(fields: [contratoId], references: [id])
-  contratoId     String               @unique
-
-  movimentacoes  Movimentacao[]
-
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
-model ContratoInformations {
-  id       String         @id @default(cuid())
-  type     TipoContrato
-  dia      String
-  cliente  Cliente?        @relation()
+  id           String          @id @default(cuid())
+  nome         String
+  telefone     String
+  tipoContrato TipoContrato
+  diaContrato  String
 }
 
 model Movimentacao {
-  id            String           @id @default(cuid())
-  tipo          TipoMovimentacao
-  data          DateTime
-  vencimento    DateTime?
-  valor         Float
-  valorAbatido  Float?
-  codigo        String?
+  id           String           @id @default(cuid())
+  tipo         TipoMovimentacao
+  data         DateTime
+  vencimento   DateTime?
+  valor        Float
+  valorAbatido Float?
+  codigo       String?
 
-  cliente       Cliente          @relation(fields: [clienteId], references: [id])
-  clienteId     String
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  // apenas FK
+  clienteId    String
 }
