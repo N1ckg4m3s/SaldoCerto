@@ -46,3 +46,12 @@ export type Movimentacao = {
     valorAbatido?: number,
     codigo: string,
 }
+
+// Modulos da float por pagina
+type FloatTypeInformacoesCliente = 'editCliente' | 'removeCliente' | 'addMovimentacao' | 'removeMovimentacao';
+
+export type FloatGuiProps = {
+    active: boolean,
+    GuiInformations: any,
+    type: FloatTypeInformacoesCliente | ''
+}

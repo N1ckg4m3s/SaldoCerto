@@ -2,10 +2,10 @@
 
 **Progresso:**
 
-- Totais: 65
-- Concluidas: 31
-- Parciais: 3
-**Conclusão: ~50%**
+- Totais: 113
+- Concluidas: 33
+- Parciais: 4
+**Conclusão: ~27%**
 
 ---
 
@@ -139,3 +139,54 @@ Usar quando envolver navegação dedicada, filtros amplos ou histórico detalhad
 - [ ] Relatórios ou exportações detalhadas → visualização separada
 
 💡 *Justificativa:* melhora legibilidade e organiza dados extensos sem sobrecarregar o layout principal.
+
+### API -> EndPoints
+
+- [0/3] cliente:getList
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] cliente:getById
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] cliente:create
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] cliente:update
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] cliente:delete
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] cliente:getInadimplentesList
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] movimentacoes:list
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] movimentacoes:create
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] movimentacoes:delete
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] dashboard:getResumo
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] dashboard:getProximasCobrancas
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository
+- [0/3] dashboard:getUltimasMovimentacoes
+  - [ ] Controller
+  - [ ] Services
+  - [ ] Repository

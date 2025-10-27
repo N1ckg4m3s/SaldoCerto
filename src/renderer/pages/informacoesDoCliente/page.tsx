@@ -4,12 +4,20 @@ import * as s from './style'
 import type { InformacoesDoClienteView, PaginacaoView } from '@renderer/shered/viewTypes';
 import { useState } from 'react';
 import { Paginacao } from '@renderer/components/pagination/component';
+import type { FloatGuiProps } from '@renderer/shered/types';
+import InterfaceFlutuante from '@renderer/components/floatGui/component';
+import { CreateEditClient_FloatGuiModule } from '@renderer/components/floatGui/models/createEditClient';
 
 const InformacoesDoCliente = () => {
     const [page, setPage] = useState<PaginacaoView>({
         currentPage: 0,
         totalPages: 5
     });
+    const [floatGui, setFloatGui] = useState<FloatGuiProps>({
+        active: true,
+        type: '',
+        GuiInformations: {},
+    })
 
     const mockData: InformacoesDoClienteView[] = [
         {
@@ -44,6 +52,22 @@ const InformacoesDoCliente = () => {
 
     }
 
+    const handleCloseFloatGui = () => {
+        setFloatGui({
+            active: false,
+            type: '',
+            GuiInformations: {},
+        })
+    }
+
+    const handleEditClientHeaderButton = () => {
+        setFloatGui({
+            ...floatGui,
+            active: true,
+            type: 'editCliente',
+        })
+    }
+
     return (
         <sh.MainPageContainer>
             <PageTitle
@@ -51,7 +75,7 @@ const InformacoesDoCliente = () => {
                 buttons={[
                     { label: 'Registrar movimentação', onClick: () => { } },
                     { label: 'Exportar lista', onClick: () => { } },
-                    { label: '⚙', onClick: () => { } },
+                    { label: '⚙', onClick: handleEditClientHeaderButton },
                 ]}
             />
 
@@ -108,6 +132,18 @@ const InformacoesDoCliente = () => {
                 onPageChange={handleChangePage}
                 totalPages={page.totalPages}
             />
+
+            {floatGui.active && floatGui.type == 'editCliente' &&
+                <InterfaceFlutuante
+                    title='<EDIT | CREATE> Cliente'
+                    onClose={handleCloseFloatGui}>
+
+                    <CreateEditClient_FloatGuiModule
+                        onComplete={() => { }}
+                        onError={() => { }}
+                    />
+                </InterfaceFlutuante>
+            }
 
         </sh.MainPageContainer>
     )
