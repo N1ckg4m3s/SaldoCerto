@@ -11,7 +11,7 @@
  *      As notas vão ser somadas e cobradas no final do tempo do periodo.
 */
 export interface ContratoInformations {
-    type: 'praso' | 'fechamento' | 'periodo',
+    type: 'prazo' | 'fechamento' | 'periodo',
     dia: string
 }
 

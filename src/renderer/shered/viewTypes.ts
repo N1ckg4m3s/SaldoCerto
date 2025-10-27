@@ -29,3 +29,15 @@ export type PaginacaoView = {
     currentPage: number
     totalPages: number
 }
+
+/* NOTIFICAÇÕES */
+export type NotificationType = "success" | "warning" | "error";
+
+export interface Notification {
+    id: string;
+    title: string,
+    errorCode?: string,
+    message: string;
+    type: NotificationType;
+    duration?: number;
+}

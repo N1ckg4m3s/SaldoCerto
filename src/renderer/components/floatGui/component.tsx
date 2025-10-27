@@ -10,8 +10,8 @@ interface props {
 
 const InterfaceFlutuante: React.FC<props> = ({ title, children, onClose }) => {
     return (
-        <s.BlurBackground>
-            <s.InterfaceBackground>
+        <s.BlurBackground onClick={onClose} >
+            <s.InterfaceBackground onClick={(e) => e.stopPropagation()}>
                 <s.HeaderContainer>
                     <s.TitleContainer>
                         <span>{title}</span>

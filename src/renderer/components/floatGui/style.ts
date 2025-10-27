@@ -1,8 +1,8 @@
-import { GlobalTextSize } from "@renderer/globalStyleInformations";
-import { cardBrackgroundBase, flexCenter, resetButtonStyle } from "@renderer/sheredStyles";
+import { GlobalBackgroundColor, GlobalBorderColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "@renderer/globalStyleInformations";
+import { cardBrackgroundBase, flexCenter, flexColumn, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
 import styled, { css } from "styled-components";
 
-export const BlurBackground = styled.main`
+export const BlurBackground = styled.div`
   ${flexCenter}
   width: 100%;
   height: 100%;
@@ -19,9 +19,7 @@ export const BlurBackground = styled.main`
 
 export const InterfaceBackground = styled.main`
   ${cardBrackgroundBase};
-  max-width: clamp(75%, 70vh, 1000px);
-  width: 100%;
-  max-height: 75%;
+  width: clamp(500px, 70vh, 250px);
 `
 
 export const HeaderContainer = styled.header`
@@ -46,4 +44,93 @@ export const CloseButton = styled.button`
   border-radius: 8px;
   width: 30px;
   aspect-ratio: 1/1;
+`
+
+/*
+    ==================== MODULOS ====================
+    Daqui para baixo vai ser as estilizações dos modulos.
+*/
+
+export const ModuleContainer = styled.section`
+  ${flexCenter}
+  flex-direction: column;
+  gap: 10px;
+
+  & > *{
+    width: 100%;
+  }
+`
+
+export const ModuleFieldRow = styled.div`
+  ${flexCenter}
+  gap: 10px;
+  height: 30px;
+`
+
+export const ModuleFormLabel = styled.label`
+  white-space: nowrap;
+`
+
+export const ModuleFormInput = styled.input`
+  ${resetInputStyle}
+  border-bottom: 1px solid ${GlobalBorderColor.MidGray};
+  width: 100%;
+  height: 100%;
+`
+
+export const ModuleFormSelect = styled.select`
+  ${resetInputStyle}
+  border-bottom: 1px solid ${GlobalBorderColor.MidGray};
+  width: 100%;
+  height: 100%;
+`
+
+export const FieldTip = styled.span`
+  display: inline-block;
+  margin-left: 4px;
+  color: #888;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 12px;
+  background-color: #eee;
+  position: relative;
+
+  &:hover > span {
+    display: block;
+  }
+
+  & > span {
+    text-align: start;
+    display: none;
+    position: absolute;
+    top: 120%;
+    left: 25%;
+    transform: translateX(-25%);
+    background: #333;
+    color: #fff;
+    padding: 6px 8px;
+    font-size: 15px;
+    border-radius: 4px;
+    width: max-content;
+    white-space: pre-wrap;
+    z-index: 10;
+  }
+`;
+
+export const ModuleFormButton = styled.button`
+  ${resetButtonStyle}
+  ${cardBrackgroundBase}
+  padding: ${GlobalSpacing.Padding6x10};
+  background-color: ${GlobalBackgroundColor.Success};
+  font-weight: bold;
+  font-size: ${GlobalTextSize.HeadingSmall};
+  color: ${GlobalTextColor.White};
+  letter-spacing: 1px;
+  max-width: 250px;
+  margin-top: ${GlobalSpacing.MediumLarge};
 `

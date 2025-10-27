@@ -10,21 +10,22 @@ import InformacoesDoCliente from './pages/informacoesDoCliente/page';
 import ListaDeClientesCadastrados from './pages/listaDeClientesCadastrados/page';
 import TabelaDeClientesEmAtrazo from './pages/TabelaDeClientesEmAtrazo/page';
 import BarraDeNavegacao from './components/navBar/component';
+import { NotificationProvider } from './components/notificationContainer/notificationContext';
 
 const App = () => (<>
-  <HashRouter>
-    {/* Navbar padrão */}
-    <BarraDeNavegacao />
+  <NotificationProvider>
+    <HashRouter>
+      <BarraDeNavegacao />
 
-    {/* Rotas */}
-    <Routes>
-      <Route path='/' element={<Dashboard />} />
-      <Route path='/historicoDeLancamentos' element={<HistoricoDeLancamentos />} />
-      <Route path='/informacoesDoCliente' element={<InformacoesDoCliente />} />
-      <Route path='/listaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
-      <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
-    </Routes>
-  </HashRouter>
+      <Routes>
+        <Route path='/' element={<Dashboard />} />
+        <Route path='/historicoDeLancamentos' element={<HistoricoDeLancamentos />} />
+        <Route path='/informacoesDoCliente' element={<InformacoesDoCliente />} />
+        <Route path='/listaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
+        <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
+      </Routes>
+    </HashRouter>
+  </NotificationProvider>
 </>)
 
 export default App
