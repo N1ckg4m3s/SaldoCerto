@@ -1,5 +1,5 @@
 import { cardBrackgroundBase, flexColumn } from "../../../../sheredStyles";
-import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
+import { GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
 import styled, { css } from "styled-components";
 
 interface CardProps {
@@ -14,6 +14,8 @@ export const cardContainer = styled.div<CardProps>`
     ${props => props.clicable && css`
         cursor: pointer;
     `}
+    
+    height: 100%;
 `
 
 export const cardTitle = styled.small`

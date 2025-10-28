@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const gridCard4x2 = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: ${GlobalSpacing.Gap14};
     margin-bottom: ${GlobalSpacing.Medium};
 `
