@@ -1,21 +1,33 @@
 import { app, BrowserWindow } from 'electron';
+import { existsSync } from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// importando o iniciador dos controladores
+const ControllerStartPath = path.join(__dirname, 'utilits', 'startControllers.js');
+const ControllerStartURL = pathToFileURL(ControllerStartPath).href;
+
+console.log('Existe?', existsSync(ControllerStartPath))
+
+const { iniciarTodosControladores } = await import(ControllerStartURL);
+
 let mainWindow: BrowserWindow | null = null;
 
-function createWindow() {
+const preloadPath = path.join(__dirname, 'preload.js');
+
+async function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1024,
         height: 768,
         title: 'Saldo Certo',
         icon: path.join(__dirname, 'assets', 'IconeSaldoCerto.ico'),
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
+            preload: preloadPath,
             contextIsolation: true,
+            nodeIntegration: true,
         },
     });
 
@@ -26,6 +38,8 @@ function createWindow() {
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
+
+    iniciarTodosControladores();
 }
 
 app.on('ready', createWindow);

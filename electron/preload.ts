@@ -1,9 +1,12 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+console.log('to aq no preload')
+
 contextBridge.exposeInMainWorld('api', {
     cliente: {
         getList: (args?: any) => ipcRenderer.invoke('cliente:list', args),
         getById: (args?: any) => ipcRenderer.invoke('cliente:getById', args),
+        getBySearch: (args?: any) => ipcRenderer.invoke('cliente:getBySearch', args),
         create: (args?: any) => ipcRenderer.invoke('cliente:create', args),
         update: (args?: any) => ipcRenderer.invoke('cliente:update', args),
         delete: (args?: any) => ipcRenderer.invoke('cliente:delete', args),
@@ -11,6 +14,7 @@ contextBridge.exposeInMainWorld('api', {
     },
     movimentacoes: {
         list: (args?: any) => ipcRenderer.invoke('movimentacao:list', args),
+        listByClient: (args?: any) => ipcRenderer.invoke('movimentacao:listByClient', args),
         create: (args?: any) => ipcRenderer.invoke('movimentacao:create', args),
         delete: (args?: any) => ipcRenderer.invoke('movimentacao:delete', args),
     },

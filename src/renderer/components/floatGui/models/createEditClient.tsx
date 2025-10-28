@@ -2,6 +2,7 @@ import { useRef } from "react";
 import * as s from '../style'
 import type { Cliente } from "@renderer/shered/types";
 import { useNotification } from "@renderer/components/notificationContainer/notificationContext";
+import { ApiCaller } from "@renderer/controler/ApiCaller";
 
 interface Props {
     onError: () => void;
@@ -60,12 +61,27 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
 
             const IsFormularioValido = validadeForm();
             if (IsFormularioValido) {
-                console.log("Payload:", payload);
-                addNotification({
-                    id: String(Date.now()),
-                    title: 'Formulario Valido',
-                    message: "Enviando informações",
-                    type: 'success',
+                const url = `/cliente/${isEditMode ? 'update' : 'create'}`
+
+                ApiCaller({
+                    url: url,
+                    args: 'NO ARGS',
+                    onError(error) {
+                        addNotification({
+                            id: String(Date.now()),
+                            title: 'Error',
+                            message: "Erro..., fale com o dev:\n" + error,
+                            type: 'error',
+                        })
+                    },
+                    onSuccess(data) {
+                        addNotification({
+                            id: String(Date.now()),
+                            title: 'Sucesso',
+                            message: "Adicionado / Alterado com sucesso",
+                            type: 'success',
+                        })
+                    },
                 })
                 onComplete();
             }

@@ -5,7 +5,8 @@
   "description": "Controle simples e organizado de fiado e movimentações",
   "main": "build/electron/main.js",
   "scripts": {
-    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npx electron -r ts-node/register/transpile-only electron/main.ts\"",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "dev": "concurrently \"vite\" \"npm run build:electron && wait-on http://localhost:5173 && electron build/electron/main.js\"",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "build": "vite build && tsc -p tsconfig.electron.json && electron-builder"

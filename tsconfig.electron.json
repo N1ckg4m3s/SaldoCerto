@@ -4,9 +4,18 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "outDir": "build/electron",
+    "rootDir": "electron", // 🔹 garante que o main e preload saiam no mesmo lugar
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedModules": true, // 🔹 importante para Vite/ESM
+    "resolveJsonModule": true
   },
-  "include": ["electron/**/*.ts"]
+  "include": [
+    "electron/**/*.ts",
+    "electron/assets/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
