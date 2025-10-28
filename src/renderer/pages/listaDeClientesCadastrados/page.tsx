@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import type { ListaClienteView, NumberFilterType, PaginacaoView } from '@renderer/shered/viewTypes';
 import { nextNumberFilterType } from '@renderer/controler/auxiliar';
 import { Paginacao } from '@renderer/components/pagination/component';
+import type { FloatGuiProps } from '@renderer/shered/types';
+import InterfaceFlutuante from '@renderer/components/floatGui/component';
+import { CreateEditClient_FloatGuiModule } from '@renderer/components/floatGui/models/createEditClient';
 
 interface TableHeadFilterProps {
     SomaTotal: NumberFilterType;
@@ -18,6 +21,11 @@ const ListaDeClientesCadastrados = () => {
         currentPage: 0,
         totalPages: 5
     });
+    const [floatGui, setFloatGui] = useState<FloatGuiProps>({
+        active: true,
+        type: '',
+        GuiInformations: {},
+    })
 
     const mockData: ListaClienteView[] = [
         {
@@ -72,14 +80,29 @@ const ListaDeClientesCadastrados = () => {
 
     }
 
-    useEffect(() => { }, [TableHeadFilter])
+    const handleOpenFloatGui = () => {
+        setFloatGui({
+            active: true,
+            type: 'editCliente',
+            GuiInformations: {},
+        })
+    }
+    const handleCloseFloatGui = () => {
+        setFloatGui({
+            active: false,
+            type: '',
+            GuiInformations: {},
+        })
+    }
+
+    useEffect(() => { }, [TableHeadFilter, page.currentPage])
 
     return (
         <sh.MainPageContainer>
             <PageTitle
                 titulo='Clientes cadastrados'
                 buttons={[
-                    { label: 'Adicionar Cliente', onClick: () => { } }
+                    { label: 'Adicionar Cliente', onClick: handleOpenFloatGui }
                 ]}
             />
             <sh.filtrosContainer>
@@ -156,6 +179,18 @@ const ListaDeClientesCadastrados = () => {
             <sh.AcoesFooter>
                 <sh.FooterBotao> Exportar </sh.FooterBotao>
             </sh.AcoesFooter>
+
+            {floatGui.active && floatGui.type == 'editCliente' &&
+                <InterfaceFlutuante
+                    title='Adicionar Cliente'
+                    onClose={handleCloseFloatGui}>
+
+                    <CreateEditClient_FloatGuiModule
+                        onComplete={() => { }}
+                        onError={() => { }}
+                    />
+                </InterfaceFlutuante>
+            }
         </sh.MainPageContainer>
     )
 }

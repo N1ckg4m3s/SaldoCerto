@@ -31,7 +31,7 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
 
             if (!telefoneRef.current || telefoneRef.current.value === '') throw new Error("Contato não informado");
 
-            if (!contratoTypeRef.current) throw new Error("Tipo de contrato não informado");
+            if (!contratoTypeRef.current || contratoTypeRef.current.value === '') throw new Error("Tipo de contrato não informado");
 
             if (!contratoDiaRef.current || contratoDiaRef.current.value == '' || isNaN(Number(contratoDiaRef.current.value))) throw new Error("Prazo de cobrança não informado");
 
