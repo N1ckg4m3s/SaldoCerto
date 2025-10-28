@@ -15,7 +15,6 @@ export const ApiCaller = async ({ url, args, onSuccess, onError }: ApiCallerProp
         const parts: string[] = url.slice(1).split('/');
         const namespace: string = parts[0] || '';
         const action: string = parts[1] || '';
-        console.log({ url, parts, namespace, action })
 
         if (namespace === '' || action === '') throw new Error("namespace ou action esta vazio");
 
@@ -29,7 +28,7 @@ export const ApiCaller = async ({ url, args, onSuccess, onError }: ApiCallerProp
 
         if (response && !response.success) {
             onError?.({ message: response.message, errorCode: response.errorCode } as errorFormat);
-        }else{
+        } else {
             onSuccess?.(response);
         }
     } catch (error: any) {

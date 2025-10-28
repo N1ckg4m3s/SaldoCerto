@@ -46,14 +46,10 @@ function safeHandler<T>(handler: (args: any[]) => Promise<T>) {
 
 export const IniciarControladores = () => {
     /* Obtem uma lista com todos os usuarios por pagina*/
-    ipcMain.handle('cliente:list', async (_, args): Promise<IPCResponseFormat> => {
-        return { success: true }
-    })
+    ipcMain.handle('cliente:list', safeHandler(clientService.ObterClientes));
 
     /* Obtem uma usuario pelo Id */
-    ipcMain.handle('cliente:getById', async (_, args): Promise<IPCResponseFormat> => {
-        return { success: true }
-    })
+    ipcMain.handle('cliente:getById', safeHandler(clientService.ObterClientePorId));
 
     /* Obtem uma usuario pelo search */
     ipcMain.handle('cliente:getBySearch', async (_, args): Promise<IPCResponseFormat> => {
@@ -62,23 +58,12 @@ export const IniciarControladores = () => {
 
     /* Cria um novo usuario */
     ipcMain.handle('cliente:create', safeHandler(clientService.AdicionarNovoCliente));
-    // ipcMain.handle('cliente:create', async (_, args): Promise<IPCResponseFormat> => {
-    //     try {
-    //         return await JSON.stringify(clientService.AdicionarNovoCliente(args));
-    //     } catch (e) {
-    //         return { success: false, message: `[clientController cliente:create]: ${e}` };
-    //     }
-    // });
 
     /* Atualiza as informações do usuario */
-    ipcMain.handle('cliente:update', async (_, args): Promise<IPCResponseFormat> => {
-        return { success: true }
-    })
+    ipcMain.handle('cliente:update', safeHandler(clientService.AtualizarInformacoesDoCliente))
 
     /* Remove um usuario especifico */
-    ipcMain.handle('cliente:delete', async (_, args): Promise<IPCResponseFormat> => {
-        return { success: true }
-    })
+    ipcMain.handle('cliente:delete', safeHandler(clientService.RemoverCliente))
 
     /* Obtem uma lista com todos os usuarios "vencidos" por pagina */
     ipcMain.handle('cliente:listInadimplentes', async (_, args): Promise<IPCResponseFormat> => {
