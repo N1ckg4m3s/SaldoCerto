@@ -15,50 +15,34 @@ interface TableHeadFilterProps {
     ValorProximaNota: NumberFilterType;
 }
 
-const ListaDeClientesCadastrados = () => {
-    const navigate = useNavigate();
-    const [page, setPage] = useState<PaginacaoView>({
-        currentPage: 0,
-        totalPages: 5
-    });
+const useAllStates = () => {
+    const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
     const [floatGui, setFloatGui] = useState<FloatGuiProps>({
         active: true,
         type: '',
         GuiInformations: {},
     })
-
-    const mockData: ListaClienteView[] = [
-        {
-            nome: "João da Silva",
-            SomaTotal: 320,
-            ProximoPagamento: '22/10/2025',
-            ValorProximaNota: 120,
-            Situacao: 'ativo',
-        },
-        {
-            nome: "Maria Souza",
-            SomaTotal: 500,
-            ProximoPagamento: '14/10/2025',
-            ValorProximaNota: 500,
-            Situacao: 'vencido',
-        },
-        {
-            nome: "Carlos Lima",
-            SomaTotal: 0,
-            ProximoPagamento: '-',
-            ValorProximaNota: 0,
-            Situacao: 'quitado',
-        }
-    ]
-
     const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
         SomaTotal: null,
         ProximoPagamento: null,
         ValorProximaNota: null,
     });
+    const [clientsCadastrados, setClientsCadastrados] = useState<ListaClienteView[]>([]);
+
+    return {
+        page: { data: page, set: setPage },
+        floatGui: { data: floatGui, set: setFloatGui },
+        TableHeadFilter: { data: TableHeadFilter, set: setTableHeadFilter },
+        clientsCadastrados: { data: clientsCadastrados, set: setClientsCadastrados },
+    }
+}
+
+const ListaDeClientesCadastrados = () => {
+    const navigate = useNavigate();
+    const { page, floatGui, TableHeadFilter, clientsCadastrados } = useAllStates();
 
     const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
-        setTableHeadFilter(prev => {
+        TableHeadFilter.set(prev => {
             const next = nextNumberFilterType(prev[column]);
             return {
                 // colunas atuais
@@ -72,37 +56,23 @@ const ListaDeClientesCadastrados = () => {
         });
     };
 
-    const handleOpenClientInformations = () => {
-        navigate('/informacoesDoCliente');
-    }
-
     const handleChangePage = (page: number) => {
 
     }
 
-    const handleOpenFloatGui = () => {
-        setFloatGui({
-            active: true,
-            type: 'editCliente',
-            GuiInformations: {},
-        })
-    }
-    const handleCloseFloatGui = () => {
-        setFloatGui({
-            active: false,
-            type: '',
-            GuiInformations: {},
-        })
-    }
+    const floatGuiActions = {
+        open: () => floatGui.set({ active: true, type: 'editCliente', GuiInformations: {} }),
+        close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
+    };
 
-    useEffect(() => { }, [TableHeadFilter, page.currentPage])
+    useEffect(() => { }, [TableHeadFilter, page.data.currentPage])
 
     return (
         <sh.MainPageContainer>
             <PageTitle
                 titulo='Clientes cadastrados'
                 buttons={[
-                    { label: 'Adicionar Cliente', onClick: handleOpenFloatGui }
+                    { label: 'Adicionar Cliente', onClick: floatGuiActions.open }
                 ]}
             />
             <sh.filtrosContainer>
@@ -145,8 +115,7 @@ const ListaDeClientesCadastrados = () => {
                     </sh.tableRow>
                 </thead>
                 <tbody>
-                    {mockData.map((value, index) => {
-
+                    {clientsCadastrados.data.map((value, index) => {
                         return (
                             <sh.tableRow>
                                 <sh.tableData>{value.nome}</sh.tableData>
@@ -160,9 +129,9 @@ const ListaDeClientesCadastrados = () => {
                                     </sh.situacaoCliente>
                                 </sh.tableData>
                                 <sh.tableData>
-                                    <sh.smallTableButton onClick={handleOpenClientInformations}>
-                                        🔍
-                                    </sh.smallTableButton>
+                                    <sh.smallTableButton onClick={() => {
+                                        navigate(`/informacoesDoCliente/${value.id}`);
+                                    }}> 🔍 </sh.smallTableButton>
                                 </sh.tableData>
                             </sh.tableRow>
                         )
@@ -171,23 +140,22 @@ const ListaDeClientesCadastrados = () => {
             </sh.tableContainer>
 
             <Paginacao
-                currentPage={page.currentPage}
+                currentPage={page.data.currentPage}
                 onPageChange={handleChangePage}
-                totalPages={page.totalPages}
+                totalPages={page.data.totalPages}
             />
 
             <sh.AcoesFooter>
                 <sh.FooterBotao> Exportar </sh.FooterBotao>
             </sh.AcoesFooter>
 
-            {floatGui.active && floatGui.type == 'editCliente' &&
+            {floatGui.data.active && floatGui.data.type == 'editCliente' &&
                 <InterfaceFlutuante
                     title='Adicionar Cliente'
-                    onClose={handleCloseFloatGui}>
+                    onClose={floatGuiActions.close}>
 
                     <CreateEditClient_FloatGuiModule
-                        onComplete={() => { }}
-                        onError={() => { }}
+                        onComplete={() => { floatGuiActions.close() }}
                     />
                 </InterfaceFlutuante>
             }

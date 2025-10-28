@@ -8,7 +8,7 @@ export type ClienteAtrazoView = Pick<Cliente, 'nome'> & {
     NumeroDeNotas: number,
 }
 
-export type ListaClienteView = Pick<Cliente, 'nome'> & {
+export type ListaClienteView = Pick<Cliente, 'nome' | 'id'> & {
     SomaTotal: number,
     ProximoPagamento: string,
     ValorProximaNota: number,

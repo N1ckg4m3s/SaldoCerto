@@ -1,4 +1,15 @@
 import { ipcMain } from 'electron';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
+
+/* Chegar ao Serviço */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const servicePath = path.join(__dirname, '..', 'services', 'clientService.js');
+
+const serviceUrl = pathToFileURL(servicePath).href;
+
+const { clientService } = await import(serviceUrl);
 
 /*
 
@@ -27,13 +38,8 @@ export const IniciarControladores = () => {
 
     })
 
-    /* Cria um novo usuario */
-    ipcMain.handle('cliente:create', async (_, args) => {
-        console.log('MOCK RESPONSE')
-        console.log('informations:', args)
-
-        return { sucess: true }
-    })
+    /* Cria um novo usuario */IniciarControladores
+    ipcMain.handle('cliente:create', async (_, args) => clientService.AdicionarNovoCliente(args));
 
     /* Atualiza as informações do usuario */
     ipcMain.handle('cliente:update', async (_, args) => {

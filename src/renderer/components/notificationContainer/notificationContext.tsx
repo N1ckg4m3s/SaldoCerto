@@ -24,7 +24,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
     const addNotification = (notification: Notification) => {
         setNotifications(prev => [...prev, notification]);
-        setTimeout(() => removeNotification(notification.id), notification.duration || 3000);
+        setTimeout(() => removeNotification(notification.id), notification.duration || 5000);
     };
 
     return (

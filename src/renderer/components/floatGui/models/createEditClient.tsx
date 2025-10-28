@@ -5,8 +5,8 @@ import { useNotification } from "@renderer/components/notificationContainer/noti
 import { ApiCaller } from "@renderer/controler/ApiCaller";
 
 interface Props {
-    onError: () => void;
-    onComplete: () => void;
+    onError?: () => void;
+    onComplete?: () => void;
     Cliente?: Cliente;
 }
 
@@ -65,12 +65,12 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
 
                 ApiCaller({
                     url: url,
-                    args: 'NO ARGS',
+                    args: payload,
                     onError(error) {
                         addNotification({
                             id: String(Date.now()),
                             title: 'Error',
-                            message: "Erro..., fale com o dev:\n" + error,
+                            message: error,
                             type: 'error',
                         })
                     },
@@ -78,17 +78,17 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                         addNotification({
                             id: String(Date.now()),
                             title: 'Sucesso',
-                            message: "Adicionado / Alterado com sucesso",
+                            message: `${isEditMode ? "Atualizado" : "Adicionado"} com sucesso`,
                             type: 'success',
                         })
                     },
                 })
-                onComplete();
+                onComplete?.();
             }
 
         } catch {
             console.log("on error chamado")
-            onError();
+            onError?.();
         }
     };
 

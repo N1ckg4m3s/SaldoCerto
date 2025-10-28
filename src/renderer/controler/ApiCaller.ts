@@ -23,16 +23,20 @@ export const ApiCaller = async ({ url, args, onSuccess, onError }: ApiCallerProp
         console.log({ url, parts, namespace, action })
 
         if (namespace === '' || action === '') throw new Error("namespace ou action esta vazio");
-        
+
         const api: any = (window as any).api;
-        
+
         if (!api) throw new Error("sem api definida");
         if (!api[namespace]) throw new Error("namespace não encontrado");
         if (!api[namespace][action]) throw new Error("action não encontrado");
 
         const response = await api[namespace][action](args);
 
-        onSuccess?.(response);
+        if (response && response['erro']) {
+            onError?.(response['erro'])
+        }else{
+            onSuccess?.(response);
+        }
     } catch (error: any) {
         console.error(`[ApiCaller] Erro em ${url}:`, error);
         onError?.(error);

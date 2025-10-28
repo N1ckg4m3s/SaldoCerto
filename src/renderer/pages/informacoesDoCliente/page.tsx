@@ -2,43 +2,41 @@ import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import * as s from './style'
 import type { InformacoesDoClienteView, PaginacaoView } from '@renderer/shered/viewTypes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Paginacao } from '@renderer/components/pagination/component';
-import type { FloatGuiProps } from '@renderer/shered/types';
+import type { Cliente, FloatGuiProps } from '@renderer/shered/types';
 import InterfaceFlutuante from '@renderer/components/floatGui/component';
 import { CreateEditClient_FloatGuiModule } from '@renderer/components/floatGui/models/createEditClient';
+import { useParams } from 'react-router-dom';
 
-const InformacoesDoCliente = () => {
-    const [page, setPage] = useState<PaginacaoView>({
-        currentPage: 0,
-        totalPages: 5
-    });
+const useAllStates = () => {
+    const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
     const [floatGui, setFloatGui] = useState<FloatGuiProps>({
         active: true,
         type: '',
         GuiInformations: {},
     })
+    const [client, setClient] = useState<Cliente>();
 
-    const mockData: InformacoesDoClienteView[] = [
-        {
-            id: '',
-            tipo: 'Pedido',
-            data: '10/10/2025',
-            vencimento: '10/11/2025',
-            valor: 150,
-            valorAbatido: 100,
-            codigo: '01-023C',
-        },
-        {
-            id: '',
-            tipo: 'Pagamento',
-            data: '12/10/2025',
-            vencimento: '-',
-            valor: 100,
-            valorAbatido: 0,
-            codigo: '-',
-        },
-    ]
+    const [historico, setHistorico] = useState<InformacoesDoClienteView[]>([]);
+
+    return {
+        page: { data: page, set: setPage },
+        floatGui: { data: floatGui, set: setFloatGui },
+        client: { data: client, set: setClient },
+        historico: { data: historico, set: setHistorico },
+    }
+}
+
+const InformacoesDoCliente = () => {
+    const { id } = useParams<{ id: string }>();
+
+    const { page, floatGui, client, historico } = useAllStates()
+
+    const floatGuiActions = {
+        open: () => floatGui.set({ active: true, type: 'editCliente', GuiInformations: {} }),
+        close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
+    };
 
     const formatValue = (valor?: number): string => {
         // se não tiver valor retorna '-'
@@ -52,21 +50,13 @@ const InformacoesDoCliente = () => {
 
     }
 
-    const handleCloseFloatGui = () => {
-        setFloatGui({
-            active: false,
-            type: '',
-            GuiInformations: {},
-        })
-    }
+    useEffect(() => {
+        // Atualiza apenas o historico por conta da paginação
+    }, [page.data.currentPage])
 
-    const handleEditClientHeaderButton = () => {
-        setFloatGui({
-            ...floatGui,
-            active: true,
-            type: 'editCliente',
-        })
-    }
+    useEffect(() => {
+        // Atualiza geral
+    }, [id, page.data.currentPage])
 
     return (
         <sh.MainPageContainer>
@@ -75,7 +65,7 @@ const InformacoesDoCliente = () => {
                 buttons={[
                     { label: 'Registrar movimentação', onClick: () => { } },
                     { label: 'Exportar lista', onClick: () => { } },
-                    { label: '⚙', onClick: handleEditClientHeaderButton },
+                    { label: '⚙', onClick: floatGuiActions.open },
                 ]}
             />
 
@@ -106,7 +96,7 @@ const InformacoesDoCliente = () => {
                         </sh.tableRow>
                     </thead>
                     <tbody>
-                        {mockData.map((value, index) => {
+                        {historico.data.map((value, index) => {
                             return (
                                 <sh.tableRow key={index}>
                                     <sh.tableData>{value.tipo}</sh.tableData>
@@ -128,15 +118,15 @@ const InformacoesDoCliente = () => {
             </s.HistoryContainer>
 
             <Paginacao
-                currentPage={page.currentPage}
+                currentPage={page.data.currentPage}
                 onPageChange={handleChangePage}
-                totalPages={page.totalPages}
+                totalPages={page.data.totalPages}
             />
 
-            {floatGui.active && floatGui.type == 'editCliente' &&
+            {floatGui.data.active && floatGui.data.type == 'editCliente' &&
                 <InterfaceFlutuante
                     title='<EDIT | CREATE> Cliente'
-                    onClose={handleCloseFloatGui}>
+                    onClose={floatGuiActions.close}>
 
                     <CreateEditClient_FloatGuiModule
                         onComplete={() => { }}
