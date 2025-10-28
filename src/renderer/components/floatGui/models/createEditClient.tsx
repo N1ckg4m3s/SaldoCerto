@@ -50,6 +50,9 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
 
     const handleSubmit = async () => {
         try {
+            const IsFormularioValido = validadeForm();
+            if (!IsFormularioValido) return;
+
             const payload = {
                 nome: nomeRef.current?.value || "",
                 telefone: telefoneRef.current?.value || "",
@@ -59,32 +62,30 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                 },
             };
 
-            const IsFormularioValido = validadeForm();
-            if (IsFormularioValido) {
-                const url = `/cliente/${isEditMode ? 'update' : 'create'}`
+            const url = `/cliente/${isEditMode ? 'update' : 'create'}`
 
-                ApiCaller({
-                    url: url,
-                    args: payload,
-                    onError(error) {
-                        addNotification({
-                            id: String(Date.now()),
-                            title: 'Error',
-                            message: error,
-                            type: 'error',
-                        })
-                    },
-                    onSuccess(data) {
-                        addNotification({
-                            id: String(Date.now()),
-                            title: 'Sucesso',
-                            message: `${isEditMode ? "Atualizado" : "Adicionado"} com sucesso`,
-                            type: 'success',
-                        })
-                    },
-                })
-                onComplete?.();
-            }
+            ApiCaller({
+                url: url,
+                args: payload,
+                onError(error) {
+                    addNotification({
+                        id: String(Date.now()),
+                        title: 'Error',
+                        message: error.message || 'Unknown error',
+                        errorCode: error.errorCode || 'ERR_UNKNOWN',
+                        type: 'error',
+                    })
+                },
+                onSuccess(data) {
+                    addNotification({
+                        id: String(Date.now()),
+                        title: 'Sucesso',
+                        message: `${isEditMode ? "Atualizado" : "Adicionado"} com sucesso`,
+                        type: 'success',
+                    })
+                },
+            })
+            onComplete?.();
 
         } catch {
             console.log("on error chamado")

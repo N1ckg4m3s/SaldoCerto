@@ -55,3 +55,25 @@ export type FloatGuiProps = {
     GuiInformations: any,
     type: FloatTypeInformacoesCliente | ''
 }
+
+// Padrão de respostas da API
+
+export interface IPCResponseFormat {
+    success: boolean,
+    message?: string,
+    data?: any,
+    errorCode?: string
+}
+
+// Padrão da APICaller
+export type errorFormat = {
+    message?: string
+    errorCode?: string
+}
+export interface ApiCallerProps {
+    /** Caminho no formato "/namespace/metodo", ex: "/cliente/getList" */
+    url: string;
+    args?: any;
+    onSuccess?: (data: any) => void;
+    onError?: (erro: errorFormat) => void;
+}

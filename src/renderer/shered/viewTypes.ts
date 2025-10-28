@@ -37,7 +37,7 @@ export interface Notification {
     id: string;
     title: string,
     errorCode?: string,
-    message: string;
+    message?: string;
     type: NotificationType;
     duration?: number;
 }

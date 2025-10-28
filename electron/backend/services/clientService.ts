@@ -1,6 +1,13 @@
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
+export interface IPCResponseFormat {
+    success: boolean,
+    message?: string,
+    data?: any,
+    errorCode?: string
+}
+
 /* Chegar ao Repositorio */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -8,7 +15,7 @@ const RepositoryPath = path.join(__dirname, '..', 'repositories', 'clientRepo.js
 
 const RepositoryUrl = pathToFileURL(RepositoryPath).href;
 
-const {RepositorioCliente} = await import(RepositoryUrl);
+const { RepositorioCliente } = await import(RepositoryUrl);
 
 /*
     Service, tem como função tratar o 'pedido' de dados para o banco com base na regra de negocios
@@ -37,11 +44,10 @@ const ValidateClientData = (dado: any): [boolean, string] => {
 }
 
 export const clientService = {
-    AdicionarNovoCliente: (dados: any) => {
+    AdicionarNovoCliente: async (dados: any): Promise<IPCResponseFormat> => {
         const [valido, erro] = ValidateClientData(dados);
+        if (!valido) return { success: false, message: `[ClientService.AdicionarNovoCliente]: ${erro}` }
 
-        if (!valido) return { Erro: `[ClientService.AdicionarNovoCliente]: ${erro}` };
-
-        return RepositorioCliente.adicionarCliente(dados);
+        return await RepositorioCliente.adicionarCliente(dados);
     }
 }

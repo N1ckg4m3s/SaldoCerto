@@ -3,13 +3,8 @@
  * e tratar erros/sucesso de forma padronizada.
  */
 
-interface ApiCallerProps {
-    /** Caminho no formato "/namespace/metodo", ex: "/cliente/getList" */
-    url: string;
-    args?: any;
-    onSuccess?: (data: any) => void;
-    onError?: (error: any) => void;
-}
+import type { ApiCallerProps, errorFormat, IPCResponseFormat } from "@renderer/shered/types";
+
 
 export const ApiCaller = async ({ url, args, onSuccess, onError }: ApiCallerProps) => {
     try {
@@ -30,10 +25,10 @@ export const ApiCaller = async ({ url, args, onSuccess, onError }: ApiCallerProp
         if (!api[namespace]) throw new Error("namespace não encontrado");
         if (!api[namespace][action]) throw new Error("action não encontrado");
 
-        const response = await api[namespace][action](args);
+        const response = await api[namespace][action](args) as IPCResponseFormat;
 
-        if (response && response['erro']) {
-            onError?.(response['erro'])
+        if (response && !response.success) {
+            onError?.({ message: response.message, errorCode: response.errorCode } as errorFormat);
         }else{
             onSuccess?.(response);
         }

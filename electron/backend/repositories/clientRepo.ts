@@ -1,6 +1,13 @@
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 
+export interface IPCResponseFormat {
+    success: boolean,
+    message?: string,
+    data?: any,
+    errorCode?: string
+}
+
 /* Chegar ao Prisma */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,18 +22,8 @@ const { prisma } = await import(PrismaUrl);
         para todos os fins de acesso possive: GET, GET-FILTER, SET, UPDATE, DELETE...
 */
 
-/*
-data: {
-    nome: "asd",
-    telefone: "asd",
-    diaContrato: undefined, + tipoContrato: TipoContrato
-}
-Argument `tipoContrato` is missing.
-*/
-
-
 export const RepositorioCliente = {
-    adicionarCliente: async (dados: any) => {
+    adicionarCliente: async (dados: any): Promise<IPCResponseFormat> => {
         try {
             const novoCliente = await prisma.cliente.create({
                 data: {
@@ -38,12 +35,12 @@ export const RepositorioCliente = {
             })
 
             if (novoCliente) {
-                return { sucess: true }
+                return { success: true }
             } else {
-                return { erro: '[Erro não identificado]: RepositorioCliente.adicionarCliente' }
+                return { success: false, message: '[Erro não identificado]: RepositorioCliente.adicionarCliente' }
             }
         } catch (e) {
-            return { erro: `[RepositorioCliente.adicionarCliente]: ${e}` }
+            return { success: false, message: `[RepositorioCliente.adicionarCliente]: ${e}` }
         }
     }
 }
