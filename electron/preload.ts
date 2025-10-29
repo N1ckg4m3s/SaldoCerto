@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('api', {
         update: (args?: any) => ipcRenderer.invoke('cliente:update', args),
         delete: (args?: any) => ipcRenderer.invoke('cliente:delete', args),
         getInadimplentesList: (args?: any) => ipcRenderer.invoke('cliente:listInadimplentes', args),
+        searchName: (args?: any) => ipcRenderer.invoke('cliente:searchByName', args),
     },
     movimentacoes: {
         list: (args?: any) => ipcRenderer.invoke('movimentacao:list', args),

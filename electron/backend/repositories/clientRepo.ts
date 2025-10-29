@@ -11,11 +11,8 @@ export interface IPCResponseFormat {
 /* Chegar ao Prisma */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PrismaPath = path.join(__dirname, '..', 'prismaConnection.js');
 
-const PrismaUrl = pathToFileURL(PrismaPath).href;
-
-const { prisma } = await import(PrismaUrl);
+const { prisma } = await import(pathToFileURL(path.join(__dirname, '..', 'prismaConnection.js')).href);
 
 /*
     Repositorio, tem como função ser o UNICO a acessar o banco de dados

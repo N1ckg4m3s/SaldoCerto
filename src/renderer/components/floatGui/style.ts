@@ -134,3 +134,28 @@ export const ModuleFormButton = styled.button`
   max-width: 250px;
   margin-top: ${GlobalSpacing.MediumLarge};
 `
+
+/* Options button */
+
+export const SelectClientContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: auto;
+`
+
+export const SelectClientSelect = styled.div`
+  position: absolute;
+  top: 100%;
+  background: white;
+  width: 100%;
+  border: 1px solid #ccc;
+  list-Style: none;
+  margin: 0;
+  padding: 0;
+  z-Index: 10;
+`
+
+export const SelectClientOption = styled.div`
+  padding: 6px;
+  cursor: pointer
+`

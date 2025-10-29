@@ -1,0 +1,113 @@
+import { fileURLToPath, pathToFileURL } from "url";
+import path from "path";
+
+export interface IPCResponseFormat {
+    success: boolean,
+    message?: string,
+    data?: any,
+    errorCode?: string
+}
+
+/* Chegar ao Prisma */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const { prisma } = await import(pathToFileURL(path.join(__dirname, '..', 'prismaConnection.js')).href);
+
+/*
+    Repositorio, tem como função ser o UNICO a acessar o banco de dados
+        para todos os fins de acesso possive: GET, GET-FILTER, SET, UPDATE, DELETE...
+*/
+
+export const RepositorioMovimentacoes = {
+    adicionarMovimentacao: async (dados: any): Promise<IPCResponseFormat> => {
+        try {
+            const novaMovimentacao = await prisma.movimentacao.create({
+                data: {
+                    tipo: dados.tipo,
+                    data: new Date(dados.data),
+                    vencimento: dados.vencimento,
+                    valor: dados.valor,
+                    valorAbatido: 0,
+                    codigo: dados.codigo,
+                    clienteId: dados.ClientId,
+                },
+            });
+
+            if (novaMovimentacao) {
+                return { success: true }
+            } else {
+                return { success: false, message: '[Erro não identificado]: RepositorioMovimentacoes.adicionarMovimentacao' }
+            }
+        } catch (e) {
+            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+
+    // Esse atualiza é apenas interno, o usuario não pode alterar, apenas apagar.
+    atualizaMovimentacao: async (dados: any): Promise<IPCResponseFormat> => {
+        try {
+            const novaMovimentacao = await prisma.movimentacao.update({
+                where: { id: dados.id },
+                data: dados.data,
+            });
+
+            if (novaMovimentacao) {
+                return { success: true }
+            } else {
+                return { success: false, message: '[Erro não identificado]: RepositorioMovimentacoes.adicionarMovimentacao' }
+            }
+        } catch (e) {
+            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+
+    obterTodasMovimentacoes: async (dados: any): Promise<IPCResponseFormat> => {
+        try {
+            // Obtem todas as movimentações com base nas paginas
+            return { success: true }
+        } catch (e) {
+            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+
+    obterTodasMovimentacoesDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
+        try {
+            // Obtem todas as movimentações de um cliente especifico com base nas paginas
+            return { success: true }
+        } catch (e) {
+            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+
+    obterPedidosNaoAbatidosDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
+        // Obtem todas os pedidos de um cliente que não esta abatido
+        try {
+            const todosOsPedidos = await prisma.movimentacao.findMany({
+                where: {
+                    clienteId: dados.id, // id do usuario a ser 
+                    tipo: 'Pedido',
+                },
+                orderBy: {
+                    data: 'asc', // mais antigo primeiro
+                },
+            });
+
+            const pedidosNaoAbatidos = todosOsPedidos.filter((p: any) => {
+                const abatido = p.valorAbatido ?? 0;
+                return abatido < p.valor;
+            });
+
+
+            if (pedidosNaoAbatidos) {
+                return { success: true, data: pedidosNaoAbatidos }
+            } else {
+                return { success: false, message: '[Erro não identificado]: RepositorioMovimentacoes.adicionarMovimentacao' }
+            }
+
+            return { success: true }
+        } catch (e) {
+            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+}

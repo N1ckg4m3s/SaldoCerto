@@ -11,11 +11,8 @@ export interface IPCResponseFormat {
 /* Chegar ao Repositorio */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const RepositoryPath = path.join(__dirname, '..', 'repositories', 'clientRepo.js');
 
-const RepositoryUrl = pathToFileURL(RepositoryPath).href;
-
-const { RepositorioCliente } = await import(RepositoryUrl);
+const { RepositorioCliente } = await import(pathToFileURL(path.join(__dirname, '..', 'repositories', 'clientRepo.js')).href);
 
 /*
     Service, tem como função tratar o 'pedido' de dados para o banco com base na regra de negocios
@@ -67,9 +64,9 @@ export const clientService = {
     },
 
     ObterClientePorId: async (dados: any): Promise<IPCResponseFormat> => {
-        if (!dados.id) return { success: false, message: `[ClientService.RemoverCliente]: Id Não informado` }
+        if (!dados.id) return { success: false, message: `[ClientService.ObterClientePorId]: Id Não informado` }
 
-        return await RepositorioCliente.removerInformacoesDoCliente(dados);
+        return await RepositorioCliente.obterClientePorId(dados);
     },
 
     ObterClientes: async (dados: any): Promise<IPCResponseFormat> => {
@@ -124,5 +121,27 @@ export const clientService = {
                 clients: retornoData
             }
         };
+    },
+
+    ObterIdENomeClientes: async (dados: any): Promise<IPCResponseFormat> => {
+
+        /*
+            Return format:
+            {
+                id:string
+                nome:string
+            }
+        */
+        let search = dados.search ?? '' // Verifica a existencia da pesquisa
+        
+        // Obter os clientes
+        const informacoesDaPagina = await RepositorioCliente.obterClientes({ search, limit: 10 })
+
+        return {
+            success: true,
+            data: informacoesDaPagina.data.clients.map((info: any) => {
+                return { id: info.id, nome: info.nome }
+            })
+        }
     },
 }

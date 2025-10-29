@@ -112,14 +112,13 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                         Tipos de contrato: {'\n'}
                         * Praso: Define o tempo que a pessoa tem que pagar (tipo: 15 dias apartir da data) {'\n'}
                         * Fechamento: Define uma data final do mes que o cliente deve pagar (tipo: dia 20) {'\n'}
-                        * Periodo: Define um periodo de tempo que as notas vão ser somadas (tipo: 10 em 10 dias)
+                        {/* * Periodo: Define um periodo de tempo que as notas vão ser somadas (tipo: 10 em 10 dias) */}
                     </span>
                 </s.FieldTip>
                 <s.ModuleFormSelect defaultValue={Cliente?.contrato.type} ref={contratoTypeRef}>
                     <option value=''>-Selecione-</option>
                     <option value="praso">Prazo</option>
                     <option value="fechamento">Fechamento</option>
-                    <option value="periodo">Período</option>
                 </s.ModuleFormSelect>
             </s.ModuleFieldRow>
 
