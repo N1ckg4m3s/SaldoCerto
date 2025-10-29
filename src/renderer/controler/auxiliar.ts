@@ -1,8 +1,5 @@
 import type { NumberFilterType } from "@renderer/shered/viewTypes";
 
-const formatNumeroComZero = (numero: number): string => numero <= 9 ? `0${numero}` : `${numero}`
-
-
 export const nextNumberFilterType = (current: NumberFilterType): NumberFilterType => {
     switch (current) {
         case null: return 'Biggest';
@@ -12,17 +9,13 @@ export const nextNumberFilterType = (current: NumberFilterType): NumberFilterTyp
 };
 
 export const formatarDateParaTexto = (data: Date | string): string => {
-    const DateASerFormatada: Date = typeof data == 'string' ? new Date(data) : data
+    const d = typeof data === 'string' ? new Date(data) : data;
 
-    const diaNaData = DateASerFormatada.getDate() + 1
-    const mesNaData = DateASerFormatada.getMonth() + 1
-    const anoNaData = DateASerFormatada.getFullYear()
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const ano = d.getFullYear();
 
-    const diaFixed = formatNumeroComZero(diaNaData);
-    const mesFixed = formatNumeroComZero(mesNaData);
-    const anoFixed = formatNumeroComZero(anoNaData);
-
-    return `${diaFixed}/${mesFixed}/${anoFixed}`;
+    return `${dia}/${mes}/${ano}`;
 }
 
 export const formatarValorParaTexto = (valor?: number | string): string => {
