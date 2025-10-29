@@ -11,7 +11,7 @@ const { safeHandler } = await import(pathToFileURL(path.join(__dirname, '..', '.
 
 export const IniciarControladores = () => {
     /* Obtem uma lista com todos os usuarios por pagina*/
-    ipcMain.handle('movimentacao:list', safeHandler(() => { }));
+    ipcMain.handle('movimentacao:list', safeHandler(movimentacoesService.ObterMovimentacoes));
 
     /* Obtem uma lista com todos os usuarios por pagina*/
     ipcMain.handle('movimentacao:listByClient', safeHandler(() => { }));

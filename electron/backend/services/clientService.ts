@@ -70,18 +70,6 @@ export const clientService = {
     },
 
     ObterClientes: async (dados: any): Promise<IPCResponseFormat> => {
-        /*
-            Return format:
-            {
-                id:string
-                nome:string,
-                SomaTotal: number,
-                ProximoPagamento: string,
-                ValorProximaNota: number,
-                Situacao: SituacaoCliente,
-            }
-        */
-
         let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
         let limit = dados.limit ?? 20 // padroniza o liminte a 20
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
@@ -91,11 +79,6 @@ export const clientService = {
         const informacoesDaPagina = await RepositorioCliente.obterClientes({ page, limit, search })
 
         const clientesDaPagina = informacoesDaPagina.data.clients || []
-
-        // filtragem pela 'header'
-        const orderBy: any = {}
-
-        // Mergir as tabelas em 1 retorno
 
         let retornoData = clientesDaPagina.map((cliente: any) => {
             const randomNumber = Math.random(); // 0 a 1
@@ -124,24 +107,22 @@ export const clientService = {
     },
 
     ObterIdENomeClientes: async (dados: any): Promise<IPCResponseFormat> => {
-
-        /*
-            Return format:
-            {
-                id:string
-                nome:string
-            }
-        */
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
-        
+
         // Obter os clientes
         const informacoesDaPagina = await RepositorioCliente.obterClientes({ search, limit: 10 })
 
+        let retornoData = informacoesDaPagina.data.clients.map((info: any) => {
+            return { id: info.id, nome: info.nome }
+        })
+
+        if (retornoData.length <= 0) {
+            retornoData = [{ id: null, nome: '- sem cliente -'}]
+        }
+
         return {
             success: true,
-            data: informacoesDaPagina.data.clients.map((info: any) => {
-                return { id: info.id, nome: info.nome }
-            })
+            data: retornoData
         }
     },
 }

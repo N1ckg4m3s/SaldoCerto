@@ -166,4 +166,59 @@ export const movimentacoesService = {
             return { success: false, message: `[movimentacoesServices.RegistrarAdicaoDePedido]: ${e}` };
         }
     },
+
+    ObterMovimentacoes: async (dados: any): Promise<IPCResponseFormat> => {
+        let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
+        let limit = dados.limit ?? 20 // padroniza o liminte a 20
+        let search = dados.search ?? '' // Verifica a existencia da pesquisa
+        let filters = dados.filters ?? '' // Verifica a existencia dos filtros
+
+        const filtros: any = {}
+
+        if (filters) {
+            const deData = filters.de !== '' && new Date(filters.de) || null;
+            const ateData = filters.ate !== '' && new Date(filters.ate) || null;
+
+            if (deData && ateData) {
+                if (deData) filtros.data.gte = new Date(deData);
+                if (ateData) filtros.data.lte = new Date(ateData);
+            }
+
+            if (filters.option) filtros.tipo = filters.option;
+        }
+
+        const informacoesDaPagina = await RepositorioMovimentacoes.obterMovimentacoes({ page, limit, search, filtros })
+
+        if (!informacoesDaPagina.success) throw new Error("Erro ao obter as movimentações da pagina \n Erro: " + informacoesDaPagina.message);
+
+        // Mergir informações para retorno
+        const retornoData = await Promise.all(
+            informacoesDaPagina.data.movimentacoes.map(async (movimentacao: any) => {
+                const clientServiceResponse = await clientService.ObterClientePorId({ id: movimentacao.clienteId });
+
+                const nomeCliente = clientServiceResponse.success
+                    ? clientServiceResponse.data.nome
+                    : '';
+
+                return {
+                    id: movimentacao.id,
+                    nome: nomeCliente,
+                    ClientId: movimentacao.clienteId,
+                    tipo: movimentacao.tipo,
+                    data: movimentacao.data,
+                    valor: movimentacao.valor,
+                    codigo: movimentacao.codigo,
+                };
+            })
+        );
+
+        return {
+            success: true,
+            data: {
+                currentPage: informacoesDaPagina.data.currentPage,
+                totalPages: informacoesDaPagina.data.totalPages,
+                movimentacoes: retornoData,
+            }
+        }
+    },
 }

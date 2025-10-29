@@ -62,12 +62,30 @@ export const RepositorioMovimentacoes = {
         }
     },
 
-    obterTodasMovimentacoes: async (dados: any): Promise<IPCResponseFormat> => {
+    obterMovimentacoes: async (dados: any): Promise<IPCResponseFormat> => {
         try {
-            // Obtem todas as movimentações com base nas paginas
-            return { success: true }
+            // preciso adicionar 'de, até' e tipo, sendo: Todos, Pedidos, Pagamentos.
+            const { page = 0, limit = 20, filtros = {} } = dados;
+
+            const movimentacoesEncontradas = await prisma.movimentacao.findMany({
+                where: filtros,
+                orderBy: { data: 'desc' },
+                skip: page * limit,
+                take: limit,
+            });
+
+            const total = await prisma.movimentacao.count();
+
+            return {
+                success: true,
+                data: {
+                    currentPage: page,
+                    totalPages: Math.ceil(total / limit),
+                    movimentacoes: movimentacoesEncontradas,
+                },
+            };
         } catch (e) {
-            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+            return { success: false, message: `[RepositorioCliente.obterClientes]: ${e}` }
         }
     },
 

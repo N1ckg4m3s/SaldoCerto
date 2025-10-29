@@ -2,10 +2,10 @@
 
 **Progresso:**
 
-- Totais: 113
-- Concluidas: 33
+- Totais: 125
+- Concluidas: 60
 - Parciais: 4
-**Conclusão: ~27%**
+**Conclusão: ~48%**
 
 ---
 
@@ -53,10 +53,10 @@
 - [x] - Exibir: Nome, Contato, Ciclo de pagamento, Situação
 - [x] - Melhorar campo “Situação” (usar: “Em dia”, “Em atraso”, etc.)
 - [x] - Adicionar input de filtro / busca
-- [2/3] - Funcionalidades:  
+- [3/3] - Funcionalidades:  
   - [x] - Paginação (máx. 20 por página)  
   - [x] - Ordenação por nome ou situação  
-  - [ ] - Ação de clique → abrir detalhes do cliente (página 3)
+  - [x] - Ação de clique → abrir detalhes do cliente (página 3)
 
 ---
 
@@ -142,38 +142,50 @@ Usar quando envolver navegação dedicada, filtros amplos ou histórico detalhad
 
 ### API -> EndPoints
 
-- [0/3] cliente:getList
-  - [ ] Controller
-  - [ ] Services
-  - [ ] Repository
+- [0/3] cliente:list
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] cliente:getById
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
+- [0/3] cliente:getBySearch
   - [ ] Controller
   - [ ] Services
   - [ ] Repository
 - [0/3] cliente:create
-  - [ ] Controller
-  - [ ] Services
-  - [ ] Repository
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] cliente:update
-  - [ ] Controller
-  - [ ] Services
-  - [ ] Repository
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] cliente:delete
-  - [ ] Controller
-  - [ ] Services
-  - [ ] Repository
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] cliente:getInadimplentesList
   - [ ] Controller
   - [ ] Services
   - [ ] Repository
+- [0/3] cliente:searchByName
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] movimentacoes:list
   - [ ] Controller
   - [ ] Services
   - [ ] Repository
-- [0/3] movimentacoes:create
+- [0/3] movimentacoes:listByClient
   - [ ] Controller
   - [ ] Services
   - [ ] Repository
+- [0/3] movimentacoes:create
+  - [x] Controller
+  - [x] Services
+  - [x] Repository
 - [0/3] movimentacoes:delete
   - [ ] Controller
   - [ ] Services

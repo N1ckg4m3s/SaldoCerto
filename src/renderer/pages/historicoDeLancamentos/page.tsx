@@ -2,10 +2,12 @@ import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import type { HistoricoDeLancamentoView, PaginacaoView } from '@renderer/shered/viewTypes';
 import { Paginacao } from '@renderer/components/pagination/component';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FloatGuiProps } from '@renderer/shered/types';
 import { AdicionarMovimentacao_FloatGuiModule } from '@renderer/components/floatGui/models/adicionarMovimentacao';
 import InterfaceFlutuante from '@renderer/components/floatGui/component';
+import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
+import { ApiCaller } from '@renderer/controler/ApiCaller';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -34,37 +36,8 @@ const useAllStates = () => {
 }
 
 const HistoricoDeLancamentos = () => {
+    const { addNotification } = useNotification();
     const { page, floatGui, movimentacoes, deDataRef, ateDataRef, optionRef, searchRef } = useAllStates();
-
-    const mockData: HistoricoDeLancamentoView[] = [
-        {
-            id: '',
-            data: "10/10/2025",
-            ClientId: '',
-            nome: "João Silva",
-            tipo: "Pedido",
-            valor: 250,
-            codigo: '0-001c',
-        },
-        {
-            id: '',
-            data: "12/10/2025",
-            ClientId: '',
-            nome: "João Silva",
-            tipo: "Pagamento",
-            valor: 100,
-            codigo: '-',
-        },
-        {
-            id: '',
-            data: "15/10/2025",
-            ClientId: '',
-            nome: "Maria Oliveira",
-            tipo: "Pedido",
-            valor: 350,
-            codigo: '0-005c',
-        },
-    ];
 
     const formatValue = (valor: string | undefined): string => {
         // se não tiver valor retorna '-'
@@ -81,16 +54,46 @@ const HistoricoDeLancamentos = () => {
     }
 
     const getAllApiMovimentations = () => {
-        // aqui vai obter todos os dados do cliente
-        const payload = {
-            page: page.data.currentPage,
-            limit: 20,
-            search: searchRef.current?.value || '',
-            filters: {
-                de: deDataRef.current?.value || '',
-                ate: ateDataRef.current?.value || '',
-                option: optionRef.current?.value || '',
-            },
+        try {
+            const payload = {
+                page: page.data.currentPage,
+                limit: 20,
+                search: searchRef.current?.value || '',
+                filters: {
+                    de: deDataRef.current?.value || '',
+                    ate: ateDataRef.current?.value || '',
+                    option: optionRef.current?.value || '',
+                },
+            }
+
+            ApiCaller({
+                url: '/movimentacoes/list',
+                args: payload,
+                onError(erro) {
+                    addNotification({
+                        id: String(Date.now()),
+                        title: 'Erro ao obter os dados',
+                        message: `Contate o DEV: \n${erro.message}`,
+                        errorCode: erro.errorCode || '',
+                        type: 'error',
+                    });
+                },
+                onSuccess(response) {
+                    movimentacoes.set(response.data.movimentacoes || []);
+                    page.set({
+                        currentPage: response.data.currentPage,
+                        totalPages: response.data.totalPages,
+                    });
+                },
+            })
+
+        } catch (e) {
+            addNotification({
+                id: String(Date.now()),
+                title: 'Erro inesperado',
+                message: String(e),
+                type: 'error',
+            });
         }
     }
 
@@ -102,6 +105,8 @@ const HistoricoDeLancamentos = () => {
         openAddNewMovimentacao: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} }),
     }
+
+    useEffect(() => { getAllApiMovimentations() }, [page.data.currentPage]);
 
     return (
         <sh.MainPageContainer>
@@ -152,27 +157,25 @@ const HistoricoDeLancamentos = () => {
                     <sh.tableTh>-</sh.tableTh>
                 </thead>
                 <tbody>
-                    {
-                        mockData.map((value, index) => (
-                            <sh.tableRow>
-                                <sh.tableData>{value.data}</sh.tableData>
-                                <sh.tableData>{value.nome}</sh.tableData>
-                                <sh.tableData>
-                                    <sh.tipoNota
-                                        situacao={value.tipo}>
-                                        {value.tipo}
-                                    </sh.tipoNota>
-                                </sh.tableData>
-                                <sh.tableData>{formatValue(value.valor.toString())}</sh.tableData>
-                                <sh.tableData>{value.codigo || '-'}</sh.tableData>
-                                <sh.tableData>
-                                    <sh.smallTableButton onClick={() => { }}>
-                                        🔍
-                                    </sh.smallTableButton>
-                                </sh.tableData>
-                            </sh.tableRow>
-                        ))
-                    }
+                    {movimentacoes.data.map((value, index) => (
+                        <sh.tableRow>
+                            <sh.tableData>{value.data}</sh.tableData>
+                            <sh.tableData>{value.nome}</sh.tableData>
+                            <sh.tableData>
+                                <sh.tipoNota
+                                    situacao={value.tipo}>
+                                    {value.tipo}
+                                </sh.tipoNota>
+                            </sh.tableData>
+                            <sh.tableData>{formatValue(value.valor.toString())}</sh.tableData>
+                            <sh.tableData>{value.codigo || '-'}</sh.tableData>
+                            <sh.tableData>
+                                <sh.smallTableButton onClick={() => { }}>
+                                    🔍
+                                </sh.smallTableButton>
+                            </sh.tableData>
+                        </sh.tableRow>
+                    ))}
                 </tbody>
             </sh.tableContainer>
 
@@ -194,7 +197,7 @@ const HistoricoDeLancamentos = () => {
                         }}
                         onError={() => { }}
                     />
-                    
+
                 </InterfaceFlutuante>
             }
 

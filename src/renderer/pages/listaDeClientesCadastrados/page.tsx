@@ -71,8 +71,6 @@ const ListaDeClientesCadastrados = () => {
                 filters: TableHeadFilter.data,
             };
 
-            console.log(payload)
-
             const response = await ApiCaller({
                 url: '/cliente/getList',
                 args: payload,
@@ -85,7 +83,6 @@ const ListaDeClientesCadastrados = () => {
                     });
                 },
                 onSuccess(response) {
-                    console.log('chegou a response:', response)
                     clientsCadastrados.set(response.data.clients || []);
                     page.set({
                         currentPage: response.data.currentPage,
