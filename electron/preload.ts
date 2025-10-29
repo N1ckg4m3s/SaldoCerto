@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-console.log('to aq no preload')
-
 contextBridge.exposeInMainWorld('api', {
     cliente: {
         getList: (args?: any) => ipcRenderer.invoke('cliente:list', args),

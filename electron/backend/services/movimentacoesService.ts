@@ -172,6 +172,117 @@ export const movimentacoesService = {
         let limit = dados.limit ?? 20 // padroniza o liminte a 20
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
         let filters = dados.filters ?? '' // Verifica a existencia dos filtros
+        const filtros: any = {}
+
+        if (filters) {
+            const deData = filters.de !== '' && new Date(filters.de) || null;
+            const ateData = filters.ate !== '' && new Date(filters.ate) || null;
+
+            if (deData && ateData) {
+                if (deData) filtros.data.gte = new Date(deData);
+                if (ateData) filtros.data.lte = new Date(ateData);
+            }
+
+            if (filters.option) filtros.tipo = filters.option;
+        }
+
+        const informacoesDaPagina = await RepositorioMovimentacoes.obterMovimentacoes({ page, limit, search, filtros })
+
+        if (!informacoesDaPagina.success) throw new Error("[movimentacoesService.ObterMovimentacoes] Erro ao obter as movimentações da pagina \n Erro: " + (informacoesDaPagina.message ?? 'NO ERROR MESSAGE'));
+
+        // Mergir informações para retorno
+        const retornoData = await Promise.all(
+            informacoesDaPagina.data.movimentacoes.map(async (movimentacao: any) => {
+                const clientServiceResponse = await clientService.ObterClientePorId({ id: movimentacao.clienteId });
+
+                const nomeCliente = clientServiceResponse.success
+                    ? clientServiceResponse.data.nome
+                    : '';
+
+                return {
+                    id: movimentacao.id,
+                    nome: nomeCliente,
+                    ClientId: movimentacao.clienteId,
+                    tipo: movimentacao.tipo,
+                    data: movimentacao.data,
+                    valor: movimentacao.valor,
+                    codigo: movimentacao.codigo,
+                };
+            })
+        );
+
+        return {
+            success: true,
+            data: {
+                currentPage: informacoesDaPagina.data.currentPage,
+                totalPages: informacoesDaPagina.data.totalPages,
+                movimentacoes: retornoData,
+            }
+        }
+    },
+
+    ObterResumoDeMovimentacoesDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
+        const idCliente = dados.id;
+        if (!idCliente) return { success: false, message: '[Movimentações service. Obter resumo] Id do cliente não informado' }
+
+        const RepositorioMovimentacoesRetorno = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: idCliente });
+        if (!RepositorioMovimentacoesRetorno.success) return RepositorioMovimentacoesRetorno;
+
+        const PedidosNaoAbatidos = RepositorioMovimentacoesRetorno.data;
+
+        let TotalEmDivida: number = 0;
+        let DataDeProximoPagamento: Date | '' = '';
+        let ValorACobrarNaProximaNota: number = 0;
+        let Situacao: 'ativo' | 'vencido' | 'quitado' = 'quitado';
+
+        // Adicionar informações do proximo pagamento:
+        if (PedidosNaoAbatidos.length > 0) {
+            DataDeProximoPagamento = PedidosNaoAbatidos[0].vencimento
+            ValorACobrarNaProximaNota = PedidosNaoAbatidos[0].valor - (PedidosNaoAbatidos[0].valorAbatido ?? 0);
+
+            // Verificação se esta vencida
+            const hoje: Date = new Date();
+            const isVencido: boolean = DataDeProximoPagamento <= hoje;
+
+            Situacao = isVencido ? 'vencido' : 'ativo';
+        } else {
+            return {
+                success: true,
+                data: {
+                    TotalEmDivida,
+                    DataDeProximoPagamento,
+                    ValorACobrarNaProximaNota,
+                    Situacao
+                }
+            };
+        }
+
+        // Adiciona o total em divida
+        for (const pedido of PedidosNaoAbatidos) {
+            const saldoAberto = pedido.valor - (pedido.valorAbatido ?? 0);
+            TotalEmDivida += saldoAberto
+        }
+
+        return {
+            success: true,
+            data: {
+                TotalEmDivida,
+                DataDeProximoPagamento,
+                ValorACobrarNaProximaNota,
+                Situacao,
+            }
+        };
+    },
+
+    ObterMovimentacoesPorID: async (dados: any): Promise<IPCResponseFormat> => {
+        let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
+        let limit = dados.limit ?? 20 // padroniza o liminte a 20
+        let search = dados.search ?? '' // Verifica a existencia da pesquisa
+        let filters = dados.filters ?? '' // Verifica a existencia dos filtros
+
+        const idCliente = dados.id;
+
+        if (!idCliente) return { success: false, message: 'Id do cliente não informado' }
 
         const filtros: any = {}
 

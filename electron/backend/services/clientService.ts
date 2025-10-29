@@ -14,6 +14,8 @@ const __dirname = path.dirname(__filename);
 
 const { RepositorioCliente } = await import(pathToFileURL(path.join(__dirname, '..', 'repositories', 'clientRepo.js')).href);
 
+// const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
+
 /*
     Service, tem como função tratar o 'pedido' de dados para o banco com base na regra de negocios
         Ele verifica, datas, acrescimos, juros..., tudo.
@@ -70,6 +72,10 @@ export const clientService = {
     },
 
     ObterClientes: async (dados: any): Promise<IPCResponseFormat> => {
+
+        /* importação local da função que preciso */
+        const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
+
         let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
         let limit = dados.limit ?? 20 // padroniza o liminte a 20
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
@@ -80,21 +86,23 @@ export const clientService = {
 
         const clientesDaPagina = informacoesDaPagina.data.clients || []
 
-        let retornoData = clientesDaPagina.map((cliente: any) => {
-            const randomNumber = Math.random(); // 0 a 1
+        let retornoData = await Promise.all(
+            clientesDaPagina.map(async (cliente: any) => {
+                const movimentacoesServiceRetorno = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({ id: cliente.id });
+                if (!movimentacoesServiceRetorno.success) return movimentacoesServiceRetorno;
 
-            const mockSituacao = randomNumber <= 0.33 ? 'ativo' :
-                randomNumber <= 0.66 ? 'vencido' : 'quitado';
+                const movimentacoesDoCliente = movimentacoesServiceRetorno.data
 
-            return {
-                id: cliente.id,
-                nome: cliente.nome,
-                SomaTotal: Math.floor(Math.random() * 500),
-                ProximoPagamento: new Date(Date.now() + Math.random() * 10 * 86400000).toISOString(),
-                ValorProximaNota: Math.floor(Math.random() * 200),
-                Situacao: mockSituacao,
-            }
-        })
+                return {
+                    id: cliente.id,
+                    nome: cliente.nome,
+                    SomaTotal: movimentacoesDoCliente.TotalEmDivida,
+                    ProximoPagamento: movimentacoesDoCliente.DataDeProximoPagamento,
+                    ValorProximaNota: movimentacoesDoCliente.ValorACobrarNaProximaNota,
+                    Situacao: movimentacoesDoCliente.Situacao
+                }
+            })
+        )
 
         return {
             success: true,
@@ -117,7 +125,7 @@ export const clientService = {
         })
 
         if (retornoData.length <= 0) {
-            retornoData = [{ id: null, nome: '- sem cliente -'}]
+            retornoData = [{ id: null, nome: '- sem cliente -' }]
         }
 
         return {
