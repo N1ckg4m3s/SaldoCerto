@@ -8,6 +8,7 @@ import { AdicionarMovimentacao_FloatGuiModule } from '@renderer/components/float
 import InterfaceFlutuante from '@renderer/components/floatGui/component';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
+import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -38,20 +39,6 @@ const useAllStates = () => {
 const HistoricoDeLancamentos = () => {
     const { addNotification } = useNotification();
     const { page, floatGui, movimentacoes, deDataRef, ateDataRef, optionRef, searchRef } = useAllStates();
-
-    const formatValue = (valor: string | undefined): string => {
-        // se não tiver valor retorna '-'
-        if (!valor) return '-';
-
-        // tenta transformar em numero
-        const stringToNumber = Number(valor);
-        if (isNaN(stringToNumber)) {
-            return '-' // nulo
-        }
-
-        // retorna formatado
-        return `$${stringToNumber.toFixed(2)}`
-    }
 
     const getAllApiMovimentations = () => {
         try {
@@ -159,7 +146,7 @@ const HistoricoDeLancamentos = () => {
                 <tbody>
                     {movimentacoes.data.map((value, index) => (
                         <sh.tableRow>
-                            <sh.tableData>{value.data}</sh.tableData>
+                            <sh.tableData>{formatarDateParaTexto(value.data)}</sh.tableData>
                             <sh.tableData>{value.nome}</sh.tableData>
                             <sh.tableData>
                                 <sh.tipoNota
@@ -167,7 +154,7 @@ const HistoricoDeLancamentos = () => {
                                     {value.tipo}
                                 </sh.tipoNota>
                             </sh.tableData>
-                            <sh.tableData>{formatValue(value.valor.toString())}</sh.tableData>
+                            <sh.tableData>{formatarValorParaTexto(value.valor)}</sh.tableData>
                             <sh.tableData>{value.codigo || '-'}</sh.tableData>
                             <sh.tableData>
                                 <sh.smallTableButton onClick={() => { }}>

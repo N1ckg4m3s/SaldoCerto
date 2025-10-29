@@ -3,7 +3,7 @@ import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import { useEffect, useRef, useState } from 'react';
 import type { ListaClienteView, NumberFilterType, PaginacaoView } from '@renderer/shered/viewTypes';
-import { nextNumberFilterType } from '@renderer/controler/auxiliar';
+import { formatarDateParaTexto, formatarValorParaTexto, nextNumberFilterType } from '@renderer/controler/auxiliar';
 import { Paginacao } from '@renderer/components/pagination/component';
 import type { FloatGuiProps } from '@renderer/shered/types';
 import InterfaceFlutuante from '@renderer/components/floatGui/component';
@@ -167,9 +167,9 @@ const ListaDeClientesCadastrados = () => {
                         return (
                             <sh.tableRow>
                                 <sh.tableData>{value.nome}</sh.tableData>
-                                <sh.tableData>{value.SomaTotal}</sh.tableData>
-                                <sh.tableData>{value.ProximoPagamento}</sh.tableData>
-                                <sh.tableData>{value.ValorProximaNota}</sh.tableData>
+                                <sh.tableData>{formatarValorParaTexto(value.SomaTotal)}</sh.tableData>
+                                <sh.tableData>{formatarDateParaTexto(value.ProximoPagamento)}</sh.tableData>
+                                <sh.tableData>{formatarValorParaTexto(value.ValorProximaNota)}</sh.tableData>
                                 <sh.tableData>
                                     <sh.situacaoCliente
                                         situacao={value.Situacao}>
