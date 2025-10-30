@@ -3,11 +3,12 @@ import * as s from '../style'
 import type { Cliente } from "@renderer/shered/types";
 import { useNotification } from "@renderer/components/notificationContainer/notificationContext";
 import { ApiCaller } from "@renderer/controler/ApiCaller";
+import type { InformacoesDoClienteView } from "@renderer/shered/viewTypes";
 
 interface Props {
     onError?: () => void;
     onComplete?: () => void;
-    Cliente?: Cliente;
+    Cliente?: InformacoesDoClienteView;
 }
 
 export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, onError, Cliente }) => {

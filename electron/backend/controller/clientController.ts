@@ -12,8 +12,11 @@ export const IniciarControladores = () => {
     /* Obtem uma lista com todos os usuarios por pagina*/
     ipcMain.handle('cliente:list', safeHandler(clientService.ObterClientes));
 
-    /* Obtem uma usuario pelo Id */
+    /* Obtem uma usuario pelo Id [SISTEMA] */
     ipcMain.handle('cliente:getById', safeHandler(clientService.ObterClientePorId));
+
+    /* Obtem uma usuario pelo Id */
+    ipcMain.handle('cliente:getInformationsById', safeHandler(clientService.ObterClienteInformationsPorId));
 
     /* Obtem uma usuario pelo search */
     ipcMain.handle('cliente:getBySearch', safeHandler(() => { }))

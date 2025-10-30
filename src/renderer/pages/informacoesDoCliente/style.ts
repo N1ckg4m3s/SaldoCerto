@@ -10,11 +10,16 @@ export const HistoryContainer = styled.div`
 
 export const informationsContainer = styled.div`
     ${cardBrackgroundBase};
-    ${flexColumn}
-    gap: ${GlobalSpacing.Gap10};
+    display: flex;
     margin-bottom: ${GlobalSpacing.Medium};
 `
 
 export const Information = styled.span`
     font-size: ${GlobalTextSize.Small};
+`
+
+export const InformationsGroup = styled.section`
+    ${flexColumn}
+    gap: ${GlobalSpacing.Gap10};
+    width: 100%;
 `

@@ -286,7 +286,7 @@ export const movimentacoesService = {
 
     ObterMovimentacoesPorID: async (dados: any): Promise<IPCResponseFormat> => {
         let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
-        let limit = dados.limit ?? 20 // padroniza o liminte a 20
+        let limit = dados.limit ?? 20 // padroniza o liminte a 20 ObterMovimentacoesPorID
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
         let filters = dados.filters ?? '' // Verifica a existencia dos filtros
 
@@ -329,6 +329,8 @@ export const movimentacoesService = {
                     data: movimentacao.data,
                     valor: movimentacao.valor,
                     codigo: movimentacao.codigo,
+                    vencimento: movimentacao.vencimento,
+                    valorAbatido: movimentacao.valorAbatido
                 };
             })
         );

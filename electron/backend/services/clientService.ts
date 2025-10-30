@@ -1,5 +1,6 @@
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
+import { movimentacoesService } from "./movimentacoesService";
 
 interface IPCResponseFormat {
     success: boolean,
@@ -70,7 +71,6 @@ export const clientService = {
     },
 
     ObterClientes: async (dados: any): Promise<IPCResponseFormat> => {
-
         /* importação local da função que preciso */
         const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
 
@@ -129,6 +129,34 @@ export const clientService = {
         return {
             success: true,
             data: retornoData
+        }
+    },
+
+    ObterClienteInformationsPorId: async (dados: any): Promise<IPCResponseFormat> => {
+        /* importação local da função que preciso */
+        const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
+        
+        if (!dados || !dados.id) return { success: false, message: 'Id do cliente não informado' }
+
+        /* OBTENDO AS INFORMAÇÕES NECESSARIAS */
+        const clientServiceResponse = await clientService.ObterClientePorId({ id: dados.id });
+        if (!clientServiceResponse.success) return { success: false, message: 'Não foi possivel obter o cliente' }
+
+        const cliente = clientServiceResponse.data;
+
+        const movimentacoesServiceResponse = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({ id: dados.id });
+        if (!movimentacoesServiceResponse.success) return { success: false, message: 'Não foi possivel obter o resumo das movimentações' }
+
+        const resumoMovimentacoes = movimentacoesServiceResponse.data;
+
+        return {
+            success: true,
+            data: {
+                ...cliente,
+                ProximoPagamento: resumoMovimentacoes.DataDeProximoPagamento,
+                SomaTotal: resumoMovimentacoes.TotalEmDivida,
+                ValorProximaNota:  resumoMovimentacoes.ValorACobrarNaProximaNota
+            }
         }
     },
 }

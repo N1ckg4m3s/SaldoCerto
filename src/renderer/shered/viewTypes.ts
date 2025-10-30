@@ -15,7 +15,10 @@ export type ListaClienteView = Pick<Cliente, 'nome' | 'id'> & {
     Situacao: SituacaoCliente
 }
 
-export type InformacoesDoClienteView = Omit<Movimentacao, 'ClientId'>
+/* INFORMAÇÕES DO CLIENTE*/
+export type HistoricoDeLancamentoDoClienteView = Omit<Movimentacao, 'ClientId'>
+
+export type InformacoesDoClienteView = Omit<ListaClienteView, 'Situacao'> & Pick<Cliente, 'telefone' | 'contrato'>;
 
 export type HistoricoDeLancamentoView = Omit<Movimentacao, 'vencimento' | 'valorAbatido'> & Pick<Cliente, 'nome'>
 
@@ -57,7 +60,6 @@ export interface cardInformationsView {
     clientesComVencimento7d: number
     entradasRecentes: number
 }
-
 
 export type TableRowView = {
     nome: string,

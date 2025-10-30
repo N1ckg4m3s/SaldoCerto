@@ -50,6 +50,7 @@ export const Paginacao = ({ currentPage, totalPages, onPageChange }: PaginacaoPr
         > {totalPages} </s.PageButton>
     </>
 
+    if (totalPages == 1) return <></>;
 
     return (
         <s.Container>

@@ -9,15 +9,15 @@ const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname,
 const { safeHandler } = await import(pathToFileURL(path.join(__dirname, '..', '..', 'utilits', 'safeHandler.js')).href);
 
 export const IniciarControladores = () => {
-    /* Obtem uma lista com todos os usuarios por pagina*/
+    /* Obtem uma lista com as movimentações por pagina*/
     ipcMain.handle('movimentacao:list', safeHandler(movimentacoesService.ObterMovimentacoes));
 
-    /* Obtem uma lista com todos os usuarios por pagina*/
-    ipcMain.handle('movimentacao:listByClient', safeHandler(() => { }));
+    /* Obtem uma lista com as movimentações por usuario */
+    ipcMain.handle('movimentacao:listByClient', safeHandler(movimentacoesService.ObterMovimentacoesPorID));
 
-    /* Obtem uma lista com todos os usuarios por pagina*/
+    /* Adiciona uma nova movimentação */
     ipcMain.handle('movimentacao:create', safeHandler(movimentacoesService.AdicionarNovaMovimentação));
 
-    /* Obtem uma lista com todos os usuarios por pagina*/
+    /* Remove a movimentação */
     ipcMain.handle('movimentacao:delete', safeHandler(() => { }));
 }
