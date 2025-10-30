@@ -122,22 +122,36 @@ export const dashboardService = {
         }
     },
 
-    obterListaDeProximasCobrancas: async () => {
+    obterResumoDasTabelas: async () => {
         try {
             const hoje = new Date();
 
-            const movimentacoes = await RepositorioMovimentacoes.obterPedidosNaoAbatidos();
-            if (!movimentacoes.success) return movimentacoes;
+            /* 1️⃣ Obter as litas de informações */
+            const [listaProximosVencimentos, listaMovimentacoesRecentes] = await Promise.all([
+                RepositorioMovimentacoes.obterPedidosNaoAbatidos(),
+                RepositorioMovimentacoes.obterMovimentacoesRecentes(),
+            ])
 
-            const lista = movimentacoes.data || [];
+            // Verificando responses
+            if (!listaProximosVencimentos.success || !listaMovimentacoesRecentes.success) return {
+                success: false, message: 'Falha ao obter os dados da tabela'
+            };
 
-            const proximosVencimentos = lista
+            const listaProximasCobrancas = listaProximosVencimentos.data;
+            const listaUltimasMovimentacoes = listaMovimentacoesRecentes.data;
+
+
+            /* 2️⃣ Filtrando informações */
+            const proximosVencimentos = listaProximasCobrancas
                 .filter((m: any) => m.vencimento && new Date(m.vencimento) > hoje)
                 .sort((a: any, b: any) => new Date(a.vencimento).getTime() - new Date(b.vencimento).getTime());
-
             const proximos10 = proximosVencimentos.slice(0, 10);
 
-            const returnData = await Promise.all(
+            const ultimos10 = listaUltimasMovimentacoes.slice(0, 10)
+
+
+            /* 3️⃣ Unindo informações */
+            const returnData_Proximas10 = await Promise.all(
                 proximos10.map(async (m: any) => {
 
                     const clientServiceResponse = await clientService.ObterClientePorId({ id: m.clienteId });
@@ -157,14 +171,37 @@ export const dashboardService = {
                 })
             )
 
+            const returnData_Ultimas10 = await Promise.all(
+                ultimos10.map(async (m: any) => {
+
+                    const clientServiceResponse = await clientService.ObterClientePorId({ id: m.clienteId });
+                    if (!clientServiceResponse.success) return {
+                        nome: '- // -',
+                        tipo: '- // -',
+                        data: m.data,
+                        valor: 0
+                    }
+
+                    const clienteEncontrado = clientServiceResponse.data
+
+                    return {
+                        nome: clienteEncontrado.nome,
+                        tipo: m.tipo,
+                        data: m.data,
+                        valor: m.valor
+                    }
+                })
+            )
+
             return {
                 success: true,
                 data: {
-                    proximosVencimentos: returnData,
+                    proximosVencimentos: returnData_Proximas10,
+                    ultimasMovimentacoes: returnData_Ultimas10
                 }
             }
         } catch (e) {
-            return { success: false, message: `[dashboardService.obterResumoDasMovimentacoes]: ${e}` };
+            return { success: false, message: `[dashboardService.obterResumoDasTabelas]: ${e}` };
         }
-    }
+    },
 };

@@ -19,7 +19,6 @@ contextBridge.exposeInMainWorld('api', {
     },
     dashboard: {
         getResumo: (args?: any) => ipcRenderer.invoke('dashboard:getResumo', args),
-        getProximasCobrancas: (args?: any) => ipcRenderer.invoke('dashboard:getProximasCobrancas', args),
-        getUltimasMovimentacoes: (args?: any) => ipcRenderer.invoke('dashboard:getUltimasMovimentacoes', args),
+        getTableResumo: (args?: any) => ipcRenderer.invoke('dashboard:getTableResume', args),
     }
 });

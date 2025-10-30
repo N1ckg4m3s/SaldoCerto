@@ -65,7 +65,7 @@ export type TableRowView = {
     data: string,
 }
 
-export type TableRowultimasMovimentacoesView = Omit<TableRowView, 'data'> & {
+export type TableRowultimasMovimentacoesView = TableRowView & {
     tipo: TipoMovimentacao,
 }
 

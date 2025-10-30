@@ -7,7 +7,7 @@ import PageTitle from '@renderer/components/pageTitle/component';
 import { useEffect, useState } from 'react';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
-import { formatarValorParaTexto } from '@renderer/controler/auxiliar';
+import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
 import type { cardInformationsView, tableDatasView } from '@renderer/shered/viewTypes';
 
 const Dashboard = () => {
@@ -15,13 +15,7 @@ const Dashboard = () => {
     const [dados, setDados] = useState<cardInformationsView>();
     const [tableData, setTableData] = useState<tableDatasView>({
         proximosVencimentos: [],
-        ultimasMovimentacoes: [
-            {
-                tipo: 'Pedido',
-                nome: 'teste',
-                valor: 10,
-            }
-        ]
+        ultimasMovimentacoes: []
     })
 
     useEffect(() => {
@@ -43,13 +37,10 @@ const Dashboard = () => {
             }
         })
         ApiCaller({
-            url: `/dashboard/getProximasCobrancas`,
+            url: `/dashboard/getTableResumo`,
             onSuccess(result) {
                 if (result.success) {
-                    setTableData({
-                        ...tableData,
-                        proximosVencimentos: result.data.proximosVencimentos
-                    })
+                    setTableData(result.data)
                 }
             },
             onError(erro) {
@@ -158,7 +149,7 @@ const Dashboard = () => {
                         data={{
                             Title: `${index + 1}. ${value.nome}`,
                             FloatInfo: value.tipo,
-                            AdicionalInformation: formatarValorParaTexto(value.valor)
+                            AdicionalInformation: `${formatarValorParaTexto(value.valor)} - ${formatarDateParaTexto(value.data)}`
                         }}
                     />)}
                 </ListComponent>
