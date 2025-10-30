@@ -8,10 +8,21 @@ import { useEffect, useState } from 'react';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { formatarValorParaTexto } from '@renderer/controler/auxiliar';
+import type { cardInformationsView, tableDatasView } from '@renderer/shered/viewTypes';
 
 const Dashboard = () => {
     const { addNotification } = useNotification()
-    const [dados, setDados] = useState<any>(null);
+    const [dados, setDados] = useState<cardInformationsView>();
+    const [tableData, setTableData] = useState<tableDatasView>({
+        proximosVencimentos: [],
+        ultimasMovimentacoes: [
+            {
+                tipo: 'Pedido',
+                nome: 'teste',
+                valor: 10,
+            }
+        ]
+    })
 
     useEffect(() => {
         ApiCaller({
@@ -19,6 +30,26 @@ const Dashboard = () => {
             onSuccess(result) {
                 if (result.success) {
                     setDados(result.data)
+                }
+            },
+            onError(erro) {
+                addNotification({
+                    id: String(Date.now()),
+                    title: "Erro ao obter os dados do dashboard",
+                    type: 'error',
+                    message: erro.message || 'No message',
+                    errorCode: erro.errorCode || 'ERR'
+                })
+            }
+        })
+        ApiCaller({
+            url: `/dashboard/getProximasCobrancas`,
+            onSuccess(result) {
+                if (result.success) {
+                    setTableData({
+                        ...tableData,
+                        proximosVencimentos: result.data.proximosVencimentos
+                    })
                 }
             },
             onError(erro) {
@@ -43,6 +74,14 @@ const Dashboard = () => {
         return `${diffEmDias}d`;
     }
 
+    const DiferencaEmDias = (data: string) => {
+        const agora = new Date();
+        const alvo = new Date(data);
+        const diffMs = agora.getTime() - alvo.getTime();
+        const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        return -diffDias;
+    }
+
     return (
         <sh.MainPageContainer>
             <PageTitle titulo='Dashboard - Controle de Fiado' />
@@ -63,7 +102,7 @@ const Dashboard = () => {
                 <sh.CleanReacrLink to={"/listaDeClientesCadastrados"}>
                     <CardComponent
                         title='Clientes com fiado ativo'
-                        data={dados?.clientesComFiadoAtivo || '-'}
+                        data={(dados?.clientesComFiadoAtivo || '').toString() || '-'}
                         description='Contagem com saldo > 0'
                     />
                 </sh.CleanReacrLink>
@@ -77,42 +116,50 @@ const Dashboard = () => {
                 <sh.CleanReacrLink to={'/TabelaDeClientesEmAtrazo'}>
                     <CardComponent
                         title='Clientes vencidos'
-                        data={dados?.clientesVencidos || '-'}
+                        data={(dados?.clientesVencidos || '').toString() || '-'}
                         description='Contagem de clientes com titulos vencidos'
                     />
                 </sh.CleanReacrLink>
 
                 <CardComponent
                     title='Próxima cobrança'
-                    data={calcularQuantosDiasParaCobranca(dados?.proximaCobranca.data || '')}
+                    data={calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString() || '')}
                     description={`${dados?.proximaCobranca.nome}: ${formatarValorParaTexto(dados?.proximaCobranca.valor || '-')}`}
                 />
 
                 <CardComponent
                     title='Clientes com vencimento em 7d'
-                    data={dados?.clientesComVencimento7d || '-'}
+                    data={(dados?.clientesComVencimento7d || '').toString() || '-'}
                     description='Alerta de curto praso'
                 />
 
                 <CardComponent
                     title='Entrada nos ultimos 7 dias'
-                    data={dados?.entradasRecentes || '-'}
+                    data={(dados?.entradasRecentes || '').toString() || '-'}
                     description='Ultimos lançamentos cadastrados'
                 />
             </s.gridCard4x2>
 
             <s.gridCard2x1>
                 <ListComponent title='10 Próximas cobranças' >
-                    {Array.from({ length: 10 }).map(() => <RowItemList
+                    {tableData.proximosVencimentos?.map((value, index) => <RowItemList
                         type='Prox.Cobran'
-                        data={[]}
+                        data={{
+                            Title: `${index + 1}. ${value.nome}`,
+                            FloatInfo: `${DiferencaEmDias(value.data)}`,
+                            AdicionalInformation: formatarValorParaTexto(value.valor)
+                        }}
                     />)}
                 </ListComponent>
 
                 <ListComponent title='Movimentações dos ultimos 7 dias (limite: 10)' >
-                    {Array.from({ length: 10 }).map(() => <RowItemList
+                    {tableData.ultimasMovimentacoes?.map((value, index) => <RowItemList
                         type='Val.Recent'
-                        data={[]}
+                        data={{
+                            Title: `${index + 1}. ${value.nome}`,
+                            FloatInfo: value.tipo,
+                            AdicionalInformation: formatarValorParaTexto(value.valor)
+                        }}
                     />)}
                 </ListComponent>
             </s.gridCard2x1>

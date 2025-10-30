@@ -9,13 +9,13 @@ const { dashboardService } = await import(pathToFileURL(path.join(__dirname, '..
 const { safeHandler } = await import(pathToFileURL(path.join(__dirname, '..', '..', 'utilits', 'safeHandler.js')).href);
 
 export const IniciarControladores = () => {
-    /*  */
+    /* Gera o resumo dos cards */
     ipcMain.handle('dashboard:getResumo', safeHandler(dashboardService.obterResumoDasMovimentacoes));
+    
+    /* Obtem uma lista com as proximas 10 cobranças */
+    ipcMain.handle('dashboard:getProximasCobrancas', safeHandler(dashboardService.obterListaDeProximasCobrancas));
 
-    /*  */
-    ipcMain.handle('dashboard:getProximasCobrancas', safeHandler(() => { }));
-
-    /*  */
+    /* Obtem uma lista (limite 10) com as ultimas movimentações */
     ipcMain.handle('dashboard:getUltimasMovimentacoes', safeHandler(() => { }));
 
 }

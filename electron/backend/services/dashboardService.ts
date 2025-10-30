@@ -120,5 +120,51 @@ export const dashboardService = {
         } catch (e) {
             return { success: false, message: `[dashboardService.obterResumoDasMovimentacoes]: ${e}` };
         }
+    },
+
+    obterListaDeProximasCobrancas: async () => {
+        try {
+            const hoje = new Date();
+
+            const movimentacoes = await RepositorioMovimentacoes.obterPedidosNaoAbatidos();
+            if (!movimentacoes.success) return movimentacoes;
+
+            const lista = movimentacoes.data || [];
+
+            const proximosVencimentos = lista
+                .filter((m: any) => m.vencimento && new Date(m.vencimento) > hoje)
+                .sort((a: any, b: any) => new Date(a.vencimento).getTime() - new Date(b.vencimento).getTime());
+
+            const proximos10 = proximosVencimentos.slice(0, 10);
+
+            const returnData = await Promise.all(
+                proximos10.map(async (m: any) => {
+
+                    const clientServiceResponse = await clientService.ObterClientePorId({ id: m.clienteId });
+                    if (!clientServiceResponse.success) return {
+                        nome: '- // -',
+                        data: '- // -',
+                        valor: 0
+                    }
+
+                    const clienteEncontrado = clientServiceResponse.data
+
+                    return {
+                        nome: clienteEncontrado.nome,
+                        data: m.vencimento,
+                        valor: (m.valor - (m.valorAbatido ?? 0))
+                    }
+                })
+            )
+
+            return {
+                success: true,
+                data: {
+                    proximosVencimentos: returnData,
+                }
+            }
+        } catch (e) {
+            return { success: false, message: `[dashboardService.obterResumoDasMovimentacoes]: ${e}` };
+        }
     }
 };

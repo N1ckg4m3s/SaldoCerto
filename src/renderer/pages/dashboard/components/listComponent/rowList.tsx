@@ -3,27 +3,37 @@ import * as s from './style'
 
 interface props {
     type: 'Prox.Cobran' | 'Val.Recent',
-    data: DashboardTableRowView[],
+    data: DashboardTableRowView,
 }
 
 export const RowItemList: React.FC<props> = ({ type, data }) => {
-    let RowInformations: DashboardTableRowView = {
-        Title: "1. João",
-        FloatInfo: '2d',
-        AdicionalInformation: 'R$ 280 - 12/04',
+    const value = Number(data.FloatInfo);
+    const valueIsNumber = !isNaN(value);
+
+    let good = false;
+    let ok = false;
+    let bad = false;
+    let displayValue = data.FloatInfo;
+
+    if (valueIsNumber) {
+        if (value > 5) good = true;
+        else if (value > 0) ok = true;
+        else bad = true;
+
+        displayValue = `${Math.abs(value)}d`;
+    } else {
+        displayValue = data.FloatInfo == 'Pedido' ? '📦' : '💵'
     }
 
     return (
         <s.rowItemList>
             <div>
-                <strong>{RowInformations.Title}</strong>
-                <s.rowAditionalInfo>{RowInformations.AdicionalInformation}</s.rowAditionalInfo>
+                <strong>{data.Title}</strong>
+                <s.rowAditionalInfo>{data.AdicionalInformation}</s.rowAditionalInfo>
             </div>
-            <s.rowPill
-                good={false}
-                bad={false}
-                ok={true}
-            >{RowInformations.FloatInfo}</s.rowPill>
+            <s.rowPill good={good} ok={ok} bad={bad}>
+                {displayValue}
+            </s.rowPill>
         </s.rowItemList>
-    )
-}
+    );
+};

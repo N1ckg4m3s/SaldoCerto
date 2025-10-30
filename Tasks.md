@@ -3,7 +3,7 @@
 **Progresso:**  
 
 - Totais: 110
-- Concluídas: 69
+- Concluídas: 72
 - Parciais: 5
 **Conclusão: ~65%**
 
@@ -151,5 +151,5 @@
 | movimentacoes:create                |    [x]     |   [x]   |    [x]     |
 | movimentacoes:delete                |    [ ]     |   [ ]   |    [ ]     |
 | dashboard:getResumo                 |    [x]     |   [x]   |    [x]     |
-| dashboard:getProximasCobrancas      |    [ ]     |   [ ]   |    [ ]     |
+| dashboard:getProximasCobrancas      |    [x]     |   [x]   |    [x]     |
 | dashboard:getUltimasMovimentacoes   |    [ ]     |   [ ]   |    [ ]     |
