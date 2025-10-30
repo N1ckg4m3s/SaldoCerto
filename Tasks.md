@@ -25,7 +25,7 @@
 - [x] Criar estrutura base do projeto (HTML + CSS)  
 - [x] Criar barra de navegação  
 - [x] Definir estilo visual padrão (cores, fontes, espaçamento)  
-- [ ] Integrar layout com React posteriormente  
+- [x] Integrar layout com React posteriormente  
 - [x] Criar estrutura de rotas (React Router)  
 
 ---
@@ -43,7 +43,7 @@
   - [x] Clique no card “Clientes em atraso” → ir para página “Clientes em atraso”  
   - [x] Clique no card “Clientes” → ir para “Clientes cadastrados”  
   - [x] Clique no card “Lançamentos” → ir para “Histórico geral”  
-- [ ] Adicionar atualização dinâmica (valores reais do backend)  
+- [x] Adicionar atualização dinâmica (valores reais do backend)  
 
 ---
 

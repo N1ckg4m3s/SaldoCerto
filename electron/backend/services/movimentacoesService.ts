@@ -172,13 +172,23 @@ export const movimentacoesService = {
         let limit = dados.limit ?? 20 // padroniza o liminte a 20
         let search = dados.search ?? '' // Verifica a existencia da pesquisa
         let filters = dados.filters ?? '' // Verifica a existencia dos filtros
-        const filtros: any = {}
+        const filtros: {
+            data?: {
+                gte: Date,
+                lte: Date
+            },
+            tipo?: string
+        } = {}
 
         if (filters) {
             const deData = filters.de !== '' && new Date(filters.de) || null;
             const ateData = filters.ate !== '' && new Date(filters.ate) || null;
 
             if (deData && ateData) {
+                filtros.data = {
+                    gte: new Date(deData),
+                    lte: new Date(ateData)
+                }
                 if (deData) filtros.data.gte = new Date(deData);
                 if (ateData) filtros.data.lte = new Date(ateData);
             }

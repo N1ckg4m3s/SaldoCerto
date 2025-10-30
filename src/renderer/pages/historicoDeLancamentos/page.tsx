@@ -119,8 +119,8 @@ const HistoricoDeLancamentos = () => {
                 {/* Filtrar pot tipo */}
                 <sh.filterSelect ref={optionRef}>
                     <option value={""}>Todos</option>
-                    <option value={"pedigos"}>Pedidos</option>
-                    <option value={"pagamento"}>Pagamentos</option>
+                    <option value={"Pedido"}>Pedidos</option>
+                    <option value={"Pagamento"}>Pagamentos</option>
                 </sh.filterSelect>
 
                 {/* Pesquisa */}
