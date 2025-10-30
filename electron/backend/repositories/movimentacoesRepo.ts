@@ -1,7 +1,7 @@
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 
-export interface IPCResponseFormat {
+interface IPCResponseFormat {
     success: boolean,
     message?: string,
     data?: any,
@@ -18,6 +18,23 @@ const { prisma } = await import(pathToFileURL(path.join(__dirname, '..', 'prisma
     Repositorio, tem como função ser o UNICO a acessar o banco de dados
         para todos os fins de acesso possive: GET, GET-FILTER, SET, UPDATE, DELETE...
 */
+const obterPedidosNaoAbatidosBase = async (whereExtra: any = {}, single = false): Promise<any[]> => {
+    const query = prisma.movimentacao[single ? 'findFirst' : 'findMany']({
+        where: {
+            tipo: 'Pedido',
+            OR: [
+                { valorAbatido: null },
+                { valor: { gt: prisma.movimentacao.fields.valorAbatido } },
+            ],
+            ...whereExtra,
+        },
+        orderBy: { vencimento: 'asc' },
+    });
+
+    const result = await query;
+    if (single) return result ? [result] : [];
+    return result.filter((p: any) => (p.valorAbatido ?? 0) < p.valor);
+};
 
 export const RepositorioMovimentacoes = {
     adicionarMovimentacao: async (dados: any): Promise<IPCResponseFormat> => {
@@ -89,15 +106,6 @@ export const RepositorioMovimentacoes = {
         }
     },
 
-    obterTodasMovimentacoesDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
-        try {
-            // Obtem todas as movimentações de um cliente especifico com base nas paginas
-            return { success: true }
-        } catch (e) {
-            return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
-        }
-    },
-
     obterPedidosNaoAbatidosDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
         // Obtem todas os pedidos de um cliente que não esta abatido
         try {
@@ -126,6 +134,94 @@ export const RepositorioMovimentacoes = {
             return { success: true }
         } catch (e) {
             return { success: false, message: `[RepositorioMovimentacoes.adicionarMovimentacao]: ${e}` }
+        }
+    },
+
+    obterPedidosNaoAbatidos: async (): Promise<IPCResponseFormat> => {
+        try {
+            const filtrados = await obterPedidosNaoAbatidosBase();
+            return { success: true, data: filtrados };
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterPedidosNaoAbatidos]: ${e}` };
+        }
+    },
+
+    obterPedidosVencidos: async (): Promise<IPCResponseFormat> => {
+        try {
+            const hoje = new Date();
+            const filtrados = await obterPedidosNaoAbatidosBase({ vencimento: { lte: hoje } });
+            return { success: true, data: filtrados };
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterPedidosVencidos]: ${e}` };
+        }
+    },
+
+    obterProximosVencimentos: async (): Promise<IPCResponseFormat> => {
+        try {
+            const hoje = new Date();
+            const seteDias = new Date();
+            seteDias.setDate(hoje.getDate() + 7);
+
+            const filtrados = await obterPedidosNaoAbatidosBase({
+                vencimento: { gt: hoje, lte: seteDias },
+            });
+
+            return { success: true, data: filtrados };
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterProximosVencimentos]: ${e}` };
+        }
+    },
+
+    obterTopDevedores: async (): Promise<IPCResponseFormat> => {
+        try {
+            const todas = await prisma.movimentacao.findMany({
+                where: { tipo: 'Pedido' },
+                select: { clienteId: true, valor: true, valorAbatido: true },
+            });
+
+            const mapa = new Map<string, number>();
+
+            for (const p of todas) {
+                const saldo = p.valor - (p.valorAbatido ?? 0);
+                if (saldo > 0)
+                    mapa.set(p.clienteId, (mapa.get(p.clienteId) ?? 0) + saldo);
+            }
+
+            const ordenado = [...mapa.entries()]
+                .sort((a, b) => b[1] - a[1])
+                .map(([clienteId, valor]) => ({ clienteId, valor }));
+
+            return { success: true, data: ordenado.slice(0, 10) }; // top 10
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterTopDevedores]: ${e}` };
+        }
+    },
+
+    obterProximaCobranca: async (): Promise<IPCResponseFormat> => {
+        try {
+            const hoje = new Date();
+            const [proxima] = await obterPedidosNaoAbatidosBase({ vencimento: { gt: hoje } }, true);
+            return { success: true, data: proxima ?? null };
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterProximaCobranca]: ${e}` };
+        }
+    },
+
+    obterMovimentacoesRecentes: async (): Promise<IPCResponseFormat> => {
+        try {
+            const seteDiasAtras = new Date();
+            seteDiasAtras.setDate(seteDiasAtras.getDate() - 7);
+
+            const recentes = await prisma.movimentacao.findMany({
+                where: {
+                    data: { gte: seteDiasAtras },
+                },
+                orderBy: { data: 'desc' },
+            });
+
+            return { success: true, data: recentes };
+        } catch (e) {
+            return { success: false, message: `[movimentacoesRepo.obterMovimentacoesRecentes]: ${e}` };
         }
     },
 }

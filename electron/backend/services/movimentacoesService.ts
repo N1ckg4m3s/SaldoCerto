@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
-export interface IPCResponseFormat {
+interface IPCResponseFormat {
     success: boolean,
     message?: string,
     data?: any,

@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
-export interface IPCResponseFormat {
+interface IPCResponseFormat {
     success: boolean,
     message?: string,
     data?: any,
@@ -13,8 +13,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const { RepositorioCliente } = await import(pathToFileURL(path.join(__dirname, '..', 'repositories', 'clientRepo.js')).href);
-
-// const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
 
 /*
     Service, tem como função tratar o 'pedido' de dados para o banco com base na regra de negocios
