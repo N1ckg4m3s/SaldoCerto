@@ -18,6 +18,7 @@ export const dashboardService = {
     obterResumoDasMovimentacoes: async (): Promise<IPCResponseFormat> => {
         try {
             const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
 
             // === 1️⃣ Buscar todas as movimentações em aberto ===
             const movimentacoes = await RepositorioMovimentacoes.obterPedidosNaoAbatidos();
@@ -38,7 +39,6 @@ export const dashboardService = {
                         clientesComVencimentoProximo: 0,
                         entradasRecentes: 0,
                         proximasCobrancas: [],
-                        movimentacoesRecentes: []
                     }
                 };
             }
@@ -66,8 +66,11 @@ export const dashboardService = {
             }
 
             // === 3️⃣ Próxima cobrança ===
+            const em7Dias = new Date(hoje);
+            em7Dias.setDate(em7Dias.getDate() + 7)
+
             const proximosVencimentos = lista
-                .filter((m: any) => m.vencimento && new Date(m.vencimento) > hoje)
+                .filter((m: any) => m.vencimento && new Date(m.vencimento) <= em7Dias)
                 .sort((a: any, b: any) => new Date(a.vencimento).getTime() - new Date(b.vencimento).getTime());
 
             const proximo = proximosVencimentos[0];
@@ -108,12 +111,6 @@ export const dashboardService = {
                         const diff = (hoje.getTime() - new Date(m.data).getTime()) / (1000 * 60 * 60 * 24);
                         return diff <= 7;
                     }).length,
-                    movimentacoesRecentes: lista
-                        .filter((m: any) => {
-                            const diff = (hoje.getTime() - new Date(m.data).getTime()) / (1000 * 60 * 60 * 24);
-                            return diff <= 7;
-                        })
-                        .slice(0, 10)
                 }
             };
 
@@ -125,6 +122,7 @@ export const dashboardService = {
     obterResumoDasTabelas: async () => {
         try {
             const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0)
 
             /* 1️⃣ Obter as litas de informações */
             const [listaProximosVencimentos, listaMovimentacoesRecentes] = await Promise.all([
@@ -142,9 +140,12 @@ export const dashboardService = {
 
 
             /* 2️⃣ Filtrando informações */
+            const em7Dias = new Date(hoje);
+            em7Dias.setDate(em7Dias.getDate() + 7)
+
             const proximosVencimentos = listaProximasCobrancas
-                .filter((m: any) => m.vencimento && new Date(m.vencimento) > hoje)
                 .sort((a: any, b: any) => new Date(a.vencimento).getTime() - new Date(b.vencimento).getTime());
+                
             const proximos10 = proximosVencimentos.slice(0, 10);
 
             const ultimos10 = listaUltimasMovimentacoes.slice(0, 10)

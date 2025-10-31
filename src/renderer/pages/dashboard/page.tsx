@@ -23,6 +23,7 @@ const Dashboard = () => {
             url: `/dashboard/getResumo`,
             onSuccess(result) {
                 if (result.success) {
+                    console.log('Card resumo:', result.data)
                     setDados(result.data)
                 }
             },
@@ -40,6 +41,7 @@ const Dashboard = () => {
             url: `/dashboard/getTableResumo`,
             onSuccess(result) {
                 if (result.success) {
+                    console.log('Table resumo:', result.data)
                     setTableData(result.data)
                 }
             },
@@ -62,7 +64,7 @@ const Dashboard = () => {
         const diffEmMs = d.getTime() - hoje.getTime(); // diferença em milissegundos
         const diffEmDias = Math.ceil(diffEmMs / (1000 * 60 * 60 * 24)); // converte para dias e arredonda para cima
 
-        return `${diffEmDias}d`;
+        return `${diffEmDias}`;
     }
 
     const DiferencaEmDias = (data: string) => {
@@ -86,7 +88,7 @@ const Dashboard = () => {
 
                 <CardComponent
                     title='Valor vencido (R$)'
-                    data={formatarValorParaTexto(dados?.valorVencido || '-')}
+                    data={formatarValorParaTexto(dados?.totalVencido || '-')}
                     description='Clique para ver uma tabela detalhada'
                 />
 
@@ -114,13 +116,25 @@ const Dashboard = () => {
 
                 <CardComponent
                     title='Próxima cobrança'
-                    data={calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString() || '')}
+                    data={(() => {
+                        const tempo = Number(calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString()))
+                        let sufixo: string = tempo > 0 ? 'Em' : 'Há';
+
+                        if (tempo == 0) {
+                            return "Hoje"
+                        } else {
+                            return `${sufixo} ${tempo}d`
+                        }
+
+                    })()}
+
+                    // data={calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString() || '')}
                     description={`${dados?.proximaCobranca.nome}: ${formatarValorParaTexto(dados?.proximaCobranca.valor || '-')}`}
                 />
 
                 <CardComponent
                     title='Clientes com vencimento em 7d'
-                    data={(dados?.clientesComVencimento7d || '').toString() || '-'}
+                    data={(dados?.clientesComVencimentoProximo || '').toString() || '-'}
                     description='Alerta de curto praso'
                 />
 

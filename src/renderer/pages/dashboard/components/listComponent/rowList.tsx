@@ -20,7 +20,7 @@ export const RowItemList: React.FC<props> = ({ type, data }) => {
         else if (value > 0) ok = true;
         else bad = true;
 
-        displayValue = `${Math.abs(value)}d`;
+        displayValue = `${value}d`;
     } else {
         displayValue = data.FloatInfo == 'Pedido' ? '📦' : '💵'
     }

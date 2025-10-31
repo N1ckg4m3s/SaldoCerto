@@ -48,7 +48,7 @@ export interface Notification {
 /* DASHBOARD */
 export interface cardInformationsView {
     totalEmDivida: number,
-    valorVencido: number
+    totalVencido: number
     clientesComFiadoAtivo: number
     topDevedor: { valor: number, nome: string }
     proximaCobranca: {
@@ -57,7 +57,7 @@ export interface cardInformationsView {
         valor: number
     }
     clientesVencidos: number
-    clientesComVencimento7d: number
+    clientesComVencimentoProximo: number
     entradasRecentes: number
 }
 

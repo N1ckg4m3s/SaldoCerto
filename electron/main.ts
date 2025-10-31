@@ -10,8 +10,6 @@ const __dirname = path.dirname(__filename);
 const ControllerStartPath = path.join(__dirname, 'utilits', 'startControllers.js');
 const ControllerStartURL = pathToFileURL(ControllerStartPath).href;
 
-console.log('Existe?', existsSync(ControllerStartPath))
-
 const { iniciarTodosControladores } = await import(ControllerStartURL);
 
 let mainWindow: BrowserWindow | null = null;
