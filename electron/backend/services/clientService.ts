@@ -1,162 +1,152 @@
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
-import { movimentacoesService } from "./movimentacoesService";
 
-interface IPCResponseFormat {
-    success: boolean,
-    message?: string,
-    data?: any,
-    errorCode?: string
-}
-
-/* Chegar ao Repositorio */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const { RepositorioCliente } = await import(pathToFileURL(path.join(__dirname, '..', 'repositories', 'clientRepo.js')).href);
+const { RepositorioCliente } = await import(
+    pathToFileURL(path.join(__dirname, "..", "repositories", "clientRepo.js")).href
+);
 
-/*
-    Service, tem como função tratar o 'pedido' de dados para o banco com base na regra de negocios
-        Ele verifica, datas, acrescimos, juros..., tudo.
-*/
+interface IPCResponseFormat {
+    success: boolean;
+    message?: string;
+    data?: any;
+    errorCode?: string;
+}
 
-const ValidateClientData = (dado: any): [boolean, string] => {
-    try {
-        if (!dado) throw new Error('Não chegou data');
+/* ---------- Utils ---------- */
 
-        if (!dado.nome) throw new Error('Usuario sem nome informado');
+const successResponse = (data?: any): IPCResponseFormat => ({ success: true, data });
+const errorResponse = (context: string, message: any): IPCResponseFormat => ({
+    success: false,
+    message: `[${context}]: ${message}`,
+});
 
-        if (!dado.telefone) throw new Error('Usuario sem telefone informado');
+const validateClientData = (dado: any): IPCResponseFormat => {
+    const required = [
+        ["nome", "Usuário sem nome informado"],
+        ["telefone", "Usuário sem telefone informado"],
+        ["contrato", "Usuário sem contrato informado"],
+    ];
 
-        if (!dado.contrato) throw new Error('Usuario sem contrato informado');
-
-        if (!dado.contrato.type) throw new Error('Usuario sem tipo de contrato informado');
-
-        if (!dado.contrato.dia) throw new Error('Usuario sem tempo informado no contrato');
-
-        return [true, '']
-    } catch (e: any) {
-        return [false, e.message];
+    for (const [field, msg] of required) {
+        if (field && !dado?.[field]) return errorResponse("ValidateClientData", msg);
     }
 
-}
+    if (!dado.contrato.type) return errorResponse("ValidateClientData", "Tipo de contrato ausente");
+    if (!dado.contrato.dia) return errorResponse("ValidateClientData", "Dia do contrato ausente");
+
+    return successResponse();
+};
+
+/* ---------- Serviço Principal ---------- */
 
 export const clientService = {
     AdicionarNovoCliente: async (dados: any): Promise<IPCResponseFormat> => {
-        const [valido, erro] = ValidateClientData(dados);
-        if (!valido) return { success: false, message: `[ClientService.AdicionarNovoCliente]: ${erro}` }
+        const validation = validateClientData(dados);
+        if (!validation.success) return validation;
 
-        return await RepositorioCliente.adicionarCliente(dados);
+        return RepositorioCliente.adicionarCliente(dados);
     },
 
     AtualizarInformacoesDoCliente: async (dados: any): Promise<IPCResponseFormat> => {
-        if (!dados.id) return { success: false, message: `[ClientService.AtualizarInformacoesDoCliente]: Id Não informado para atualização` }
+        if (!dados.id) return errorResponse("AtualizarInformacoesDoCliente", "Id não informado");
 
-        const [valido, erro] = ValidateClientData(dados);
-        if (!valido) return { success: false, message: `[ClientService.AdicionarNovoCliente]: ${erro}` }
+        const validation = validateClientData(dados);
+        if (!validation.success) return validation;
 
-        return await RepositorioCliente.atualizarInformacoesDoCliente(dados);
+        return RepositorioCliente.atualizarInformacoesDoCliente(dados);
     },
 
     RemoverCliente: async (dados: any): Promise<IPCResponseFormat> => {
-        if (!dados.id) return { success: false, message: `[ClientService.RemoverCliente]: Id Não informado para remoção` }
+        if (!dados.id) return errorResponse("RemoverCliente", "Id não informado");
 
-        return await RepositorioCliente.removerInformacoesDoCliente(dados);
+        return RepositorioCliente.removerInformacoesDoCliente(dados);
     },
 
     ObterClientePorId: async (dados: any): Promise<IPCResponseFormat> => {
-        if (!dados.id) return { success: false, message: `[ClientService.ObterClientePorId]: Id Não informado` }
+        if (!dados.id) return errorResponse("ObterClientePorId", "Id não informado");
 
-        return await RepositorioCliente.obterClientePorId(dados);
+        return RepositorioCliente.obterClientePorId(dados);
     },
 
     ObterClientes: async (dados: any): Promise<IPCResponseFormat> => {
-        /* importação local da função que preciso */
-        const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
+        const { movimentacoesService } = await import(
+            pathToFileURL(path.join(__dirname, "movimentacoesService.js")).href
+        );
 
-        let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
-        let limit = dados.limit ?? 20 // padroniza o liminte a 20
-        let search = dados.search ?? '' // Verifica a existencia da pesquisa
-        let filters = dados.filters ?? '' // Verifica a existencia dos filtros
+        const page = dados.page ?? 0;
+        const limit = dados.limit ?? 20;
+        const search = dados.search ?? "";
 
-        // Obter os clientes
-        const informacoesDaPagina = await RepositorioCliente.obterClientes({ page, limit, search })
+        const informacoesDaPagina = await RepositorioCliente.obterClientes({ page, limit, search });
+        if (!informacoesDaPagina.success) return informacoesDaPagina;
 
-        const clientesDaPagina = informacoesDaPagina.data.clients || []
+        const clientes = informacoesDaPagina.data.clients || [];
 
-        let retornoData = await Promise.all(
-            clientesDaPagina.map(async (cliente: any) => {
-                const movimentacoesServiceRetorno = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({ id: cliente.id });
-                if (!movimentacoesServiceRetorno.success) return movimentacoesServiceRetorno;
+        const clientsWithResumo = await Promise.all(
+            clientes.map(async (cliente: any) => {
+                const resumo = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({
+                    id: cliente.id,
+                });
+                if (!resumo.success) return resumo;
 
-                const movimentacoesDoCliente = movimentacoesServiceRetorno.data
-
+                const mov = resumo.data;
                 return {
                     id: cliente.id,
                     nome: cliente.nome,
-                    SomaTotal: movimentacoesDoCliente.TotalEmDivida,
-                    ProximoPagamento: movimentacoesDoCliente.DataDeProximoPagamento,
-                    ValorProximaNota: movimentacoesDoCliente.ValorACobrarNaProximaNota,
-                    Situacao: movimentacoesDoCliente.Situacao
-                }
+                    SomaTotal: mov.TotalEmDivida,
+                    ProximoPagamento: mov.DataDeProximoPagamento,
+                    ValorProximaNota: mov.ValorACobrarNaProximaNota,
+                    Situacao: mov.Situacao,
+                };
             })
-        )
+        );
 
-        return {
-            success: true,
-            data: {
-                currentPage: informacoesDaPagina.data.currentPage,
-                totalPages: informacoesDaPagina.data.totalPages,
-                clients: retornoData
-            }
-        };
+        return successResponse({
+            currentPage: informacoesDaPagina.data.currentPage,
+            totalPages: informacoesDaPagina.data.totalPages,
+            clients: clientsWithResumo,
+        });
     },
 
     ObterIdENomeClientes: async (dados: any): Promise<IPCResponseFormat> => {
-        let search = dados.search ?? '' // Verifica a existencia da pesquisa
+        const search = dados.search ?? "";
 
-        // Obter os clientes
-        const informacoesDaPagina = await RepositorioCliente.obterClientes({ search, limit: 10 })
+        const informacoesDaPagina = await RepositorioCliente.obterClientes({ search, limit: 10 });
+        if (!informacoesDaPagina.success) return informacoesDaPagina;
 
-        let retornoData = informacoesDaPagina.data.clients.map((info: any) => {
-            return { id: info.id, nome: info.nome }
-        })
+        let clients = informacoesDaPagina.data.clients.map((c: any) => ({
+            id: c.id,
+            nome: c.nome,
+        }));
 
-        if (retornoData.length <= 0) {
-            retornoData = [{ id: null, nome: '- sem cliente -' }]
-        }
+        if (!clients.length) clients = [{ id: null, nome: "- sem cliente -" }];
 
-        return {
-            success: true,
-            data: retornoData
-        }
+        return successResponse(clients);
     },
 
     ObterClienteInformationsPorId: async (dados: any): Promise<IPCResponseFormat> => {
-        /* importação local da função que preciso */
-        const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, 'movimentacoesService.js')).href);
-        
-        if (!dados || !dados.id) return { success: false, message: 'Id do cliente não informado' }
+        if (!dados?.id) return errorResponse("ObterClienteInformationsPorId", "Id não informado");
 
-        /* OBTENDO AS INFORMAÇÕES NECESSARIAS */
-        const clientServiceResponse = await clientService.ObterClientePorId({ id: dados.id });
-        if (!clientServiceResponse.success) return { success: false, message: 'Não foi possivel obter o cliente' }
+        const { movimentacoesService } = await import(
+            pathToFileURL(path.join(__dirname, "movimentacoesService.js")).href
+        );
 
-        const cliente = clientServiceResponse.data;
+        const client = await clientService.ObterClientePorId({ id: dados.id });
+        if (!client.success) return errorResponse("ObterClienteInformationsPorId", "Cliente não encontrado");
 
-        const movimentacoesServiceResponse = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({ id: dados.id });
-        if (!movimentacoesServiceResponse.success) return { success: false, message: 'Não foi possivel obter o resumo das movimentações' }
+        const resumo = await movimentacoesService.ObterResumoDeMovimentacoesDoCliente({ id: dados.id });
+        if (!resumo.success)
+            return errorResponse("ObterClienteInformationsPorId", "Resumo de movimentações não obtido");
 
-        const resumoMovimentacoes = movimentacoesServiceResponse.data;
-
-        return {
-            success: true,
-            data: {
-                ...cliente,
-                ProximoPagamento: resumoMovimentacoes.DataDeProximoPagamento,
-                SomaTotal: resumoMovimentacoes.TotalEmDivida,
-                ValorProximaNota:  resumoMovimentacoes.ValorACobrarNaProximaNota
-            }
-        }
+        const mov = resumo.data;
+        return successResponse({
+            ...client.data,
+            ProximoPagamento: mov.DataDeProximoPagamento,
+            SomaTotal: mov.TotalEmDivida,
+            ValorProximaNota: mov.ValorACobrarNaProximaNota,
+        });
     },
-}
+};
