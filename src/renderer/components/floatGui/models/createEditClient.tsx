@@ -103,6 +103,13 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
 
             <s.ModuleFieldRow>
                 <s.ModuleFormLabel>Contato:</s.ModuleFormLabel>
+                <s.FieldTip>I
+                    <span>
+                        Forma de contatar o cliente {'\n'}
+                        * Telefone {'\n'}
+                        * Email {'\n'}
+                    </span>
+                </s.FieldTip>
                 <s.ModuleFormInput placeholder="Contato do cliente" type="text" defaultValue={Cliente?.telefone} ref={telefoneRef} />
             </s.ModuleFieldRow>
 
@@ -124,14 +131,16 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
             </s.ModuleFieldRow>
 
             <s.ModuleFieldRow>
-                <s.ModuleFormLabel>Dia / Período / Prazo:</s.ModuleFormLabel>
+                <s.ModuleFormLabel>Dia / Prazo:</s.ModuleFormLabel>
                 <s.ModuleFormInput
-                    placeholder="Informe o valor"
+                    placeholder="Informe o dia/prazo"
                     type="number"
                     defaultValue={Cliente?.contrato.dia}
                     ref={contratoDiaRef}
                 />
             </s.ModuleFieldRow>
+
+            <s.FillSpace />
 
             <s.ModuleFormButton onClick={handleSubmit}>
                 {isEditMode ? "Salvar Alterações" : "Criar Cliente"}

@@ -3,9 +3,9 @@
 **Progresso:**  
 
 - Totais: 103
-- Concluídas: 65
+- Concluídas: 88
 - Parciais: 12
-**Conclusão: ~63%**
+**Conclusão: ~85%**
 
 ---
 
@@ -142,11 +142,11 @@
 | cliente:create                      |    [x]     |   [x]   |    [x]     |
 | cliente:update                      |    [x]     |   [x]   |    [x]     |
 | cliente:delete                      |    [x]     |   [x]   |    [x]     |
-| cliente:getInadimplentesList        |    [ ]     |   [ ]   |    [ ]     |
+| cliente:getInadimplentesList        |    [x]     |   [x]   |    [x]     |
 | cliente:searchByName                |    [x]     |   [x]   |    [x]     |
 | movimentacoes:list                  |    [x]     |   [x]   |    [x]     |
 | movimentacoes:listByClient          |    [x]     |   [x]   |    [x]     |
 | movimentacoes:create                |    [x]     |   [x]   |    [x]     |
 | movimentacoes:delete                |    [ ]     |   [ ]   |    [ ]     |
-| dashboard:getResumo               |    [x]     |   [x]   |    [x]     |
+| dashboard:getResumo                 |    [x]     |   [x]   |    [x]     |
 | dashboard:getResumoTabelas          |    [x]     |   [x]   |    [x]     |

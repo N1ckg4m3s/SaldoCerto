@@ -137,6 +137,8 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
                 </s.ModuleFieldRow>
             }
 
+            <s.FillSpace />
+            
             <s.ModuleFormButton onClick={handleSubmit}> Adicionar movimentação </s.ModuleFormButton>
 
         </s.ModuleContainer>
