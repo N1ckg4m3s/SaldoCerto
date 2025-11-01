@@ -23,7 +23,6 @@ const Dashboard = () => {
             url: `/dashboard/getResumo`,
             onSuccess(result) {
                 if (result.success) {
-                    console.log('Card resumo:', result.data)
                     setDados(result.data)
                 }
             },
@@ -41,7 +40,6 @@ const Dashboard = () => {
             url: `/dashboard/getTableResumo`,
             onSuccess(result) {
                 if (result.success) {
-                    console.log('Table resumo:', result.data)
                     setTableData(result.data)
                 }
             },
@@ -120,6 +118,8 @@ const Dashboard = () => {
                         const tempo = Number(calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString()))
                         let sufixo: string = tempo > 0 ? 'Em' : 'Há';
 
+                        if(isNaN(tempo)) return '-'
+
                         if (tempo == 0) {
                             return "Hoje"
                         } else {
@@ -127,8 +127,6 @@ const Dashboard = () => {
                         }
 
                     })()}
-
-                    // data={calcularQuantosDiasParaCobranca((dados?.proximaCobranca.data || '').toString() || '')}
                     description={`${dados?.proximaCobranca.nome}: ${formatarValorParaTexto(dados?.proximaCobranca.valor || '-')}`}
                 />
 

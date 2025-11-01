@@ -15,6 +15,10 @@ export const formatarDateParaTexto = (data: Date | string): string => {
     const mes = String(d.getMonth() + 1).padStart(2, '0');
     const ano = d.getFullYear();
 
+    if (dia == "NaN" || mes == 'NaN') {
+        return '-'
+    }
+
     return `${dia}/${mes}/${ano}`;
 }
 
