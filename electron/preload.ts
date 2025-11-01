@@ -4,7 +4,6 @@ contextBridge.exposeInMainWorld('api', {
     cliente: {
         getList: (args?: any) => ipcRenderer.invoke('cliente:list', args),
         getById: (args?: any) => ipcRenderer.invoke('cliente:getById', args),
-        getBySearch: (args?: any) => ipcRenderer.invoke('cliente:getBySearch', args),
         getInformationsById: (args?: any) => ipcRenderer.invoke('cliente:getInformationsById', args),
         create: (args?: any) => ipcRenderer.invoke('cliente:create', args),
         update: (args?: any) => ipcRenderer.invoke('cliente:update', args),

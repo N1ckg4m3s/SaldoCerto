@@ -18,9 +18,6 @@ export const IniciarControladores = () => {
     /* Obtem uma usuario pelo Id */
     ipcMain.handle('cliente:getInformationsById', safeHandler(clientService.ObterClienteInformationsPorId));
 
-    /* Obtem uma usuario pelo search */
-    ipcMain.handle('cliente:getBySearch', safeHandler(() => { }))
-
     /* Cria um novo usuario */
     ipcMain.handle('cliente:create', safeHandler(clientService.AdicionarNovoCliente));
 
