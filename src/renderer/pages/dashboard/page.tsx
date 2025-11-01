@@ -131,7 +131,7 @@ const Dashboard = () => {
                 />
 
                 <CardComponent
-                    title='Clientes com vencimento em 7d'
+                    title='Numero de vencimentos em 7d'
                     data={(dados?.clientesComVencimentoProximo || '').toString() || '-'}
                     description='Alerta de curto praso'
                 />

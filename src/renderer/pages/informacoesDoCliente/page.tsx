@@ -86,7 +86,6 @@ const InformacoesDoCliente = () => {
             args: { id },
             onSuccess(response) {
                 if (response.success) {
-                    console.log(response.data.movimentacoes)
                     historico.set(response.data.movimentacoes)
                     page.set({
                         currentPage: response.data.currentPage,

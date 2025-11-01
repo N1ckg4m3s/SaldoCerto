@@ -76,7 +76,6 @@ const TabelaDeClientesEmAtrazo = () => {
                             totalPages: response.data.totalPages
                         })
                     }
-                    console.log(response);
                 },
                 onError(error) {
                     console.error(error)
