@@ -137,7 +137,7 @@ export const RepositorioMovimentacoes = {
         }
     },
 
-    obterPedidosNaoAbatidos: async (): Promise<IPCResponseFormat> => {
+    obterPedidosNaoAbatidos: async (dados: any): Promise<IPCResponseFormat> => {
         try {
             const filtrados = await obterPedidosNaoAbatidosBase();
             return { success: true, data: filtrados };
@@ -224,4 +224,81 @@ export const RepositorioMovimentacoes = {
             return { success: false, message: `[movimentacoesRepo.obterMovimentacoesRecentes]: ${e}` };
         }
     },
+
+    ObterListaDeInadimplencia: async (dados: any): Promise<IPCResponseFormat> => {
+        const page = dados.page ?? 0;
+        const limit = dados.limit ?? 20;
+
+        try {
+            const hoje = new Date()
+            // 1️⃣ Agrupa os valores por clienteId
+            const agrupados = await prisma.movimentacao.groupBy({
+                by: ['clienteId'],
+                where: {
+                    tipo: 'Pedido',
+                    vencimento: { lt: hoje },
+                    OR: [
+                        { valorAbatido: null },
+                        { valor: { gt: prisma.movimentacao.fields.valorAbatido } },
+                    ],
+                },
+                _sum: { valor: true, valorAbatido: true },
+                _count: { _all: true },
+            });
+
+            // 2️⃣ Busca o vencimento mais antigo de cada cliente (para calcular atraso)
+            const vencimentos = await prisma.movimentacao.findMany({
+                where: {
+                    tipo: 'Pedido',
+                    vencimento: { lt: hoje },
+                    OR: [
+                        { valorAbatido: null },
+                        { valor: { gt: prisma.movimentacao.fields.valorAbatido } },
+                    ],
+                },
+                select: { clienteId: true, vencimento: true },
+            });
+
+            // 3️⃣ Monta um mapa do vencimento mais antigo
+            const mapaDiasAtraso = new Map<string, number>();
+            for (const mov of vencimentos) {
+                const dias = Math.floor(
+                    (hoje.getTime() - mov.vencimento.getTime()) / (1000 * 60 * 60 * 24)
+                );
+                const atual = mapaDiasAtraso.get(mov.clienteId) ?? 0;
+                mapaDiasAtraso.set(mov.clienteId, Math.max(atual, dias));
+            }
+            const lista = agrupados
+                .map((r: any) => {
+                    const abatido = r._sum.valorAbatido ?? 0;
+                    const valor = r._sum.valor ?? 0;
+                    const valorVencido = valor - abatido;
+
+                    return {
+                        clienteId: r.clienteId,
+                        ValorVencido: valorVencido,
+                        NumeroDeNotas: r._count._all,
+                        DiasDeAtrazo: mapaDiasAtraso.get(r.clienteId) ?? 0,
+                    };
+                })
+                .filter((r: any) => r.ValorVencido > 0)
+                .sort((a: any, b: any) => b.ValorVencido - a.ValorVencido);
+
+            const start = page * limit;
+            const paginated = lista.slice(start, start + limit);
+            return {
+                success: true,
+                data: {
+                    currentPage: page,
+                    totalPages: Math.ceil(lista.length / limit),
+                    inadimplentes: paginated,
+                },
+            };
+        } catch (e) {
+            return {
+                success: false,
+                message: `[ObterListaDeInadimplencia.groupBy+DiasDeAtrazo]: ${e}`,
+            };
+        }
+    }
 }

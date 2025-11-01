@@ -2,7 +2,7 @@ import type { Cliente, Movimentacao, SituacaoCliente, TipoMovimentacao } from ".
 
 export type NumberFilterType = 'Biggest' | 'Lowest' | null
 
-export type ClienteAtrazoView = Pick<Cliente, 'nome'> & {
+export type ClienteAtrazoView = Pick<Cliente, 'nome' | 'id'> & {
     ValorVencido: number,
     DiasDeAtrazo: number,
     NumeroDeNotas: number,

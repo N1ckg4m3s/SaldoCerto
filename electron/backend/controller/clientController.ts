@@ -30,9 +30,6 @@ export const IniciarControladores = () => {
     /* Remove um usuario especifico */
     ipcMain.handle('cliente:delete', safeHandler(clientService.RemoverCliente))
 
-    /* Obtem uma lista com todos os usuarios "vencidos" por pagina */
-    ipcMain.handle('cliente:listInadimplentes', safeHandler(() => { }))
-
     /* Obtem uma lista com todos nome e id do usuario */
     ipcMain.handle('cliente:searchByName', safeHandler(clientService.ObterIdENomeClientes))
 }

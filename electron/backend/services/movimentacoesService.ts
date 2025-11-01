@@ -344,4 +344,41 @@ export const movimentacoesService = {
             }
         }
     },
+
+    ObterListaDeInadimplencia: async (dados: any): Promise<IPCResponseFormat> => {
+        let page = dados.page ?? 0 // Define a pagina como 0 caso não tenha a informação
+        let limit = dados.limit ?? 20 // padroniza o liminte a 20
+        let search = dados.search ?? '' // Verifica a existencia da pesquisa
+
+        const RepositorioMovimentacoesResponse = await RepositorioMovimentacoes.ObterListaDeInadimplencia({ page, limit, search });
+        if (!RepositorioMovimentacoesResponse.success) return RepositorioMovimentacoesResponse;
+
+        const movimentacoesVencidas = RepositorioMovimentacoesResponse.data.inadimplentes;
+
+        const returnData = await Promise.all(
+            movimentacoesVencidas.map(async (mv: any) => {
+                const clientServiceResponse = await clientService.ObterClientePorId({ id: mv.clienteId });
+
+                const nomeCliente = clientServiceResponse.success
+                    ? clientServiceResponse.data.nome
+                    : '';
+
+                return {
+                    ...mv,
+                    id: clientServiceResponse.data.id,
+                    nome: nomeCliente
+                }
+            })
+        )
+
+        return {
+            success: true,
+            data: {
+                currentPage: RepositorioMovimentacoesResponse.data.currentPage,
+                totalPages: RepositorioMovimentacoesResponse.data.totalPages,
+                inadimplentes: returnData,
+            },
+
+        }
+    }
 }

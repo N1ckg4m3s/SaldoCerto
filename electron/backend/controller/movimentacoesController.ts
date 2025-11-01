@@ -20,4 +20,7 @@ export const IniciarControladores = () => {
 
     /* Remove a movimentação */
     ipcMain.handle('movimentacao:delete', safeHandler(() => { }));
+
+    /* Obtem uma lista com clientes com notas vencidas. */
+    ipcMain.handle('movimentacao:listInadimplentes', safeHandler(movimentacoesService.ObterListaDeInadimplencia));
 }

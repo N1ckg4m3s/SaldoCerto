@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageTitle from '@renderer/components/pageTitle/component';
 import * as sh from '../sheredPageStyles'
 import type { ClienteAtrazoView, NumberFilterType, PaginacaoView } from 'src/renderer/shered/viewTypes';
 import { nextNumberFilterType } from '@renderer/controler/auxiliar';
 import { Paginacao } from '@renderer/components/pagination/component';
+import { ApiCaller } from '@renderer/controler/ApiCaller';
+import { useNavigate } from 'react-router-dom';
 
 interface TableHeadFilterProps {
     ValorVencido: NumberFilterType;
@@ -11,32 +13,10 @@ interface TableHeadFilterProps {
     NumeroDeNotas: NumberFilterType;
 }
 
-const TabelaDeClientesEmAtrazo = () => {
-    const [ClientesEmAtrazo, setClientesEmAtrazo] = useState<ClienteAtrazoView[]>([
-        {
-            nome: "João da Silva",
-            ValorVencido: 450,
-            DiasDeAtrazo: 5,
-            NumeroDeNotas: 3,
-        },
-        {
-            nome: "Maria Souza",
-            ValorVencido: 220,
-            DiasDeAtrazo: 12,
-            NumeroDeNotas: 2,
-        },
-        {
-            nome: "Carlos Lima",
-            ValorVencido: 900,
-            DiasDeAtrazo: 20,
-            NumeroDeNotas: 5,
-        }
-    ])
+const useAllStates = () => {
+    const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
 
-    const [page, setPage] = useState<PaginacaoView>({
-        currentPage: 0,
-        totalPages: 5
-    });
+    const [ClientesEmAtrazo, setClientesEmAtrazo] = useState<ClienteAtrazoView[]>([])
 
     const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
         ValorVencido: null,
@@ -44,8 +24,22 @@ const TabelaDeClientesEmAtrazo = () => {
         NumeroDeNotas: null
     });
 
+    const searchRef = useRef<HTMLInputElement>(null)
+
+    return {
+        page: { data: page, set: setPage },
+        TableHeadFilter: { data: TableHeadFilter, set: setTableHeadFilter },
+        ClientesEmAtrazo: { data: ClientesEmAtrazo, set: setClientesEmAtrazo },
+        searchRef
+    }
+}
+
+const TabelaDeClientesEmAtrazo = () => {
+    const navigate = useNavigate();
+    const { page, TableHeadFilter, ClientesEmAtrazo, searchRef } = useAllStates();
+
     const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
-        setTableHeadFilter(prev => {
+        TableHeadFilter.set(prev => {
             const next = nextNumberFilterType(prev[column]);
             return {
                 // colunas atuais
@@ -64,8 +58,34 @@ const TabelaDeClientesEmAtrazo = () => {
     }
 
     useEffect(() => {
-        console.log('Buscar itens:', TableHeadFilter)
-    }, [TableHeadFilter])
+        try {
+            const payload = {
+                page: page.data.currentPage,
+                limit: 20,
+                search: searchRef.current?.value || '',
+                filters: TableHeadFilter.data,
+            };
+            ApiCaller({
+                url: '/movimentacoes/getInadimplentesList',
+                args: payload,
+                onSuccess(response) {
+                    if (response.success) {
+                        ClientesEmAtrazo.set(response.data.inadimplentes)
+                        page.set({
+                            currentPage: 0,
+                            totalPages: response.data.totalPages
+                        })
+                    }
+                    console.log(response);
+                },
+                onError(error) {
+                    console.error(error)
+                }
+            })
+        } catch (e) {
+
+        }
+    }, [])
 
     return (
         <sh.MainPageContainer>
@@ -103,16 +123,16 @@ const TabelaDeClientesEmAtrazo = () => {
                     </sh.tableRow>
                 </thead>
                 <tbody>
-                    {ClientesEmAtrazo.map((value, index) => (
+                    {ClientesEmAtrazo.data && ClientesEmAtrazo.data.map((value, index) => (
                         <sh.tableRow>
                             <sh.tableData>{value.nome}</sh.tableData>
                             <sh.tableData>{value.ValorVencido}</sh.tableData>
                             <sh.tableData>{value.DiasDeAtrazo}</sh.tableData>
                             <sh.tableData>{value.NumeroDeNotas}</sh.tableData>
                             <sh.tableData>
-                                <sh.smallTableButton onClick={() => { }}>
-                                    🔍
-                                </sh.smallTableButton>
+                                <sh.smallTableButton onClick={() => {
+                                    navigate(`/informacoesDoCliente/${value.id}`);
+                                }}> 🔍 </sh.smallTableButton>
                             </sh.tableData>
                         </sh.tableRow>
                     ))}
@@ -120,9 +140,9 @@ const TabelaDeClientesEmAtrazo = () => {
             </sh.tableContainer>
 
             <Paginacao
-                currentPage={page.currentPage}
+                currentPage={page.data.currentPage}
                 onPageChange={handleChangePage}
-                totalPages={page.totalPages}
+                totalPages={page.data.totalPages}
             />
 
         </sh.MainPageContainer>

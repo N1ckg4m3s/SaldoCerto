@@ -9,7 +9,6 @@ contextBridge.exposeInMainWorld('api', {
         create: (args?: any) => ipcRenderer.invoke('cliente:create', args),
         update: (args?: any) => ipcRenderer.invoke('cliente:update', args),
         delete: (args?: any) => ipcRenderer.invoke('cliente:delete', args),
-        getInadimplentesList: (args?: any) => ipcRenderer.invoke('cliente:listInadimplentes', args),
         searchName: (args?: any) => ipcRenderer.invoke('cliente:searchByName', args),
     },
     movimentacoes: {
@@ -17,6 +16,7 @@ contextBridge.exposeInMainWorld('api', {
         listByClient: (args?: any) => ipcRenderer.invoke('movimentacao:listByClient', args),
         create: (args?: any) => ipcRenderer.invoke('movimentacao:create', args),
         delete: (args?: any) => ipcRenderer.invoke('movimentacao:delete', args),
+        getInadimplentesList: (args?: any) => ipcRenderer.invoke('movimentacao:listInadimplentes', args),
     },
     dashboard: {
         getResumo: (args?: any) => ipcRenderer.invoke('dashboard:getResumo', args),
