@@ -38,6 +38,7 @@ export const SelectClient: React.FC<SelectClientProps> = ({ onSelect, showSelect
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar cliente..."
+                onFocus={refreshOptions}
             />
             {!isEqualTheOnly && results.length > 0 && (
                 <s.SelectClientSelect>
