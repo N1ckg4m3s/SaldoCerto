@@ -96,7 +96,7 @@ export const movimentacoesService = {
             const idCliente = clientRes.data.id;
 
             let valorDePagamento = Number(dados.valor);
-            const pedidosRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: idCliente, orderBy: 'asc' });
+            const pedidosRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: idCliente, abatidos: false, orderBy: 'asc' });
             if (!pedidosRes.success) return errorResponse('RegistrarPagamentoEmNota', pedidosRes.message);
 
             for (const pedido of pedidosRes.data) {
@@ -119,7 +119,7 @@ export const movimentacoesService = {
                 }
             }
 
-            const valorUtilizado: number =  Number(dados.valor) - valorDePagamento;
+            const valorUtilizado: number = Number(dados.valor) - valorDePagamento;
 
             const movRes = await RepositorioMovimentacoes.adicionarMovimentacao({
                 ...dados,
@@ -130,7 +130,7 @@ export const movimentacoesService = {
             });
             if (!movRes.success) return errorResponse('RegistrarPagamentoEmNota', 'Erro ao adicionar movimentação');
 
-            if (valorUtilizado >= 0) {
+            if (valorUtilizado > 0) {
                 return successResponse({
                     mensagem: ('Pagamento registrado com sucesso \n' +
                         ' Valor utilizado: R$ ' + valorUtilizado.toFixed(2) + '\n' +
@@ -207,7 +207,7 @@ export const movimentacoesService = {
             const idCliente = dados.id;
             if (!idCliente) return errorResponse('ObterResumoDeMovimentacoesDoCliente', 'Id do cliente não informado');
 
-            const pedRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: idCliente, orderBy: 'asc' });
+            const pedRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: idCliente, abatidos: false, orderBy: 'asc' });
             if (!pedRes.success) return errorResponse('ObterResumoDeMovimentacoesDoCliente', pedRes.message);
 
             const PedidosNaoAbatidos = pedRes.data;
@@ -317,7 +317,7 @@ export const movimentacoesService = {
             if (movimentacao.tipo === 'Pagamento') {
                 let valorDePagamento = movimentacao.valor;
 
-                const pedidosRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: movimentacao.clienteId, orderBy: 'desc' });
+                const pedidosRes = await RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente({ id: movimentacao.clienteId, abatidos: true, orderBy: 'desc' });
                 if (!pedidosRes.success) return errorResponse('RemoverMovimentacao', pedidosRes.message);
 
                 const pedidosDoCliente = pedidosRes.data;

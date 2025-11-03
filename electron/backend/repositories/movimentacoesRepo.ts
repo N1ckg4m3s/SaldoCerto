@@ -104,13 +104,20 @@ export const RepositorioMovimentacoes = {
         }),
 
     obterPedidosNaoAbatidosDoCliente: (dados: any) =>
-        safe("RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente", async () => {
+        safe("RepositorioMovimentacoes.obterPedidosDoCliente", async () => {
+            const where: any = { clienteId: dados.id, tipo: "Pedido" };
+            if (dados.abatidos === true) where.valorAbatido = { gt: 0 };
+            if (dados.abatidos === false) where.OR = [
+                { valorAbatido: null },
+                { valorAbatido: { lt: prisma.movimentacao.fields.valor } }
+            ];
             const todos = await prisma.movimentacao.findMany({
-                where: { clienteId: dados.id, tipo: "Pedido" },
+                where,
                 orderBy: { data: dados.orderBy },
             });
-            return todos.filter(pedidoNaoAbatido);
+            return todos;
         }),
+
 
     obterPedidosNaoAbatidos: () =>
         safe("movimentacoesRepo.obterPedidosNaoAbatidos", async () =>
