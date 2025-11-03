@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import * as s from '../style'
-import type { Cliente } from "@renderer/shered/types";
 import { useNotification } from "@renderer/components/notificationContainer/notificationContext";
 import { ApiCaller } from "@renderer/controler/ApiCaller";
 import { SelectClient } from "./selectClentInput";
@@ -82,12 +81,12 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
                     addNotification({
                         id: String(Date.now()),
                         title: 'Sucesso',
-                        message: `Adicionado com sucesso`,
+                        message: data.message || 'Movimentação adicionada com sucesso',
                         type: 'success',
                     })
+                    onComplete?.();
                 },
             })
-            onComplete?.();
 
         } catch {
             console.log("on error chamado")
@@ -96,8 +95,8 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
     }
 
     return (
-        <s.ModuleContainer>
-            <s.ModuleFieldRow>
+        <s.ModuleContainer gap={10}>
+            <s.ModuleFieldRow start={false}>
                 <s.ModuleFormLabel>Cliente:</s.ModuleFormLabel>
                 <SelectClient
                     showSelected={clientId?.nome || null}
@@ -105,7 +104,8 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
                 />
             </s.ModuleFieldRow>
 
-            <s.ModuleFieldRow>
+
+            <s.ModuleFieldRow start={false}>
                 <s.ModuleFormLabel>Tipo de movimentação:</s.ModuleFormLabel>
                 <s.ModuleFormSelect
                     value={tipo}
@@ -116,19 +116,22 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
                 </s.ModuleFormSelect>
             </s.ModuleFieldRow>
 
-            <s.ModuleFieldRow>
+
+            <s.ModuleFieldRow start={false}>
                 <s.ModuleFormLabel>Data:</s.ModuleFormLabel>
                 <s.ModuleFormInput placeholder="Data" type="date" defaultValue={''} ref={dataRef} />
             </s.ModuleFieldRow>
 
-            <s.ModuleFieldRow>
+
+            <s.ModuleFieldRow start={false}>
                 <s.ModuleFormLabel>Valor:</s.ModuleFormLabel>
                 <s.ModuleFormInput placeholder="Valor" type="number" step={0.01} min={0} defaultValue={''} ref={valorRef} />
             </s.ModuleFieldRow>
 
             {
                 tipo == 'Pedido' &&
-                <s.ModuleFieldRow>
+
+                <s.ModuleFieldRow start={false}>
                     <s.ModuleFormLabel>Codigo:</s.ModuleFormLabel>
                     <s.FieldTip>I
                         <span> Opcional, caso tenha algum controle por fora </span>
@@ -138,7 +141,7 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
             }
 
             <s.FillSpace />
-            
+
             <s.ModuleFormButton onClick={handleSubmit}> Adicionar movimentação </s.ModuleFormButton>
 
         </s.ModuleContainer>

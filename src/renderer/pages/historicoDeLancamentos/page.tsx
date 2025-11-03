@@ -9,6 +9,7 @@ import InterfaceFlutuante from '@renderer/components/floatGui/component';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
+import { Remover_FloatGuiModule } from '@renderer/components/floatGui/models/remover';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -66,6 +67,8 @@ const HistoricoDeLancamentos = () => {
                     });
                 },
                 onSuccess(response) {
+                    console.log(response)
+
                     movimentacoes.set(response.data.movimentacoes || []);
                     page.set({
                         currentPage: response.data.currentPage,
@@ -90,6 +93,7 @@ const HistoricoDeLancamentos = () => {
 
     const floatGuiActions = {
         openAddNewMovimentacao: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
+        openRemoveMovimentation: (GuiInformations: any) => floatGui.set({ active: true, type: 'removeThing', GuiInformations }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} }),
     }
 
@@ -157,9 +161,7 @@ const HistoricoDeLancamentos = () => {
                             <sh.tableData>{formatarValorParaTexto(value.valor)}</sh.tableData>
                             <sh.tableData>{value.codigo || '-'}</sh.tableData>
                             <sh.tableData>
-                                <sh.smallTableButton onClick={() => { }}>
-                                    🔍
-                                </sh.smallTableButton>
+                                <sh.smallTableButton onClick={() => floatGuiActions.openRemoveMovimentation(value)}>❌</sh.smallTableButton>
                             </sh.tableData>
                         </sh.tableRow>
                     ))}
@@ -172,22 +174,55 @@ const HistoricoDeLancamentos = () => {
                 totalPages={page.data.totalPages}
             />
 
-            {floatGui.data.active && floatGui.data.type == 'addMovimentacao' &&
-                <InterfaceFlutuante
-                    title='Adicionar movimentação'
-                    onClose={floatGuiActions.close}>
+            {floatGui.data.active && (
+                <>
+                    {floatGui.data.type === 'addMovimentacao' && (
+                        <InterfaceFlutuante
+                            title='Adicionar movimentação'
+                            onClose={floatGuiActions.close}
+                        >
+                            <AdicionarMovimentacao_FloatGuiModule
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                    getAllApiMovimentations();
+                                }}
+                                onError={() => { }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
 
-                    <AdicionarMovimentacao_FloatGuiModule
-                        onComplete={() => {
-                            floatGuiActions.close()
-                            getAllApiMovimentations();
-                        }}
-                        onError={() => { }}
-                    />
-
-                </InterfaceFlutuante>
-            }
-
+                    {floatGui.data.type === 'removeThing' && (
+                        <InterfaceFlutuante
+                            title='Deseja remover?'
+                            onClose={floatGuiActions.close}
+                        >
+                            <Remover_FloatGuiModule
+                                idToRemove={floatGui.data.GuiInformations.id}
+                                url='/movimentacoes/delete'
+                                onComplete={() => {
+                                    addNotification({
+                                        id: String(Date.now()),
+                                        title: 'Sucesso',
+                                        message: 'Movimentação removida com sucesso.',
+                                        type: 'success',
+                                    });
+                                    floatGuiActions.close();
+                                    getAllApiMovimentations();
+                                }}
+                                onError={() => { }}
+                                dados={{
+                                    id: floatGui.data.GuiInformations.id,
+                                    nome: floatGui.data.GuiInformations.nome,
+                                    tipo: floatGui.data.GuiInformations.tipo,
+                                    data: formatarDateParaTexto(floatGui.data.GuiInformations.data),
+                                    valor: formatarValorParaTexto(floatGui.data.GuiInformations.valor),
+                                    codigo: floatGui.data.GuiInformations.codigo || '-'
+                                }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+                </>
+            )}
         </sh.MainPageContainer>
     )
 }

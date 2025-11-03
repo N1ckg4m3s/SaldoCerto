@@ -107,7 +107,7 @@ export const RepositorioMovimentacoes = {
         safe("RepositorioMovimentacoes.obterPedidosNaoAbatidosDoCliente", async () => {
             const todos = await prisma.movimentacao.findMany({
                 where: { clienteId: dados.id, tipo: "Pedido" },
-                orderBy: { data: "asc" },
+                orderBy: { data: dados.orderBy },
             });
             return todos.filter(pedidoNaoAbatido);
         }),
@@ -223,5 +223,12 @@ export const RepositorioMovimentacoes = {
                 totalPages: Math.ceil(lista.length / limit),
                 inadimplentes: lista.slice(start, start + limit),
             };
+        }),
+
+    removerMovimentacao: (dados: any) =>
+        safe("RepositorioMovimentacoes.removerMovimentacao", async () => {
+            return await prisma.movimentacao.delete({
+                where: { id: dados.id },
+            });
         }),
 };

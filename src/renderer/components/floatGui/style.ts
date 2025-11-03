@@ -72,17 +72,18 @@ export const CloseButton = styled.button`
     Daqui para baixo vai ser as estilizações dos modulos.
 */
 
-export const ModuleContainer = styled.section`
+export const ModuleContainer = styled.section<{ gap: number }>`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: ${(props)=> `${props.gap || 16}px`};
 `;
 
-export const ModuleFieldRow = styled.div`
-  ${flexCenter}
+export const ModuleFieldRow = styled.div<{ start: boolean }>`
+  display: flex;
   gap: 10px;
   height: 30px;
+  justify-content: space-between;
 `
 
 export const ModuleFormLabel = styled.label`
