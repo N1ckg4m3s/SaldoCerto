@@ -55,6 +55,7 @@ export const CreateEditClient_FloatGuiModule: React.FC<Props> = ({ onComplete, o
             if (!IsFormularioValido) return;
 
             const payload = {
+                id: Cliente?.id || '',
                 nome: nomeRef.current?.value || "",
                 telefone: telefoneRef.current?.value || "",
                 contrato: {

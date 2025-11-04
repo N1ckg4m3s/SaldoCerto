@@ -72,14 +72,14 @@ export const CloseButton = styled.button`
     Daqui para baixo vai ser as estilizações dos modulos.
 */
 
-export const ModuleContainer = styled.section<{ gap: number }>`
+export const ModuleContainer = styled.section<{ gap?: number }>`
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: ${(props)=> `${props.gap || 16}px`};
 `;
 
-export const ModuleFieldRow = styled.div<{ start: boolean }>`
+export const ModuleFieldRow = styled.div`
   display: flex;
   gap: 10px;
   height: 30px;

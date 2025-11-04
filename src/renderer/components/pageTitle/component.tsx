@@ -3,7 +3,7 @@ import * as s from './style';
 
 interface ButtonProps {
     label: string;
-    onClick: () => void;
+    onClick: (dados?: any) => void;
 }
 
 interface PageTitleProps {

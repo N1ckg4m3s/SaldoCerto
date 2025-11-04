@@ -96,7 +96,7 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
 
     return (
         <s.ModuleContainer gap={10}>
-            <s.ModuleFieldRow start={false}>
+            <s.ModuleFieldRow>
                 <s.ModuleFormLabel>Cliente:</s.ModuleFormLabel>
                 <SelectClient
                     showSelected={clientId?.nome || null}
@@ -105,7 +105,7 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
             </s.ModuleFieldRow>
 
 
-            <s.ModuleFieldRow start={false}>
+            <s.ModuleFieldRow>
                 <s.ModuleFormLabel>Tipo de movimentação:</s.ModuleFormLabel>
                 <s.ModuleFormSelect
                     value={tipo}
@@ -117,13 +117,13 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
             </s.ModuleFieldRow>
 
 
-            <s.ModuleFieldRow start={false}>
+            <s.ModuleFieldRow>
                 <s.ModuleFormLabel>Data:</s.ModuleFormLabel>
                 <s.ModuleFormInput placeholder="Data" type="date" defaultValue={''} ref={dataRef} />
             </s.ModuleFieldRow>
 
 
-            <s.ModuleFieldRow start={false}>
+            <s.ModuleFieldRow>
                 <s.ModuleFormLabel>Valor:</s.ModuleFormLabel>
                 <s.ModuleFormInput placeholder="Valor" type="number" step={0.01} min={0} defaultValue={''} ref={valorRef} />
             </s.ModuleFieldRow>
@@ -131,7 +131,7 @@ export const AdicionarMovimentacao_FloatGuiModule: React.FC<Props> = ({ onComple
             {
                 tipo == 'Pedido' &&
 
-                <s.ModuleFieldRow start={false}>
+                <s.ModuleFieldRow>
                     <s.ModuleFormLabel>Codigo:</s.ModuleFormLabel>
                     <s.FieldTip>I
                         <span> Opcional, caso tenha algum controle por fora </span>

@@ -12,6 +12,7 @@ import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
 import { AdicionarMovimentacao_FloatGuiModule } from '@renderer/components/floatGui/models/adicionarMovimentacao';
+import { Remover_FloatGuiModule } from '@renderer/components/floatGui/models/remover';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -39,6 +40,7 @@ const InformacoesDoCliente = () => {
     const { page, floatGui, client, historico } = useAllStates()
 
     const floatGuiActions = {
+        openRemove: (data: any) => floatGui.set({ active: true, type: 'removeThing', GuiInformations: data || {} }),
         openAddNewMov: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
         openEditClient: () => floatGui.set({ active: true, type: 'editCliente', GuiInformations: {} }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
@@ -48,39 +50,40 @@ const InformacoesDoCliente = () => {
 
     }
 
-    useEffect(() => {
-        if (!client.data) {
-            ApiCaller({
-                url: '/cliente/getInformationsById',
-                args: { id },
-                onSuccess(response) {
-                    if (response.success) {
-                        const clientDTO: InformacoesDoClienteView = {
-                            id: response.data.id || 'erro',
-                            contrato: {
-                                dia: response.data.diaContrato,
-                                type: response.data.tipoContrato,
-                            },
-                            nome: response.data.nome,
-                            telefone: response.data.telefone,
-                            ProximoPagamento: response.data.ProximoPagamento,
-                            SomaTotal: response.data.SomaTotal,
-                            ValorProximaNota: response.data.ValorProximaNota
-                        }
-                        client.set(clientDTO)
+    const initClientInformations = () => {
+        ApiCaller({
+            url: '/cliente/getInformationsById',
+            args: { id },
+            onSuccess(response) {
+                if (response.success) {
+                    const clientDTO: InformacoesDoClienteView = {
+                        id: response.data.id || 'erro',
+                        contrato: {
+                            dia: response.data.diaContrato,
+                            type: response.data.tipoContrato,
+                        },
+                        nome: response.data.nome,
+                        telefone: response.data.telefone,
+                        ProximoPagamento: response.data.ProximoPagamento,
+                        SomaTotal: response.data.SomaTotal,
+                        ValorProximaNota: response.data.ValorProximaNota
                     }
-                },
-                onError(erro) {
-                    addNotification({
-                        id: String(new Date()),
-                        title: "Erro ao obter dados do cliente",
-                        type: 'error',
-                        errorCode: erro.errorCode || '',
-                        message: erro.message || '',
-                    })
+                    client.set(clientDTO)
                 }
-            })
-        }
+            },
+            onError(erro) {
+                addNotification({
+                    id: String(new Date()),
+                    title: "Erro ao obter dados do cliente",
+                    type: 'error',
+                    errorCode: erro.errorCode || '',
+                    message: erro.message || '',
+                })
+            }
+        })
+    }
+
+    const getAllApiMovimentations = () => {
         ApiCaller({
             url: '/movimentacoes/listByClient',
             args: { id },
@@ -103,7 +106,13 @@ const InformacoesDoCliente = () => {
                 })
             }
         })
-        // Atualiza o historico de lançamentos do cliente
+    }
+
+    useEffect(() => {
+        if (!client.data) {
+            initClientInformations();
+        }
+        getAllApiMovimentations();
     }, [page.data.currentPage])
 
     return (
@@ -113,7 +122,18 @@ const InformacoesDoCliente = () => {
                 buttons={[
                     { label: 'Registrar movimentação', onClick: floatGuiActions.openAddNewMov },
                     { label: 'Exportar lista', onClick: () => { } },
-                    { label: '⚙', onClick: floatGuiActions.openEditClient },
+                    { label: '⚙', onClick: floatGuiActions.openEditClient }, // Ícone de engrenagem para editar
+                    {
+                        label: '🗑', onClick: () => floatGuiActions.openRemove({
+                            removeType: 'cliente',
+                            data: {
+                                id: client.data?.id || '',
+                                nome: client.data?.nome || '',
+                                contato: client.data?.telefone || '',
+                                Divida: formatarValorParaTexto(client.data?.SomaTotal) || '',
+                            }
+                        })
+                    },
                 ]}
             />
 
@@ -125,7 +145,7 @@ const InformacoesDoCliente = () => {
                         {client.data?.telefone || '-'}
                     </s.Information>
                     <s.Information>
-                        <strong>CONTRATO: </strong>
+                        <strong>Contrato: </strong>
                         {client.data?.contrato.type || '-'} - {client.data?.contrato.dia || '-'}
                     </s.Information>
                 </s.InformationsGroup>
@@ -160,7 +180,17 @@ const InformacoesDoCliente = () => {
                             <sh.tableTh>-</sh.tableTh>
                         </sh.tableRow>
                     </thead>
-                    <tbody> {historico.data.map(renderHistoricoRow)}</tbody>
+                    <tbody> {historico.data.map((v, i) => renderHistoricoRow(v, i, () => floatGuiActions.openRemove({
+                        removeType: 'movimentacao',
+                        data: {
+                            id: v.id,
+                            nome: client.data?.nome || '',
+                            tipo: v.tipo,
+                            data: v.data,
+                            valor: v.valor,
+                            codigo: v.codigo
+                        }
+                    })))}</tbody>
                 </sh.tableContainer>
             </s.HistoryContainer>
 
@@ -170,38 +200,66 @@ const InformacoesDoCliente = () => {
                 totalPages={page.data.totalPages}
             />
 
-            {floatGui.data.active && floatGui.data.type == 'editCliente' && client.data &&
-                <InterfaceFlutuante
-                    title=' Editar informações do Cliente'
-                    onClose={floatGuiActions.close}>
+            {floatGui.data.active && (
+                <>
+                    {floatGui.data.type == 'editCliente' && client.data && (
+                        <InterfaceFlutuante
+                            title=' Editar informações do Cliente'
+                            onClose={floatGuiActions.close}>
 
-                    <CreateEditClient_FloatGuiModule
-                        Cliente={client.data}
-                        onComplete={() => { }}
-                        onError={() => { }}
-                    />
-                </InterfaceFlutuante>
-            }
-            {floatGui.data.active && floatGui.data.type == 'addMovimentacao' &&
-                <InterfaceFlutuante
-                    title='Adicionar movimentações ao cliente'
-                    onClose={floatGuiActions.close}>
+                            <CreateEditClient_FloatGuiModule
+                                Cliente={client.data}
+                                onComplete={() => {
+                                    floatGuiActions.close()
+                                    initClientInformations();
+                                }}
+                                onError={() => { }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
 
-                    <AdicionarMovimentacao_FloatGuiModule
-                        ClienteDeterminado={{
-                            id: client.data?.id || '',
-                            nome: client.data?.nome || ''
-                        }}
-                        onComplete={() => {
-                            page.set({
-                                ...page.data,
-                                currentPage: 0,
-                            })
-                        }}
-                        onError={() => { }}
-                    />
-                </InterfaceFlutuante>
-            }
+                    {floatGui.data.type === 'addMovimentacao' && (
+                        <InterfaceFlutuante
+                            title='Adicionar movimentações ao cliente'
+                            onClose={floatGuiActions.close}>
+
+                            <AdicionarMovimentacao_FloatGuiModule
+                                ClienteDeterminado={{
+                                    id: client.data?.id || '',
+                                    nome: client.data?.nome || ''
+                                }}
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                    getAllApiMovimentations();
+                                    page.set({
+                                        ...page.data,
+                                        currentPage: 0,
+                                    })
+                                }}
+                                onError={() => { }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+
+                    {floatGui.data.type === 'removeThing' && (
+                        <InterfaceFlutuante
+                            title='Deseja remover?'
+                            onClose={floatGuiActions.close}
+                        >
+                            <Remover_FloatGuiModule
+                                idToRemove={floatGui.data.GuiInformations.data.id}
+                                url={floatGui.data.GuiInformations.removeType === 'movimentacao' ? '/movimentacoes/delete' : '/cliente/delete'}
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                    getAllApiMovimentations();
+                                }}
+                                onError={() => { }}
+                                dados={floatGui.data.GuiInformations.data}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+                </>
+            )}
 
         </sh.MainPageContainer>
     )
@@ -210,7 +268,7 @@ const InformacoesDoCliente = () => {
 export default InformacoesDoCliente;
 
 
-const renderHistoricoRow = (value: HistoricoDeLancamentoDoClienteView, index: number) => {
+const renderHistoricoRow = (value: HistoricoDeLancamentoDoClienteView, index: number, buttonAction: (data: any) => void) => {
     const isPedido = value.tipo === 'Pedido';
 
     const tipo = isPedido ? '📦' : '💵';
@@ -235,9 +293,9 @@ const renderHistoricoRow = (value: HistoricoDeLancamentoDoClienteView, index: nu
             <sh.tableData>{valorAbatido}</sh.tableData>
             <sh.tableData>{value.codigo}</sh.tableData>
             <sh.tableData>
-                <sh.smallTableButton onClick={() => { }}>
-                    🔍
-                </sh.smallTableButton>
+                <sh.tableData>
+                    <sh.smallTableButton onClick={() => buttonAction(value)}>❌</sh.smallTableButton>
+                </sh.tableData>
             </sh.tableData>
         </sh.tableRow>
     );

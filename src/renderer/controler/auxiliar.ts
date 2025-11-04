@@ -28,5 +28,7 @@ export const formatarValorParaTexto = (valor?: number | string): string => {
     if (valor == null) return '-';
 
     const numero = typeof valor === 'number' ? valor : Number(valor);
-    return isNaN(numero) ? '-' : numero.toFixed(2) + '$';
+    if (isNaN(numero)) return '-';
+    if (numero <= 0) return '-';
+    return `${numero.toFixed(2)}$`;
 }

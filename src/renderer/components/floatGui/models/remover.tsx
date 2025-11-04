@@ -66,7 +66,7 @@ export const Remover_FloatGuiModule: React.FC<Props> = ({ onComplete, onError, u
     return (
         <s.ModuleContainer gap={5}>
             {Object.entries(dados || {}).map(([chave, valor]) => (
-                <s.ModuleFieldRow key={chave} start={true}>
+                <s.ModuleFieldRow key={chave}>
                     <s.ModuleFormLabel>{chave}</s.ModuleFormLabel>
                     <span>{String(valor)}</span>
                 </s.ModuleFieldRow>

@@ -67,8 +67,6 @@ const HistoricoDeLancamentos = () => {
                     });
                 },
                 onSuccess(response) {
-                    console.log(response)
-
                     movimentacoes.set(response.data.movimentacoes || []);
                     page.set({
                         currentPage: response.data.currentPage,
@@ -200,12 +198,6 @@ const HistoricoDeLancamentos = () => {
                                 idToRemove={floatGui.data.GuiInformations.id}
                                 url='/movimentacoes/delete'
                                 onComplete={() => {
-                                    addNotification({
-                                        id: String(Date.now()),
-                                        title: 'Sucesso',
-                                        message: 'Movimentação removida com sucesso.',
-                                        type: 'success',
-                                    });
                                     floatGuiActions.close();
                                     getAllApiMovimentations();
                                 }}
