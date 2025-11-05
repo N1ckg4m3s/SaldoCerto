@@ -44,3 +44,12 @@ model Movimentacao {
   // apenas FK
   clienteId    String
 }
+
+model Configuracao {
+  id              Int      @id @default(autoincrement())
+  backupSetted    Boolean  @default(false)
+  backupFilesPath String?
+  backupInterval  Int      @default(7) // em dias
+  backupTime      DateTime? // horário base para agendar
+  lastBackup      DateTime?
+}
