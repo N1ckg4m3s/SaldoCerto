@@ -20,5 +20,9 @@ contextBridge.exposeInMainWorld('api', {
     dashboard: {
         getResumo: (args?: any) => ipcRenderer.invoke('dashboard:getResumo', args),
         getTableResumo: (args?: any) => ipcRenderer.invoke('dashboard:getTableResume', args),
-    }
+    },
+    config: {
+        get: (args?: any) => ipcRenderer.invoke('config:get', args),
+        set: (args?: any) => ipcRenderer.invoke('config:set', args),
+    },
 });
