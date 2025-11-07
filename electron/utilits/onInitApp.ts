@@ -5,11 +5,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* Service das configurações */
-const { configService } = await import(
+const { configurationService } = await import(
     pathToFileURL(path.join(__dirname, '..', 'backend', 'services', 'configService.js')).href
 );
-
-console.log('onInitApp carregado');
 
 /*
 ==================== Função executada ao iniciar o app ====================
@@ -20,7 +18,7 @@ console.log('onInitApp carregado');
     - Verifica se é necessário rodar a limpeza automática. -
 */
 export const onInitApp = async (): Promise<boolean> => {
-    const configServiceResponse = await configService.ObterConfiguracao();
+    const configServiceResponse = await configurationService.ObterConfiguracao();
     if (!configServiceResponse.success || !configServiceResponse.data) return false;
 
     const config = configServiceResponse.data;
@@ -38,11 +36,11 @@ export const onInitApp = async (): Promise<boolean> => {
 
     // Se passou o intervalo definido, gera um novo backup
     if (diffDays >= config.backupInterval) {
-        await configService.GerarNovoBackup();
+        await configurationService.GerarNovoBackup();
     }
 
     // Verifica se é necessário remover arquivos de backup exedentes
-    const ListarArquivosDeBackupResponse = await configService.ListarArquivosDeBackup();
+    const ListarArquivosDeBackupResponse = await configurationService.ListarArquivosDeBackup();
     if (!ListarArquivosDeBackupResponse.success || !ListarArquivosDeBackupResponse.data) return false;
     const backupFiles = ListarArquivosDeBackupResponse.data as Array<any>;
     const maxBackups = config.maxBackups;
@@ -52,13 +50,13 @@ export const onInitApp = async (): Promise<boolean> => {
 
         const filesToDelete = backupFiles.slice(0, backupFiles.length - maxBackups);
         for (const file of filesToDelete) {
-            await configService.DeletarArquivoDeBackup({ fileName: file.name });
+            await configurationService.DeletarArquivoDeBackup({ fileName: file.name });
         }
     }
 
     // Roda a limpesa automática de movimentações antigas
     const dataLimite = hoje.setDate(hoje.getDate() + config.movimentacaoExpiraEmDias);
-    await configService.RodarLimpeza({ dataLimite: new Date(dataLimite) });
+    await configurationService.RodarLimpeza({ dataLimite: new Date(dataLimite) });
 
     return true;
 }

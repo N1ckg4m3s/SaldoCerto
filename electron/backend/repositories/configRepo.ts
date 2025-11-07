@@ -46,7 +46,6 @@ export const RepositorioConfiguracoes = {
 
     adicionarConfiguracao: async (dados: any): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.atualizarConfiguracao", async () => {
-            console.log('Adicionando configuração com dados:', dados);
             const updatedConfig = await prisma.configuracao.create({
                 data: dados,
             });
@@ -73,7 +72,7 @@ export const RepositorioConfiguracoes = {
                     },
                 },
             });
-            return ok({ deletedCount });
+            return deletedCount;
         });
     },
 };

@@ -22,20 +22,19 @@ const App = () => {
 
   const initBackgroundProcess = () => ApiCaller({
     url: '/backup/init',
-    onSuccess: (data: any) => {
-      console.log('Configuração inicial verificada', data);
-      if (data) setHasConfig(true);
-      setIsLoading(false);
-    }
+    onError(erro) {
+      console.log('Erro ao iniciar processo de background', erro);
+    },
   })
 
   useEffect(() => {
     ApiCaller({
       url: '/backup/get',
       onSuccess: async (response: any) => {
-        console.log('Verificando configuração existente', response);
-        if (response.data?.success) setHasConfig(true);
-        else await initBackgroundProcess();
+        if (response?.data !== null && response?.data !== undefined) {
+          setHasConfig(true)
+          await initBackgroundProcess()
+        }
         setIsLoading(false);
       },
       onError(erro) {
@@ -84,7 +83,6 @@ const showBackupInterface = (onComplete: () => void) => {
     >
       <ControleDeBackup_FloatGuiModule
         onComplete={onComplete} />
-
     </InterfaceFlutuante>
   )
 }

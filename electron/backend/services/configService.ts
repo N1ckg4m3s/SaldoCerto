@@ -38,7 +38,7 @@ export const configurationService = {
         if (!repoResponse.success) {
             return errorResponse("configurationService.ObterConfiguracao", repoResponse.message);
         }
-        return successResponse(repoResponse);
+        return successResponse(repoResponse.data);
     },
 
     SalvarConfiguracao: async (args: any): Promise<IPCResponseFormat> => {
@@ -48,7 +48,7 @@ export const configurationService = {
             maxBackups: Number(args.maxBackupFiles || 5),
             backupInterval: Number(args.backupIntervalDays || 7),
             movimentacaoExpiraEmDias: Number(args.backupHistoryDays || 30),
-            lastBackup: args.lastBackup ? new Date(args.lastBackup).toISOString() : null,
+            lastBackup: args.lastBackup ? new Date(args.lastBackup).toISOString() : new Date().toISOString(),
         };
 
         const existingConfigResponse = await RepositorioConfiguracoes.obterConfiguracao();
@@ -64,7 +64,6 @@ export const configurationService = {
             }
             return successResponse({});
         } else {
-            console.log('Criando nova configuração');
             const repoResponse = await RepositorioConfiguracoes.adicionarConfiguracao(ConfigDTO);
 
             if (!repoResponse.success) {
@@ -93,12 +92,14 @@ export const configurationService = {
                 return errorResponse("configurationService.GerarNovoBackup", erro.message);
             });
 
-        if (!savePath || (savePath as IPCResponseFormat).success === false) {
+        if (savePath && typeof savePath === 'string') {
             const atualizarConfiguracaoResponse = await RepositorioConfiguracoes.atualizarConfiguracao({ id: config.id, lastBackup: new Date().toISOString() });
 
             if (!atualizarConfiguracaoResponse.success) {
                 return errorResponse("configurationService.GerarNovoBackup", atualizarConfiguracaoResponse.message);
             }
+        } else {
+            return errorResponse("configurationService.GerarNovoBackup", 'Falha ao criar arquivo de backup.');
         }
 
         return successResponse();

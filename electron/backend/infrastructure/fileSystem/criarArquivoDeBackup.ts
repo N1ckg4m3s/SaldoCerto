@@ -33,7 +33,7 @@ export async function criarArquivoDeBackup(backupDir: string): Promise<string> {
     }
 
     // Extrai o caminho físico do arquivo SQLite
-    const dbPath = dbUrl.replace("file:", "");
+    const dbPath = path.resolve('prisma', dbUrl.replace("file:", ""));
     if (!fs.existsSync(dbPath)) {
         throw new Error(`Banco de dados não encontrado em: ${dbPath}`);
     }

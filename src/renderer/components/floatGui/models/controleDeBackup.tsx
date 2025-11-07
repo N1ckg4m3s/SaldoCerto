@@ -53,8 +53,8 @@ export const ControleDeBackup_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                 throw new Error('O número máximo de arquivos de backup deve ser um número válido.');
             }
 
-            if (config.backupIntervalDays <= 7) {
-                throw new Error('O intervalo de backup deve ser maior que zero.');
+            if (config.backupIntervalDays < 7) {
+                throw new Error('O intervalo de backup deve ser maior que 7.');
             }
 
             if (config.backupHistoryDays < config.backupIntervalDays) {
@@ -124,7 +124,13 @@ export const ControleDeBackup_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                 ApiCaller({
                     url: '/backup/get',
                     onSuccess: (response: any) => {
-                        if (response) setConfig(response.data);
+                        if (response) setConfig({
+                            backupIntervalDays: response.backupInterval,
+                            backupHistoryDays: response.movimentacaoExpiraEmDias,
+                            backupFolderPath: response.backupFilesPath,
+                            maxBackupFiles: response.maxBackups,
+                            lastBackup: response.lastBackup,
+                        });
                     }
                 })
             } catch {
