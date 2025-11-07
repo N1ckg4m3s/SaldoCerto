@@ -173,6 +173,7 @@ export const FieldTip = styled.span`
 
 export const ModuleFormButton = styled.button`
   ${resetButtonStyle};
+  ${flexCenter}
   width: 100%;
   padding: 10px 0;
   border-radius: 8px;

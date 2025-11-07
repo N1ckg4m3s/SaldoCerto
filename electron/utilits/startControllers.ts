@@ -4,7 +4,6 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const controllersDir = path.join(__dirname, '..', 'backend', 'controller');
 
 export async function iniciarTodosControladores() {
@@ -18,7 +17,7 @@ export async function iniciarTodosControladores() {
 
         const moduleUrl = pathToFileURL(controllerPath).href
         const module = await import(moduleUrl);
-        
+
         if (module['IniciarControladores']) {
             module['IniciarControladores'](); // chama a função
         } else {

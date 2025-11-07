@@ -21,8 +21,13 @@ contextBridge.exposeInMainWorld('api', {
         getResumo: (args?: any) => ipcRenderer.invoke('dashboard:getResumo', args),
         getTableResumo: (args?: any) => ipcRenderer.invoke('dashboard:getTableResume', args),
     },
-    config: {
-        get: (args?: any) => ipcRenderer.invoke('config:get', args),
+    backup: {
+        get: () => ipcRenderer.invoke('config:get'),
         set: (args?: any) => ipcRenderer.invoke('config:set', args),
+        generateBackupFile: (args?: any) => ipcRenderer.invoke('config:generateBackupFile', args),
+        restoreFromBackupFile: (args?: any) => ipcRenderer.invoke('config:restoreFromBackupFile', args),
+        selectFolder: () => ipcRenderer.invoke('config:selectFolder'),
+
+        init: () => ipcRenderer.invoke('config:init'),
     },
 });

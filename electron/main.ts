@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from 'electron';
-import { existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 

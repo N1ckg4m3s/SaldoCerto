@@ -38,6 +38,7 @@ const { prisma } = await import(
 /* 🧩 Filtros reutilizáveis */
 const filtroPedidosNaoAbatidos = (extra: any = {}) => ({
     tipo: "Pedido",
+    pago: false,
     OR: [
         { valorAbatido: null },
         { valor: { gt: prisma.movimentacao.fields.valorAbatido } },
@@ -74,6 +75,7 @@ export const RepositorioMovimentacoes = {
                     valorAbatido: 0,
                     codigo: dados.codigo,
                     clienteId: dados.ClientId,
+                    pago: dados.pago || false,
                 },
             });
         }),
@@ -117,7 +119,6 @@ export const RepositorioMovimentacoes = {
             });
             return todos;
         }),
-
 
     obterPedidosNaoAbatidos: () =>
         safe("movimentacoesRepo.obterPedidosNaoAbatidos", async () =>

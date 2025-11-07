@@ -106,7 +106,7 @@ export const movimentacoesService = {
                 if (valorDePagamento >= saldoAberto) {
                     await RepositorioMovimentacoes.atualizaMovimentacao({
                         id: pedido.id,
-                        data: { valorAbatido: pedido.valor },
+                        data: { valorAbatido: pedido.valor, pago: true },
                     });
                     valorDePagamento -= saldoAberto;
                 } else {
@@ -331,7 +331,7 @@ export const movimentacoesService = {
                         const valorASerDesfeito = Math.min(valorDePagamento, valorAbatidoAtual);
                         await RepositorioMovimentacoes.atualizaMovimentacao({
                             id: pedido.id,
-                            data: { valorAbatido: valorAbatidoAtual - valorASerDesfeito },
+                            data: { valorAbatido: valorAbatidoAtual - valorASerDesfeito, pago: false },
                         });
                         valorDePagamento -= valorASerDesfeito;
                         if (valorDePagamento <= 0) break;

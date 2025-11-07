@@ -13,45 +13,71 @@ import { NotificationProvider } from './components/notificationContainer/notific
 import { useEffect, useState } from 'react';
 import { ApiCaller } from './controler/ApiCaller';
 import LoadingComponent from './components/loading/component';
-
+import InterfaceFlutuante from './components/floatGui/component';
+import { ControleDeBackup_FloatGuiModule } from './components/floatGui/models/controleDeBackup';
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasConfig, setHasConfig] = useState(false);
 
+  const initBackgroundProcess = () => ApiCaller({
+    url: '/backup/init',
+    onSuccess: (data: any) => {
+      console.log('Configuração inicial verificada', data);
+      if (data) setHasConfig(true);
+      setIsLoading(false);
+    }
+  })
+
   useEffect(() => {
-    // ApiCaller({
-    //   url: '',
-    //   onSuccess: (data: any) => {
-    //     if (data) {
-    //       setHasConfig(true);
-    //     }
-    //     setIsLoading(false);
-    //   }
-    // })
+    ApiCaller({
+      url: '/backup/get',
+      onSuccess: async (data: any) => {
+        if (!data) setHasConfig(false);
+        else await initBackgroundProcess();
+        setIsLoading(false);
+      }
+    })
   }, [])
 
   if (isLoading) {
     return <LoadingComponent />;
   }
 
-  if (!hasConfig) return (<>Tela caso não tenha config setada</>);
-
   // Fluxo normal do app.
   return (
     <NotificationProvider>
-      <HashRouter>
-        <BarraDeNavegacao />
-        <Routes>
-          <Route path='/' element={<Dashboard />} />
-          <Route path='/historicoDeLancamentos' element={<HistoricoDeLancamentos />} />
-          <Route path='/informacoesDoCliente/:id' element={<InformacoesDoCliente />} />
-          <Route path='/listaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
-          <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
-        </Routes>
-      </HashRouter>
+      {
+        !hasConfig ?
+          showBackupInterface() :
+          <>
+            <HashRouter>
+              <BarraDeNavegacao />
+              <Routes>
+                <Route path='/' element={<Dashboard />} />
+                <Route path='/historicoDeLancamentos' element={<HistoricoDeLancamentos />} />
+                <Route path='/informacoesDoCliente/:id' element={<InformacoesDoCliente />} />
+                <Route path='/listaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
+                <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
+              </Routes>
+            </HashRouter>
+          </>
+      }
+
     </NotificationProvider>
   )
 }
 
-export default App
+export default App;
+
+const showBackupInterface = () => {
+  return (
+    <InterfaceFlutuante
+      title="Controle de Backup"
+      onClose={() => { }}
+    >
+      <ControleDeBackup_FloatGuiModule onComplete={() => { }} />
+
+    </InterfaceFlutuante>
+  )
+}

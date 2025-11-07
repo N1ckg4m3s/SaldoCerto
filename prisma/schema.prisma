@@ -40,16 +40,18 @@ model Movimentacao {
   valor        Float
   valorAbatido Float?
   codigo       String?
+  pago         Boolean  @default(false)
 
   // apenas FK
   clienteId    String
 }
 
 model Configuracao {
-  id              Int      @id @default(autoincrement())
-  backupSetted    Boolean  @default(false)
-  backupFilesPath String?
-  backupInterval  Int      @default(7) // em dias
-  backupTime      DateTime? // horário base para agendar
-  lastBackup      DateTime?
+  id                        Int         @id @default(autoincrement())
+  backupSetted              Boolean     @default(false)
+  backupFilesPath           String?
+  maxBackups                Int         @default(5)
+  backupInterval            Int         @default(7) // em dias
+  movimentacaoExpiraEmDias  Int         @default(7) // em dias
+  lastBackup                DateTime?
 }

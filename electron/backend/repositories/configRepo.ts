@@ -39,10 +39,40 @@ const { prisma } = await import(
 export const RepositorioConfiguracoes = {
     obterConfiguracao: async (): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.obterConfiguracao", async () => {
-            // const config = await prisma.configuracoes.findFirst();
-            // return config || null;
+            const config = await prisma.configuracoes.findFirst();
+            return ok(config);
         });
     },
 
+    adicionarConfiguracao: async (dados: any): Promise<IPCResponseFormat> => {
+        return safe("RepositorioConfiguracoes.atualizarConfiguracao", async () => {
+            const updatedConfig = await prisma.configuracoes.create({
+                data: dados,
+            });
+            return ok(updatedConfig);
+        });
+    },
 
+    atualizarConfiguracao: async (dados: any): Promise<IPCResponseFormat> => {
+        return safe("RepositorioConfiguracoes.atualizarConfiguracao", async () => {
+            const updatedConfig = await prisma.configuracoes.update({
+                where: { id: dados.id },
+                data: dados,
+            });
+            return ok(updatedConfig);
+        });
+    },
+
+    limparMovimentacoesAntigas: async (dataLimite: Date): Promise<IPCResponseFormat> => {
+        return safe("RepositorioConfiguracoes.limparMovimentacoesAntigas", async () => {
+            const deletedCount = await prisma.movimentacoes.deleteMany({
+                where: {
+                    data: {
+                        lt: dataLimite,
+                    },
+                },
+            });
+            return ok({ deletedCount });
+        });
+    },
 };
