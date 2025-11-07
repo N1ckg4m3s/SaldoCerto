@@ -17,7 +17,7 @@ import InterfaceFlutuante from './components/floatGui/component';
 import { ControleDeBackup_FloatGuiModule } from './components/floatGui/models/controleDeBackup';
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasConfig, setHasConfig] = useState(false);
 
   const initBackgroundProcess = () => ApiCaller({
@@ -32,11 +32,15 @@ const App = () => {
   useEffect(() => {
     ApiCaller({
       url: '/backup/get',
-      onSuccess: async (data: any) => {
-        if (!data) setHasConfig(false);
+      onSuccess: async (response: any) => {
+        console.log('Verificando configuração existente', response);
+        if (response.data?.success) setHasConfig(true);
         else await initBackgroundProcess();
         setIsLoading(false);
-      }
+      },
+      onError(erro) {
+        console.log('Erro ao obter configuração', erro);
+      },
     })
   }, [])
 
@@ -49,7 +53,9 @@ const App = () => {
     <NotificationProvider>
       {
         !hasConfig ?
-          showBackupInterface() :
+          showBackupInterface(() => {
+            setHasConfig(true);
+          }) :
           <>
             <HashRouter>
               <BarraDeNavegacao />
@@ -70,13 +76,14 @@ const App = () => {
 
 export default App;
 
-const showBackupInterface = () => {
+const showBackupInterface = (onComplete: () => void) => {
   return (
     <InterfaceFlutuante
       title="Controle de Backup"
       onClose={() => { }}
     >
-      <ControleDeBackup_FloatGuiModule onComplete={() => { }} />
+      <ControleDeBackup_FloatGuiModule
+        onComplete={onComplete} />
 
     </InterfaceFlutuante>
   )

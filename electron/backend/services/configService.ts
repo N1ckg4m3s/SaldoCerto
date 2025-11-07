@@ -44,7 +44,6 @@ export const configurationService = {
     SalvarConfiguracao: async (args: any): Promise<IPCResponseFormat> => {
         // Validação dos dados
         const ConfigDTO = {
-            backupSetted: Boolean(args.backupSetted),
             backupFilesPath: String(args.backupFolderPath || ''),
             maxBackups: Number(args.maxBackupFiles || 5),
             backupInterval: Number(args.backupIntervalDays || 7),
@@ -56,18 +55,23 @@ export const configurationService = {
         if (!existingConfigResponse.success) {
             return errorResponse("configurationService.SalvarConfiguracao", existingConfigResponse.message);
         }
-        if (existingConfigResponse.data) {
+
+        const hasExistingConfig = existingConfigResponse.data !== null && existingConfigResponse.data !== undefined;
+        if (hasExistingConfig) {
             const repoResponse = await RepositorioConfiguracoes.atualizarConfiguracao({ id: existingConfigResponse.data.id, ...ConfigDTO });
             if (!repoResponse.success) {
                 return errorResponse("configurationService.SalvarConfiguracao", repoResponse.message);
             }
             return successResponse({});
+        } else {
+            console.log('Criando nova configuração');
+            const repoResponse = await RepositorioConfiguracoes.adicionarConfiguracao(ConfigDTO);
+
+            if (!repoResponse.success) {
+                return errorResponse("configurationService.SalvarConfiguracao", repoResponse.message);
+            }
         }
 
-        const repoResponse = await RepositorioConfiguracoes.adicionarConfiguracao(ConfigDTO);
-        if (!repoResponse.success) {
-            return errorResponse("configurationService.SalvarConfiguracao", repoResponse.message);
-        }
         return successResponse({});
     },
 

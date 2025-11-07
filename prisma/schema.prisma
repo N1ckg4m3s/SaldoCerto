@@ -48,7 +48,6 @@ model Movimentacao {
 
 model Configuracao {
   id                        Int         @id @default(autoincrement())
-  backupSetted              Boolean     @default(false)
   backupFilesPath           String?
   maxBackups                Int         @default(5)
   backupInterval            Int         @default(7) // em dias

@@ -57,7 +57,7 @@ export const ControleDeBackup_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                 throw new Error('O intervalo de backup deve ser maior que zero.');
             }
 
-            if (config.backupHistoryDays <= config.backupIntervalDays) {
+            if (config.backupHistoryDays < config.backupIntervalDays) {
                 throw new Error('O histórico de backup deve ser maior que o intervalo de backup.');
             }
 
@@ -89,8 +89,22 @@ export const ControleDeBackup_FloatGuiModule: React.FC<Props> = ({ onComplete, o
                 url: '/backup/set',
                 args: config,
                 onSuccess: (data: any) => {
+                    addNotification({
+                        id: String(Date.now()),
+                        title: "Configuração salva",
+                        type: 'success',
+                        message: 'Configurações de backup salvas com sucesso.',
+                    });
                     onComplete?.();
-                }
+                },
+                onError(erro) {
+                    addNotification({
+                        id: String(Date.now()),
+                        title: "Erro ao salvar",
+                        type: 'error',
+                        message: erro.message || 'Erro ao salvar configurações de backup.',
+                    });
+                },
             })
         } catch (error) {
             addNotification({

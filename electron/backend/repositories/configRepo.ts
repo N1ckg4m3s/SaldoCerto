@@ -39,27 +39,28 @@ const { prisma } = await import(
 export const RepositorioConfiguracoes = {
     obterConfiguracao: async (): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.obterConfiguracao", async () => {
-            const config = await prisma.configuracoes.findFirst();
-            return ok(config);
+            const config = await prisma.configuracao.findFirst();
+            return config ?? undefined
         });
     },
 
     adicionarConfiguracao: async (dados: any): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.atualizarConfiguracao", async () => {
-            const updatedConfig = await prisma.configuracoes.create({
+            console.log('Adicionando configuração com dados:', dados);
+            const updatedConfig = await prisma.configuracao.create({
                 data: dados,
             });
-            return ok(updatedConfig);
+            return updatedConfig
         });
     },
 
     atualizarConfiguracao: async (dados: any): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.atualizarConfiguracao", async () => {
-            const updatedConfig = await prisma.configuracoes.update({
+            const updatedConfig = await prisma.configuracao.update({
                 where: { id: dados.id },
                 data: dados,
             });
-            return ok(updatedConfig);
+            return updatedConfig
         });
     },
 

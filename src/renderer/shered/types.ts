@@ -74,6 +74,6 @@ export interface ApiCallerProps {
     /** Caminho no formato "/namespace/metodo", ex: "/cliente/getList" */
     url: string;
     args?: any;
-    onSuccess?: (data: any) => void;
+    onSuccess?: (response: any) => void;
     onError?: (erro: errorFormat) => void;
 }

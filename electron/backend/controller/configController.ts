@@ -9,7 +9,7 @@ const { safeHandler } = await import(pathToFileURL(path.join(__dirname, '..', '.
 const { onInitApp } = await import(pathToFileURL(path.join(__dirname, '..', '..', 'utilits', 'onInitApp.js')).href);
 
 const { configurationService } = await import(
-    pathToFileURL(path.join(__dirname, '..', '..', 'services', 'configService.js')).href
+    pathToFileURL(path.join(__dirname, '..', 'services', 'configService.js')).href
 );
 
 /* Service das configurações */
