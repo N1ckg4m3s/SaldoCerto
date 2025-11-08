@@ -86,6 +86,18 @@ const HistoricoDeLancamentos = () => {
         page.set({ ...page.data, currentPage: pageToSet });
     }
 
+    const handleCleanFilters = () => {
+        // Zera os campos de data
+        if (deDataRef.current) deDataRef.current.value = "";
+        if (ateDataRef.current) ateDataRef.current.value = "";
+
+        // Zera o select
+        if (optionRef.current) optionRef.current.value = "";
+
+        // Opcional: dispara a API sem filtros
+        getAllApiMovimentations();
+    };
+
     const floatGuiActions = {
         openAddNewMovimentacao: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
         openRemoveMovimentation: (GuiInformations: any) => floatGui.set({ active: true, type: 'removeThing', GuiInformations }),
@@ -104,7 +116,12 @@ const HistoricoDeLancamentos = () => {
                 ]}
             />
 
-            <sh.filtrosContainer>
+            <sh.filtrosContainer
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    getAllApiMovimentations();
+                }}
+            >
                 {/* De Data */}
                 <sh.searchContainer>
                     De: <sh.searchInput type='date' ref={deDataRef} />
@@ -122,6 +139,7 @@ const HistoricoDeLancamentos = () => {
                     <option value={"Pagamento"}>Pagamentos</option>
                 </sh.filterSelect>
 
+                <sh.FooterBotao onClick={handleCleanFilters}>Clean</sh.FooterBotao>
                 <sh.FooterBotao onClick={getAllApiMovimentations}>Filtrar</sh.FooterBotao>
             </sh.filtrosContainer>
 

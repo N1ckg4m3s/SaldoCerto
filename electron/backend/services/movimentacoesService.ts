@@ -279,8 +279,8 @@ export const movimentacoesService = {
 
     ObterListaDeInadimplencia: async (dados: any): Promise<IPCResponseFormat> => {
         try {
-            let { page = 0, limit = 20, search = '' } = dados;
-            const repoRes = await RepositorioMovimentacoes.ObterListaDeInadimplencia({ page, limit, search });
+            let { page = 0, limit = 20 } = dados;
+            const repoRes = await RepositorioMovimentacoes.ObterListaDeInadimplencia({ page, limit });
             if (!repoRes.success) return errorResponse('ObterListaDeInadimplencia', repoRes.message);
 
             const retornoData = await Promise.all(

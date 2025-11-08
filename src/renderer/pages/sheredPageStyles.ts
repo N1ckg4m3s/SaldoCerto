@@ -137,7 +137,7 @@ export const AcoesFooter = styled.footer`
 `
 
 /* FILTRO */
-export const filtrosContainer = styled.div`
+export const filtrosContainer = styled.form`
     display: flex;
     justify-content: space-between;
     align-items: center;

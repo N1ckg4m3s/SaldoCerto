@@ -4,7 +4,7 @@ import * as s from './style'
 import type { HistoricoDeLancamentoDoClienteView, InformacoesDoClienteView, PaginacaoView } from '@renderer/shered/viewTypes';
 import { useEffect, useState } from 'react';
 import { Paginacao } from '@renderer/components/pagination/component';
-import type { FloatGuiProps, Movimentacao } from '@renderer/shered/types';
+import type { FloatGuiProps } from '@renderer/shered/types';
 import InterfaceFlutuante from '@renderer/components/floatGui/component';
 import { CreateEditClient_FloatGuiModule } from '@renderer/components/floatGui/models/createEditClient';
 import { useParams } from 'react-router-dom';
