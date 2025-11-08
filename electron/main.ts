@@ -37,6 +37,15 @@ async function createWindow() {
     });
 
     iniciarTodosControladores();
+
+    // Gerando 30 clientes de teste
+    // const { gerarClientesDeTeste } = await import(pathToFileURL(path.join(__dirname, 'utilits', 'gerarClientesDeTeste.js')).href);
+    // await gerarClientesDeTeste(30);
+    
+    // Gerarndo 100 movimentações de teste
+    // const { gerarMovimentacoesDeTeste } = await import(pathToFileURL(path.join(__dirname, 'utilits', 'gerarMovimentacoesDeTeste.js')).href);
+    // await gerarMovimentacoesDeTeste(100);
+
 }
 
 app.on('ready', createWindow);
