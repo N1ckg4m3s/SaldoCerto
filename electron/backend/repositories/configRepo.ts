@@ -65,13 +65,26 @@ export const RepositorioConfiguracoes = {
 
     limparMovimentacoesAntigas: async (dataLimite: Date): Promise<IPCResponseFormat> => {
         return safe("RepositorioConfiguracoes.limparMovimentacoesAntigas", async () => {
-            const deletedCount = await prisma.movimentacoes.deleteMany({
+            const deletedCount = await prisma.movimentacao.deleteMany({
                 where: {
-                    data: {
-                        lt: dataLimite,
-                    },
+                    OR: [
+                        {
+                            AND: [
+                                { tipo: 'Pedido' },
+                                { pago: true },
+                                { data: { lt: new Date(dataLimite) } },
+                            ],
+                        },
+                        {
+                            AND: [
+                                { tipo: 'Pagamento' },
+                                { data: { lt: new Date(dataLimite) } },
+                            ],
+                        },
+                    ],
                 },
             });
+
             return deletedCount;
         });
     },

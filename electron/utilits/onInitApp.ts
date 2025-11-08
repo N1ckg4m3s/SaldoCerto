@@ -55,7 +55,8 @@ export const onInitApp = async (): Promise<boolean> => {
     }
 
     // Roda a limpesa automática de movimentações antigas
-    const dataLimite = hoje.setDate(hoje.getDate() + config.movimentacaoExpiraEmDias);
+    const dataLimite = new Date();
+    dataLimite.setDate(dataLimite.getDate() - config.movimentacaoExpiraEmDias);
     await configurationService.RodarLimpeza({ dataLimite: new Date(dataLimite) });
 
     return true;
