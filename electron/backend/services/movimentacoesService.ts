@@ -164,17 +164,18 @@ export const movimentacoesService = {
 
     ObterMovimentacoes: async (dados: any): Promise<IPCResponseFormat> => {
         try {
-            let { page = 0, limit = 20, search = '', filters = {} } = dados;
+            let { page = 0, limit = 20, filters = {} } = dados;
             const filtros: any = {};
 
             if (filters) {
                 const deData = filters.de ? new Date(filters.de) : null;
                 const ateData = filters.ate ? new Date(filters.ate) : null;
                 if (deData && ateData) filtros.data = { gte: deData, lte: ateData };
-                if (filters.option) filtros.tipo = filters.option;
             }
 
-            const paginaRes = await RepositorioMovimentacoes.obterMovimentacoes({ page, limit, search, filtros });
+            if (filters.option) filtros.tipo = filters.option;
+
+            const paginaRes = await RepositorioMovimentacoes.obterMovimentacoes({ page, limit, filtros });
             if (!paginaRes.success) return errorResponse('ObterMovimentacoes', paginaRes.message);
 
             const retornoData = await Promise.all(
@@ -235,7 +236,11 @@ export const movimentacoesService = {
 
     ObterMovimentacoesPorID: async (dados: any): Promise<IPCResponseFormat> => {
         try {
-            let { page = 0, limit = 20, search = '', filters = {} } = dados;
+            const page = dados.page ?? 0;
+            const limit = dados.limit ?? 20;
+            const search = dados.search ?? "";
+            const filters = dados.filters ?? "";
+
             const idCliente = dados.id;
             if (!idCliente) return errorResponse('ObterMovimentacoesPorID', 'Id do cliente não informado');
 
@@ -246,25 +251,21 @@ export const movimentacoesService = {
                 if (filters.option) filtros.tipo = filters.option;
             }
 
+            filtros.clienteId = idCliente
+
             const paginaRes = await RepositorioMovimentacoes.obterMovimentacoes({ page, limit, search, filtros });
             if (!paginaRes.success) return errorResponse('ObterMovimentacoesPorID', paginaRes.message);
 
-            const retornoData = await Promise.all(
-                paginaRes.data.movimentacoes.map(async (mov: any) => {
-                    const cliRes = await clientService.ObterClientePorId({ id: mov.clienteId });
-                    return {
-                        id: mov.id,
-                        ClientId: mov.clienteId,
-                        nome: cliRes.success ? cliRes.data.nome : '',
-                        tipo: mov.tipo,
-                        data: mov.data,
-                        valor: mov.valor,
-                        codigo: mov.codigo,
-                        vencimento: mov.vencimento,
-                        valorAbatido: mov.valorAbatido,
-                    };
-                })
-            );
+            const retornoData = paginaRes.data.movimentacoes
+                .map((mov: any) => ({
+                    id: mov.id,
+                    tipo: mov.tipo,
+                    data: mov.data,
+                    vencimento: mov.vencimento,
+                    valor: mov.valor,
+                    valorAbatido: mov.valorAbatido,
+                    codigo: mov.codigo,
+                }));
 
             return successResponse({
                 currentPage: paginaRes.data.currentPage,

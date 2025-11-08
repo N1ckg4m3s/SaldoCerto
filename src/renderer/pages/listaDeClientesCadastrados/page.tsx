@@ -24,19 +24,14 @@ const useAllStates = () => {
         type: '',
         GuiInformations: {},
     })
-    const [TableHeadFilter, setTableHeadFilter] = useState<TableHeadFilterProps>({
-        SomaTotal: null,
-        ProximoPagamento: null,
-        ValorProximaNota: null,
-    });
     const [clientsCadastrados, setClientsCadastrados] = useState<ListaClienteView[]>([]);
 
-    const searchRef = useRef<HTMLInputElement>(null)
+    const searchRef = useRef<HTMLInputElement>(null);
+    const optionRef = useRef<HTMLSelectElement>(null);
 
     return {
         page: { data: page, set: setPage },
         floatGui: { data: floatGui, set: setFloatGui },
-        TableHeadFilter: { data: TableHeadFilter, set: setTableHeadFilter },
         clientsCadastrados: { data: clientsCadastrados, set: setClientsCadastrados },
         searchRef
     }
@@ -45,22 +40,7 @@ const useAllStates = () => {
 const ListaDeClientesCadastrados = () => {
     const { addNotification } = useNotification();
     const navigate = useNavigate();
-    const { page, floatGui, TableHeadFilter, clientsCadastrados, searchRef } = useAllStates();
-
-    const TableHeadDataClick = (column: keyof TableHeadFilterProps) => {
-        TableHeadFilter.set(prev => {
-            const next = nextNumberFilterType(prev[column]);
-            return {
-                // colunas atuais
-                SomaTotal: null,
-                ProximoPagamento: null,
-                ValorProximaNota: null,
-
-                // coluna que vai ser alterada
-                [column]: next,
-            };
-        });
-    };
+    const { page, floatGui, clientsCadastrados, searchRef } = useAllStates();
 
     const getApiInformations = async () => {
         try {
@@ -68,7 +48,6 @@ const ListaDeClientesCadastrados = () => {
                 page: page.data.currentPage,
                 limit: 20,
                 search: searchRef.current?.value || '',
-                filters: TableHeadFilter.data,
             };
 
             const response = await ApiCaller({
@@ -102,8 +81,8 @@ const ListaDeClientesCadastrados = () => {
         }
     };
 
-    const handleChangePage = (page: number) => {
-
+    const handleChangePage = (pageToSet: number) => {
+        page.set({ ...page.data, currentPage: pageToSet });
     }
 
     const floatGuiActions = {
@@ -111,7 +90,7 @@ const ListaDeClientesCadastrados = () => {
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
     };
 
-    useEffect(() => { getApiInformations() }, [])
+    useEffect(() => { getApiInformations() }, [page.data.currentPage])
 
     return (
         <sh.MainPageContainer>
@@ -128,12 +107,6 @@ const ListaDeClientesCadastrados = () => {
                     </sh.svg>
                     <sh.searchInput ref={searchRef} />
                 </sh.searchContainer>
-                <sh.filterSelect>
-                    <option value={""}>Todos</option>
-                    <option value={"ativo"}>Ativo</option>
-                    <option value={"vencido"}>Vencido</option>
-                    <option value={"quitado"}>Quitado</option>
-                </sh.filterSelect>
 
                 <sh.FooterBotao onClick={getApiInformations} >Filtrar</sh.FooterBotao>
             </sh.filtrosContainer>
@@ -143,21 +116,10 @@ const ListaDeClientesCadastrados = () => {
                     <sh.tableRow>
                         <sh.tableTh>Nome</sh.tableTh>
 
-                        <sh.tableTh onClick={() => TableHeadDataClick('SomaTotal')} clickable>
-                            Total em dívida
-                        </sh.tableTh>
-
-                        <sh.tableTh onClick={() => TableHeadDataClick('ProximoPagamento')} clickable>
-                            Próximo pagamento
-                        </sh.tableTh>
-
-                        <sh.tableTh onClick={() => TableHeadDataClick('ValorProximaNota')} clickable>
-                            Valor a cobrar
-                        </sh.tableTh>
-
-                        <sh.tableTh>
-                            Situação
-                        </sh.tableTh>
+                        <sh.tableTh>Total em dívida</sh.tableTh>
+                        <sh.tableTh>Próximo pagamento</sh.tableTh>
+                        <sh.tableTh>Valor a cobrar</sh.tableTh>
+                        <sh.tableTh>Situação</sh.tableTh>
 
                         <sh.tableTh>Ações</sh.tableTh>
                     </sh.tableRow>

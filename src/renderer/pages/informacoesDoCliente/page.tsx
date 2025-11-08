@@ -46,8 +46,8 @@ const InformacoesDoCliente = () => {
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
     };
 
-    const handleChangePage = (page: number) => {
-
+    const handleChangePage = (pageToSet: number) => {
+        page.set({ ...page.data, currentPage: pageToSet });
     }
 
     const initClientInformations = () => {
@@ -84,9 +84,14 @@ const InformacoesDoCliente = () => {
     }
 
     const getAllApiMovimentations = () => {
+        const payload={
+            id: id,
+            page: page.data.currentPage,
+
+        }
         ApiCaller({
             url: '/movimentacoes/listByClient',
-            args: { id },
+            args: payload,
             onSuccess(response) {
                 if (response.success) {
                     historico.set(response.data.movimentacoes)

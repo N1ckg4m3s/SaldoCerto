@@ -97,7 +97,9 @@ export const RepositorioMovimentacoes = {
                 skip: page * limit,
                 take: limit,
             });
-            const total = await prisma.movimentacao.count();
+            const total = await prisma.movimentacao.count({
+                where: filtros,
+            });
             return {
                 currentPage: page,
                 totalPages: Math.ceil(total / limit),

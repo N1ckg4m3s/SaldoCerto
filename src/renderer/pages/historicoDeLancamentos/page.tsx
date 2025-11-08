@@ -24,7 +24,6 @@ const useAllStates = () => {
     const deDataRef = useRef<HTMLInputElement>(null);
     const ateDataRef = useRef<HTMLInputElement>(null);
     const optionRef = useRef<HTMLSelectElement>(null);
-    const searchRef = useRef<HTMLInputElement>(null);
 
     return {
         page: { data: page, set: setPage },
@@ -32,21 +31,19 @@ const useAllStates = () => {
         movimentacoes: { data: movimentacoes, set: setMovimentacoes },
         deDataRef,
         ateDataRef,
-        optionRef,
-        searchRef
+        optionRef
     }
 }
 
 const HistoricoDeLancamentos = () => {
     const { addNotification } = useNotification();
-    const { page, floatGui, movimentacoes, deDataRef, ateDataRef, optionRef, searchRef } = useAllStates();
+    const { page, floatGui, movimentacoes, deDataRef, ateDataRef, optionRef } = useAllStates();
 
     const getAllApiMovimentations = () => {
         try {
             const payload = {
                 page: page.data.currentPage,
                 limit: 20,
-                search: searchRef.current?.value || '',
                 filters: {
                     de: deDataRef.current?.value || '',
                     ate: ateDataRef.current?.value || '',
@@ -85,8 +82,8 @@ const HistoricoDeLancamentos = () => {
         }
     }
 
-    const handleChangePage = (page: number) => {
-
+    const handleChangePage = (pageToSet: number) => {
+        page.set({ ...page.data, currentPage: pageToSet });
     }
 
     const floatGuiActions = {
@@ -124,14 +121,6 @@ const HistoricoDeLancamentos = () => {
                     <option value={"Pedido"}>Pedidos</option>
                     <option value={"Pagamento"}>Pagamentos</option>
                 </sh.filterSelect>
-
-                {/* Pesquisa */}
-                <sh.searchContainer>
-                    <sh.svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                    </sh.svg>
-                    <sh.searchInput placeholder='Cliente' ref={searchRef} />
-                </sh.searchContainer>
 
                 <sh.FooterBotao onClick={getAllApiMovimentations}>Filtrar</sh.FooterBotao>
             </sh.filtrosContainer>

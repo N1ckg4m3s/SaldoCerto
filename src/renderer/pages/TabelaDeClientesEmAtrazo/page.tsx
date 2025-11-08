@@ -53,8 +53,8 @@ const TabelaDeClientesEmAtrazo = () => {
         });
     };
 
-    const handleChangePage = (page: number) => {
-
+    const handleChangePage = (pageToSet: number) => {
+        page.set({ ...page.data, currentPage: pageToSet });
     }
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const TabelaDeClientesEmAtrazo = () => {
         } catch (e) {
 
         }
-    }, [])
+    }, [page.data.currentPage])
 
     return (
         <sh.MainPageContainer>
