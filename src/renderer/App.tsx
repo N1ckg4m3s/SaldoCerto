@@ -13,8 +13,6 @@ import { NotificationProvider } from './components/notificationContainer/notific
 import { useEffect, useState } from 'react';
 import { ApiCaller } from './controler/ApiCaller';
 import LoadingComponent from './components/loading/component';
-import InterfaceFlutuante from './components/floatGui/component';
-import { ControleDeBackup_FloatGuiModule } from './components/floatGui/models/controleDeBackup';
 import ConfiguracoesDoSistema from './pages/configuracoes/page';
 
 const App = () => {
