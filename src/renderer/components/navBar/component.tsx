@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 
 const Botoes = {
     '/': "Dashboard",
-    '/historicoDeLancamentos': 'Histórico de lançamentos',
-    '/listaDeClientesCadastrados': 'Clientes cadastrados',
+    '/HistoricoDeLancamentos': 'Histórico de lançamentos',
+    '/ListaDeClientesCadastrados': 'Clientes cadastrados',
     '/TabelaDeClientesEmAtrazo': 'Clientes em atraso',
+    '/ConfiguracoesDoSistema': '⚙',
 }
 
 const BarraDeNavegacao = () => {

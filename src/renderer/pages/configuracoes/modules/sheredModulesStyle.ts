@@ -1,82 +1,5 @@
-import { cardBrackgroundBase, flexCenter, flexColumn, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
+import { flexCenter, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
 import styled from "styled-components";
-
-export const BlurBackground = styled.div`
-  ${flexCenter}
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,.5);
-  /* google */
-  backdrop-filter: blur(2px);
-  /* safari */
-  -webkit-backdrop-filter: blur(2px);
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-`
-
-export const InterfaceBackground = styled.main`
-  ${flexColumn}
-  ${cardBrackgroundBase};
-  width: clamp(400px, 35vw, 500px);
-  height: clamp(400px, 35vw, 500px);
-  background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
-  border-radius: 12px;
-  padding: 24px 28px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e5e8ec;
-`;
-
-export const HeaderContainer = styled.header`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-`;
-
-export const TitleContainer = styled.div`
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: #222;
-  position: relative;
-  width: 100%;
-  text-align: center;
-`;
-
-export const CloseButton = styled.button`
-  ${resetButtonStyle};
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateY(-5%);
-  background-color: #ff4d4f;
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  font-size: 0.9rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background-color: #d9363e;
-  }
-`;
-
-/*
-    ==================== MODULOS ====================
-    Daqui para baixo vai ser as estilizações dos modulos.
-*/
-
-export const ModuleContainer = styled.section<{ gap?: number }>`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${(props)=> `${props.gap || 16}px`};
-`;
 
 export const ModuleFieldRow = styled.div`
   display: flex;
@@ -91,6 +14,7 @@ export const ModuleFormLabel = styled.label`
   color: #333;
   margin-bottom: 4px;
   font-size: 0.95rem;
+  align-self: center;
 `;
 
 export const ModuleFormInput = styled.input`
@@ -194,6 +118,14 @@ export const ModuleFormButton = styled.button`
     background-color: #1e7e34;
     box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
   }
+`;
+
+export const ModuleFormCheck = styled.input`
+  background-color: red;
+  height: 30px;
+  background-color: #fff;
+  align-self: flex-start;
+  margin-right: 100%;
 `;
 
 /* Options button */

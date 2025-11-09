@@ -15,6 +15,7 @@ import { ApiCaller } from './controler/ApiCaller';
 import LoadingComponent from './components/loading/component';
 import InterfaceFlutuante from './components/floatGui/component';
 import { ControleDeBackup_FloatGuiModule } from './components/floatGui/models/controleDeBackup';
+import ConfiguracoesDoSistema from './pages/configuracoes/page';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,19 +52,19 @@ const App = () => {
   return (
     <NotificationProvider>
       {
-        !hasConfig ?
-          showBackupInterface(() => {
-            setHasConfig(true);
-          }) :
+        !hasConfig ? <ConfiguracoesDoSistema
+          onComplete={() => setHasConfig(true)}
+        /> :
           <>
             <HashRouter>
               <BarraDeNavegacao />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
-                <Route path='/historicoDeLancamentos' element={<HistoricoDeLancamentos />} />
+                <Route path='/HistoricoDeLancamentos' element={<HistoricoDeLancamentos />} />
                 <Route path='/informacoesDoCliente/:id' element={<InformacoesDoCliente />} />
-                <Route path='/listaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
+                <Route path='/ListaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
                 <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
+                <Route path='/ConfiguracoesDoSistema' element={<ConfiguracoesDoSistema />} />
               </Routes>
             </HashRouter>
           </>
@@ -74,15 +75,3 @@ const App = () => {
 }
 
 export default App;
-
-const showBackupInterface = (onComplete: () => void) => {
-  return (
-    <InterfaceFlutuante
-      title="Controle de Backup"
-      onClose={() => { }}
-    >
-      <ControleDeBackup_FloatGuiModule
-        onComplete={onComplete} />
-    </InterfaceFlutuante>
-  )
-}
