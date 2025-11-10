@@ -1,3 +1,4 @@
+import { GlobalBackgroundColor, GlobalTextColor } from "@renderer/globalStyleInformations";
 import { resetButtonStyle } from "@renderer/sheredStyles";
 import styled from "styled-components";
 
@@ -12,24 +13,24 @@ export const Container = styled.div`
 export const PageButton = styled.button<{ active?: boolean }>`
     padding: 8px 12px;
     border: none;
-    background-color: ${(props) => (props.active ? '#007bff' : '#f0f0f0')};
-    color: ${(props) => (props.active ? '#fff' : '#000')};  
+    background-color: ${(props) => (props.active ? GlobalBackgroundColor.Button : GlobalBackgroundColor.LightGray)};
+    color: ${(props) => (props.active ? GlobalTextColor.White : GlobalTextColor.Black)};  
     cursor: pointer;
     border-radius: 4px;
     &:hover {
-        background-color: ${(props) => (props.active ? '#0056b3' : '#e0e0e0')};
+        background-color: ${(props) => (props.active ? GlobalBackgroundColor.ButtonHold : GlobalBackgroundColor.AlmostGray)};
     }
 `;
 
 export const DisabledButton = styled.button`
     padding: 8px 12px;
     border: none;
-    background-color: #e0e0e0;
-    color: #a0a0a0;
+    background-color: ${GlobalBackgroundColor.AlmostGray};
+    color: ${GlobalTextColor.AlmostWhite};
     cursor: not-allowed;
     border-radius: 4px;
     &:hover {
-        background-color: #e0e0e0;
+        background-color: ${GlobalBackgroundColor.AlmostGray};
     }
 `;
 

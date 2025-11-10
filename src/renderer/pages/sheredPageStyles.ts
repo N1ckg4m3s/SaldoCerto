@@ -22,6 +22,7 @@ export const tableContainer = styled.table`
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    color: ${GlobalBackgroundColor.Accent};
 `
 
 interface TableThProps {
@@ -43,6 +44,7 @@ export const tableTh = styled.th<TableThProps>`
 
 export const tableRow = styled.tr`
     border-bottom: 1px solid ${GlobalBorderColor.Gray};
+    background-color: ${GlobalBackgroundColor.White};
 `
 
 export const tableData = styled.td`
@@ -51,11 +53,11 @@ export const tableData = styled.td`
 `
 
 type situacaoClienteProps = {
-    situacao: 'ativo' | 'vencido' | 'quitado'
+    situacao: 'ativo' | 'vencido' | 'quitado';
 }
 
 type tipoNotaProps = {
-    situacao: 'Pedido' | 'Pagamento'
+    situacao: 'Pedido' | 'Pagamento';
 }
 
 export const situacaoCliente = styled.span<situacaoClienteProps>`
@@ -153,6 +155,7 @@ export const searchContainer = styled.div`
     border-radius: 8px;
     padding: ${GlobalSpacing.Padding6x10};
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: ${GlobalTextColor.DarkGray};
 `
 
 export const svg = styled.svg`
@@ -167,7 +170,9 @@ export const searchInput = styled.input`
     flex: 1;
     padding: ${GlobalSpacing.Small};
     font-size: ${GlobalTextSize.Base};
-    `
+    background-color: ${GlobalBackgroundColor.White};
+    color: ${GlobalTextColor.DarkGray};
+`
 
 export const filterSelect = styled.select`
     padding: ${GlobalSpacing.SmallMedium};

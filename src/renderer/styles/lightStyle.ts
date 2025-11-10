@@ -10,8 +10,11 @@ export const LightBackgroundColor = {
     Warn: '#d97706',
     Danger: '#dc2626',
     Button: '#007bff',
+    ButtonHold: '#0056b3',
+    Gray: '#eeeeee',
 
     White: '#ffffff',
+    AlmostGray: '#e0e0e0',
     LightGray: '#f5f6fa',
     LightPink: '#ffe9e9',
     LightOrange: '#fff7e6',
@@ -31,7 +34,7 @@ export const LightBorderColor = {
     Gray: '#eeeeee',
     MidGray: '#cccccc',
     Black: '#000000',
-    White: '#ffffff'
+    White: '#ffffff',
 };
 
 export const LightTextColor = {
@@ -49,7 +52,8 @@ export const LightTextColor = {
     White: '#ffffff',
 
     MintGreen: '#2e8b57',
-    SoftRed: '#c0392b'
+    SoftRed: '#c0392b',
+    AlmostWhite: '#a0a0a0',
 };
 
 export const LightTextSize = {

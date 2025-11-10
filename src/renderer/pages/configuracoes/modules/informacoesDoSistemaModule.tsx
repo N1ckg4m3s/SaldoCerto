@@ -8,12 +8,12 @@ export const ConfigInformacoesModule = () => {
 
             <sh.ModuleFieldRow>
                 <sh.ModuleFormLabel>Versão do aplicativo:</sh.ModuleFormLabel>
-                <span> V 1.0.0 (local) </span>
+                <sh.span> V 1.0.0 (local) </sh.span>
             </sh.ModuleFieldRow>
 
             <sh.ModuleFieldRow>
                 <sh.ModuleFormLabel>Último backup:</sh.ModuleFormLabel>
-                <span> ##/##/##</span>
+                <sh.span> ##/##/##</sh.span>
             </sh.ModuleFieldRow>
         </s.SectionContainer>
     )

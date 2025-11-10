@@ -1,31 +1,40 @@
-import { cardBrackgroundBase, flexCenter, flexColumn, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
+import {
+  GlobalBackgroundColor,
+  GlobalBorderColor,
+  GlobalTextColor
+} from "@renderer/globalStyleInformations";
+import {
+  cardBrackgroundBase,
+  flexCenter,
+  flexColumn,
+  resetButtonStyle,
+  resetInputStyle
+} from "@renderer/sheredStyles";
 import styled from "styled-components";
 
 export const BlurBackground = styled.div`
   ${flexCenter}
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,.5);
-  /* google */
+  background-color: ${GlobalBackgroundColor.ModalOverlay}; 
   backdrop-filter: blur(2px);
-  /* safari */
   -webkit-backdrop-filter: blur(2px);
   position: absolute;
   z-index: 2;
   top: 0;
   left: 0;
-`
+`;
 
 export const InterfaceBackground = styled.main`
   ${flexColumn}
   ${cardBrackgroundBase};
   width: clamp(400px, 35vw, 500px);
   height: clamp(400px, 35vw, 500px);
-  background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+  background: ${GlobalBackgroundColor.Card};
   border-radius: 12px;
   padding: 24px 28px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e5e8ec;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); /* precisa criar GlobalShadow.Light */
+  border: 1px solid ${GlobalBorderColor.Gray};
 `;
 
 export const HeaderContainer = styled.header`
@@ -38,7 +47,7 @@ export const HeaderContainer = styled.header`
 export const TitleContainer = styled.div`
   font-weight: 600;
   font-size: 1.25rem;
-  color: #222;
+  color: ${GlobalTextColor.DarkerGray};
   position: relative;
   width: 100%;
   text-align: center;
@@ -50,8 +59,8 @@ export const CloseButton = styled.button`
   right: 0;
   top: 0;
   transform: translateY(-5%);
-  background-color: #ff4d4f;
-  color: white;
+  background-color: ${GlobalBackgroundColor.Danger};
+  color: ${GlobalTextColor.White};
   font-weight: bold;
   border-radius: 50%;
   width: 28px;
@@ -62,20 +71,19 @@ export const CloseButton = styled.button`
   transition: background-color 0.15s ease;
 
   &:hover {
-    background-color: #d9363e;
+    background-color: ${GlobalBackgroundColor.Warn}; /* pode criar DangerHover */
   }
 `;
 
 /*
     ==================== MODULOS ====================
-    Daqui para baixo vai ser as estilizações dos modulos.
 */
 
 export const ModuleContainer = styled.section<{ gap?: number }>`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: ${(props)=> `${props.gap || 16}px`};
+  gap: ${(props) => `${props.gap || 16}px`};
 `;
 
 export const ModuleFieldRow = styled.div`
@@ -83,12 +91,12 @@ export const ModuleFieldRow = styled.div`
   gap: 10px;
   height: 30px;
   justify-content: space-between;
-`
+`;
 
 export const ModuleFormLabel = styled.label`
   white-space: nowrap;
   font-weight: 500;
-  color: #333;
+  color: ${GlobalTextColor.DarkGray};
   margin-bottom: 4px;
   font-size: 0.95rem;
 `;
@@ -97,22 +105,22 @@ export const ModuleFormInput = styled.input`
   ${resetInputStyle};
   width: 100%;
   height: 36px;
-  border: 1px solid #ccc;
+  border: 1px solid ${GlobalBorderColor.MidGray};
   border-radius: 6px;
   padding: 0 10px;
   font-size: 15px;
-  color: #333;
-  background-color: #fff;
+  color: ${GlobalTextColor.DarkGray};
+  background-color: ${GlobalBackgroundColor.White};
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: ${GlobalBackgroundColor.Button}; /* botão padrão */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* precisa criar GlobalShadow.Focus */
   }
 
   &::placeholder {
-    color: #aaa;
+    color: ${GlobalTextColor.AlmostWhite};
   }
 `;
 
@@ -120,12 +128,12 @@ export const ModuleFormSelect = styled.select`
   ${resetInputStyle};
   width: 100%;
   height: 36px;
-  border: 1px solid #ccc;
+  border: 1px solid ${GlobalBorderColor.MidGray};
   border-radius: 6px;
   padding: 0 10px;
   font-size: 15px;
-  color: #333;
-  background-color: #fff;
+  color: ${GlobalTextColor.DarkGray};
+  background-color: ${GlobalBackgroundColor.White};
   appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
@@ -136,7 +144,7 @@ export const ModuleFormSelect = styled.select`
 export const FieldTip = styled.span`
   display: inline-block;
   margin-left: 4px;
-  color: #888;
+  color: ${GlobalTextColor.Muted};
   cursor: pointer;
   font-weight: bold;
   border-radius: 50%;
@@ -145,7 +153,7 @@ export const FieldTip = styled.span`
   text-align: center;
   line-height: 16px;
   font-size: 12px;
-  background-color: #eee;
+  background-color: ${GlobalBackgroundColor.Gray};
   position: relative;
 
   &:hover > span {
@@ -159,8 +167,8 @@ export const FieldTip = styled.span`
     top: 120%;
     left: 25%;
     transform: translateX(-25%);
-    background: #333;
-    color: #fff;
+    background: ${GlobalTextColor.DarkGray};
+    color: ${GlobalTextColor.White};
     padding: 6px 8px;
     font-size: 15px;
     border-radius: 4px;
@@ -176,22 +184,22 @@ export const ModuleFormButton = styled.button`
   width: 100%;
   padding: 10px 0;
   border-radius: 8px;
-  background-color: #28a745;
-  color: white;
+  background-color: ${GlobalBackgroundColor.Success};
+  color: ${GlobalTextColor.White};
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.3px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* precisa criar GlobalShadow.Base */
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: #218838;
+    background-color: ${GlobalBackgroundColor.MintGreen}; /* precisa criar SuccessHover */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   }
 
   &:active {
-    background-color: #1e7e34;
+    background-color: ${GlobalBackgroundColor.Accent};
     box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
   }
 `;
@@ -202,24 +210,30 @@ export const SelectClientContainer = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-`
+`;
 
 export const SelectClientSelect = styled.div`
   position: absolute;
   top: 100%;
-  background: white;
+  background: ${GlobalBackgroundColor.White};
   width: 100%;
-  border: 1px solid #ccc;
-  list-Style: none;
+  border: 1px solid ${GlobalBorderColor.MidGray};
+  list-style: none;
   margin: 0;
   padding: 0;
-  z-Index: 10;
-`
+  z-index: 10;
+`;
 
 export const SelectClientOption = styled.div`
   padding: 6px;
   cursor: pointer;
-`
+  color: ${GlobalTextColor.DarkGray};
+  background-color: ${GlobalBackgroundColor.White};
+
+  &:hover {
+    background-color: ${GlobalBackgroundColor.LightGray}; /* precisa criar HoverGray */
+  }
+`;
 
 export const FillSpace = styled.div`
   flex: 1;

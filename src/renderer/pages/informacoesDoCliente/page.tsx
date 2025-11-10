@@ -144,7 +144,7 @@ const InformacoesDoCliente = () => {
 
             <s.informationsContainer>
                 <s.InformationsGroup>
-                    <h3>Informacoes do cliente</h3>
+                    <s.title>Informacoes do cliente</s.title>
                     <s.Information>
                         <strong>Contato adicionado: </strong>
                         {client.data?.telefone || '-'}
@@ -155,7 +155,7 @@ const InformacoesDoCliente = () => {
                     </s.Information>
                 </s.InformationsGroup>
                 <s.InformationsGroup>
-                    <h3>Informacoes financeiras</h3>
+                    <s.title>Informacoes financeiras</s.title>
                     <s.Information>
                         <strong>Divida Total: </strong>
                         {formatarValorParaTexto(client.data?.SomaTotal) || '-'}
@@ -172,7 +172,7 @@ const InformacoesDoCliente = () => {
             </s.informationsContainer>
 
             <s.HistoryContainer>
-                <h3>Historico do cliente</h3>
+                <s.title>Historico do cliente</s.title>
                 <sh.tableContainer>
                     <thead>
                         <sh.tableRow>

@@ -22,6 +22,7 @@ export const SectionContainer_Danger = styled.section`
 
 export const SectionTitle = styled.span`
     font-size: ${GlobalTextSize.Heading};
+    color: ${GlobalTextColor.Black};
 `
 
 export const SectionTitle_Danger = styled.span`

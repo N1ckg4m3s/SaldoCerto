@@ -1,54 +1,57 @@
-// 🌸 DarkTheme (modo de depuração visual)
 export const DarkBackgroundColor = {
-    Black: '#ff1493',
-    BG: '#ffb6c1',           // rosa claro
-    Card: '#ffc0cb',         // pink pastel
-    Muted: '#ff69b4',        // rosa choque
-    Accent: '#ff1493',       // pink profundo
-    Success: '#ff85b0',      // rosa esbranquiçado
-    Warn: '#ff4081',         // rosa médio
-    Danger: '#ff007f',       // magenta
-    Button: '#ff66cc',       // rosa vibrante
+    Black: '#000000',
+    BG: '#121212',
+    Card: '#1e1e1e',
+    Muted: '#999999',
+    Accent: '#cbd5e1',
+    Success: '#22c55e',
+    Warn: '#facc15',
+    Danger: '#ef4444',
+    Button: '#2563eb',
+    ButtonHold: '#1d4ed8',
+    Gray: '#2b2b2b',
 
-    White: '#ffe4e1',        // rosa bem pálido
-    LightGray: '#ffb6c1',
-    LightPink: '#ffb6c1',
-    LightOrange: '#ff8fab',
-    LightGreen: '#ffbfd0',
-    MintGreen: '#ffccd5',
-    SoftRed: '#ff99aa',
-    GrayLight: '#ffb6c1',
-    GraySoft: '#ffccd5',
-    AlmostWhite: '#fff0f5',
-    Silver: '#ffcad4',
-    GrayNeutral: '#ffe6eb',
-    ModalOverlay: 'rgba(255, 105, 180, 0.3)', // rosa translúcido
+    White: '#181818',
+    AlmostGray: '#2f2f2f',
+    LightGray: '#3a3a3a',
+    LightPink: '#5a2a2a',
+    LightOrange: '#664c1d',
+    LightGreen: '#1f3d2e',
+    MintGreen: '#1e3a34',
+    SoftRed: '#4a1e1e',
+    GrayLight: '#2e2e2e',
+    GraySoft: '#252525',
+    AlmostWhite: '#1c1c1c',
+    Silver: '#444',
+    GrayNeutral: '#2a2a2a',
+    ModalOverlay: 'rgba(0, 0, 0, 0.7)',
 };
 
 export const DarkBorderColor = {
-    LightGray: '#ff99cc',
-    Gray: '#ff66b2',
-    MidGray: '#ff3385',
-    Black: '#ff1493',
-    White: '#ff99cc',
+    LightGray: '#2f2f2f',
+    Gray: '#3c3c3c',
+    MidGray: '#4d4d4d',
+    Black: '#000000',
+    White: '#d4d4d4',
 };
 
 export const DarkTextColor = {
-    Black: '#ff4da6',
-    Accent: '#ff66cc',
-    AlmostBlack: '#ff1a75',
-    DarkerGray: '#ff3399',
-    DarkGray: '#ff66b2',
-    MediumGray: '#ff80bf',
-    Muted: '#ff99cc',
-    Success: '#ff4da6',
-    Danger: '#ff1a75',
-    Warn: '#ff66b2',
-    InfoBlue: '#ff85c1',
-    White: '#ffe6f0',
+    Black: '#f1f1f1',
+    Accent: '#f5f5f5',
+    AlmostBlack: '#e5e5e5',
+    DarkerGray: '#cccccc',
+    DarkGray: '#bbbbbb',
+    MediumGray: '#aaaaaa',
+    Muted: '#888888',
+    Success: '#22c55e',
+    Danger: '#ef4444',
+    Warn: '#facc15',
+    InfoBlue: '#60a5fa',
+    White: '#ffffff',
 
-    MintGreen: '#ffb3d9',
-    SoftRed: '#ff99c2',
+    MintGreen: '#6ee7b7',
+    SoftRed: '#f87171',
+    AlmostWhite: '#999999',
 };
 
 export const DarkTextSize = {
@@ -84,10 +87,10 @@ export const DarkSpacing = {
 };
 
 export const DarkHeaderTitleButtonColors = [
-    "#ff80ab", // rosa suave
-    "#ff4081", // rosa intenso
-    "#f06292", // rosa médio
-    "#ec407a", // magenta rosado
-    "#f48fb1", // rosa claro
-    "#ff99cc", // rosa chiclete
+    "#3b82f6", // azul
+    "#22c55e", // verde
+    "#8b5cf6", // roxo
+    "#f97316", // laranja
+    "#06b6d4", // ciano
+    "#ef4444", // vermelho
 ];
