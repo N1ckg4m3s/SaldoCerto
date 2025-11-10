@@ -1,6 +1,7 @@
 
 
 export const LightBackgroundColor = {
+    Black: '#000000',
     BG: '#f4f6f9',
     Card: '#ffffff',
     Muted: '#666666',
@@ -29,6 +30,8 @@ export const LightBorderColor = {
     LightGray: '#f0f0f0',
     Gray: '#eeeeee',
     MidGray: '#cccccc',
+    Black: '#000000',
+    White: '#ffffff'
 };
 
 export const LightTextColor = {

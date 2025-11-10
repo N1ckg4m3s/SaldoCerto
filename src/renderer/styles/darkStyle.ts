@@ -1,5 +1,6 @@
 // 🌸 DarkTheme (modo de depuração visual)
 export const DarkBackgroundColor = {
+    Black: '#ff1493',
     BG: '#ffb6c1',           // rosa claro
     Card: '#ffc0cb',         // pink pastel
     Muted: '#ff69b4',        // rosa choque
@@ -28,6 +29,8 @@ export const DarkBorderColor = {
     LightGray: '#ff99cc',
     Gray: '#ff66b2',
     MidGray: '#ff3385',
+    Black: '#ff1493',
+    White: '#ff99cc',
 };
 
 export const DarkTextColor = {

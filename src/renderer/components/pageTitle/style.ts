@@ -1,5 +1,5 @@
 import { resetButtonStyle } from "../../sheredStyles";
-import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../globalStyleInformations";
+import { GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../globalStyleInformations";
 import styled from "styled-components";
 
 export const TitleContainer = styled.header`
@@ -11,6 +11,7 @@ export const TitleContainer = styled.header`
 
 export const TitleH1 = styled.h1`
   font-size: ${GlobalTextSize.Heading};
+  color: ${GlobalTextColor.Black}
 `
 
 export const HeaderButton = styled.button<{ color: string }>`
@@ -29,7 +30,6 @@ export const HeaderButton = styled.button<{ color: string }>`
     filter: brightness(1.1);
   }
 `;
-
 
 export const ButtonGroup = styled.div`
     display: flex;

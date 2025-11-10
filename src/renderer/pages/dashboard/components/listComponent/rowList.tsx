@@ -28,7 +28,7 @@ export const RowItemList: React.FC<props> = ({ type, data }) => {
     return (
         <s.rowItemList>
             <div>
-                <strong>{data.Title}</strong>
+                <s.Title>{data.Title}</s.Title>
                 <s.rowAditionalInfo>{data.AdicionalInformation}</s.rowAditionalInfo>
             </div>
             <s.rowPill good={good} ok={ok} bad={bad}>

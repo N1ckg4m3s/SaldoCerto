@@ -1,5 +1,5 @@
 import { cardBrackgroundBase, flexColumn } from "../../../../sheredStyles";
-import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
+import { GlobalBackgroundColor, GlobalBorderColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
 import styled, { css } from "styled-components";
 
 export const painelContainer = styled.div`
@@ -22,7 +22,7 @@ export const rowItemList = styled.div`
     display:flex;
     justify-content: space-between;
     padding: ${GlobalSpacing.Padding6x10};
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid ${GlobalBorderColor.LightGray};
 `
 
 export const rowAditionalInfo = styled.div`
@@ -43,16 +43,20 @@ export const rowPill = styled.div<PillProps>`
 
     ${props => props.bad && css`
         background-color: ${GlobalBackgroundColor.LightPink};
-        color: ${GlobalTextColor.Danger}
+        color: ${GlobalTextColor.Danger};
     `}
         
     ${props => props.good && css`
         background-color: ${GlobalBackgroundColor.LightGreen};
-        color: ${GlobalTextColor.Success}
+        color: ${GlobalTextColor.Success};
     `}
             
     ${props => props.ok && css`
         background-color: ${GlobalBackgroundColor.LightOrange};
-        color: ${GlobalTextColor.Warn}
+        color: ${GlobalTextColor.Warn};
     `}
+`
+
+export const Title = styled.strong`
+    color: ${GlobalTextColor.Black};
 `
