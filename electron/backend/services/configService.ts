@@ -1,4 +1,3 @@
-import { BrowserWindow, dialog } from "electron";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
@@ -13,8 +12,20 @@ const { SelecionarPasta } = await import(
     pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarPasta.js")).href
 );
 
+const { SelecionarArquivo } = await import(
+    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarArquivo.js")).href
+);
+
 const { criarArquivoDeBackup } = await import(
     pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "criarArquivoDeBackup.js")).href
+);
+
+const { validateBancoRestore } = await import(
+    pathToFileURL(path.join(__dirname, "..", "infrastructure", "validateBancoRestore.js")).href
+);
+
+const { existsFile, copyFile } = await import(
+    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "fileHandler.js")).href
 );
 
 interface IPCResponseFormat {
@@ -74,7 +85,7 @@ export const configurationService = {
         return successResponse({});
     },
 
-    GerarNovoBackup: async (args: any): Promise<IPCResponseFormat> => {
+    GerarNovoBackup: async (): Promise<IPCResponseFormat> => {
         const serviceResponse = await configurationService.ObterConfiguracao();
         if (!serviceResponse.success) return errorResponse("configurationService.GerarNovoBackup", serviceResponse.message);
 
@@ -91,7 +102,7 @@ export const configurationService = {
             .catch((erro: any) => {
                 return errorResponse("configurationService.GerarNovoBackup", erro.message);
             });
-
+        
         if (savePath && typeof savePath === 'string') {
             const atualizarConfiguracaoResponse = await RepositorioConfiguracoes.atualizarConfiguracao({ id: config.id, lastBackup: new Date().toISOString() });
 
@@ -102,11 +113,50 @@ export const configurationService = {
             return errorResponse("configurationService.GerarNovoBackup", 'Falha ao criar arquivo de backup.');
         }
 
-        return successResponse();
+        return successResponse({ path: savePath });
     },
 
     RestaurarDeArquivoDeBackup: async (args: any): Promise<IPCResponseFormat> => {
-        return successResponse({});
+        const caminhoBackup = args.path;
+        if (!caminhoBackup) return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'Sem caminho de arquivo informado');
+
+        if (!caminhoBackup.endsWith(".db"))
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'Tipagem do arquivo incorreta');
+
+        if (!await existsFile(caminhoBackup))
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'Arquivo não encontrado');
+
+        const [valido, erro] = await validateBancoRestore(caminhoBackup);
+        if (!valido)
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', erro);
+
+        // 1️⃣ Localiza o banco ativo via .env
+        const dbUrl = process.env.DATABASE_URL;
+        if (!dbUrl || !dbUrl.startsWith("file:")) {
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'DATABASE_URL inválida ou ausente no .env');
+        }
+
+        const caminhoBancoAtual = path.resolve('prisma', dbUrl.replace("file:", ""));
+
+        if (!await existsFile(caminhoBancoAtual)) {
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', `Banco atual não encontrado: ${caminhoBancoAtual}`);
+        }
+
+        // Cria um backup
+        const configServiceResponse = await configurationService.GerarNovoBackup();
+        if (!configServiceResponse.success) return configServiceResponse; // já tem success e message
+
+        // 4️⃣ Restaurar (substituir o banco atual)
+        try {
+            await copyFile(caminhoBackup, caminhoBancoAtual);
+        } catch (error) {
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', `Erro ao restaurar banco: ${error}`);
+        }
+
+        return successResponse({
+            restoredFrom: caminhoBackup,
+            backupBeforeRestore: configServiceResponse.data
+        });
     },
 
     ListarArquivosDeBackup: async (args: any): Promise<IPCResponseFormat> => {
@@ -136,4 +186,6 @@ export const configurationService = {
     },
 
     SelecionarPasta: async (): Promise<IPCResponseFormat> => SelecionarPasta(),
+
+    SelecionarArquivo: async (): Promise<IPCResponseFormat> => SelecionarArquivo(),
 };

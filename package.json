@@ -21,6 +21,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.4",
+    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "styled-components": "^6.1.19"
   },
@@ -30,6 +31,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/react-router-dom": "^5.3.3",
+    "@types/sqlite3": "^3.1.11",
     "concurrently": "^9.2.1",
     "electron": "^38.3.0",
     "electron-builder": "^26.0.12",

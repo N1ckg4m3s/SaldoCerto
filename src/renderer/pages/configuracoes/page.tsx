@@ -17,12 +17,14 @@ const ConfiguracoesDoSistema: React.FC<props> = ({ onComplete }) => {
         <sh.MainPageContainer>
             <PageTitle titulo='Configurações do sistema' />
 
-            <ConfigBackupModule />
+            <ConfigBackupModule
+                onComplete={() => onComplete?.()}
+            />
 
             <ConfigRestauracaoModule />
 
             <ConfigAparenciaModule />
-            
+
             <ConfigInformacoesModule />
         </sh.MainPageContainer>
     )

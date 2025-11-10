@@ -2,10 +2,13 @@ import fs from "fs";
 import path from "path";
 import { promisify } from "util";
 import dotenv from "dotenv";
+import { fileURLToPath, pathToFileURL } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-const copyFile = promisify(fs.copyFile);
 const mkdir = promisify(fs.mkdir);
 const stat = promisify(fs.stat);
 
@@ -14,7 +17,11 @@ const stat = promisify(fs.stat);
  * @param backupDir Caminho da pasta onde o backup será salvo.
  * @returns Caminho completo do arquivo de backup criado.
  */
-export async function criarArquivoDeBackup(backupDir: string): Promise<string> {
+export const criarArquivoDeBackup = async (backupDir: string): Promise<string> => {
+    const { existsFile, copyFile } = await import(
+        pathToFileURL(path.join(__dirname, "fileHandler.js")).href
+    );
+
     if (!backupDir) {
         throw new Error("Caminho de backup não fornecido.");
     }
@@ -34,7 +41,7 @@ export async function criarArquivoDeBackup(backupDir: string): Promise<string> {
 
     // Extrai o caminho físico do arquivo SQLite
     const dbPath = path.resolve('prisma', dbUrl.replace("file:", ""));
-    if (!fs.existsSync(dbPath)) {
+    if (!(await existsFile(dbPath))) {
         throw new Error(`Banco de dados não encontrado em: ${dbPath}`);
     }
 

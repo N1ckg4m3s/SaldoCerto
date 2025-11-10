@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as s from '../style'
 import * as sh from './sheredModulesStyle'
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 
-export const ConfigBackupModule = () => {
+interface props {
+    onComplete?: () => void
+}
+
+export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
     const { addNotification } = useNotification()
 
     const [loading, setLoading] = useState(false);
@@ -92,7 +96,7 @@ export const ConfigBackupModule = () => {
                         type: 'success',
                         message: 'Configurações de backup salvas com sucesso.',
                     });
-                    // onComplete?.();
+                    onComplete?.();
                 },
                 onError(erro) {
                     addNotification({
@@ -114,6 +118,30 @@ export const ConfigBackupModule = () => {
             setLoading(false);
         }
     };
+
+    const handleDoBackupNow = () => {
+        ApiCaller({
+            url: '/backup/generateBackupFile',
+            args: config,
+            onSuccess: (data: any) => {
+                addNotification({
+                    id: String(Date.now()),
+                    title: "Backup gerado",
+                    type: 'success',
+                    message: 'Backup foi gerado com sucesso na pasta',
+                });
+                onComplete?.();
+            },
+            onError(erro) {
+                addNotification({
+                    id: String(Date.now()),
+                    title: "Erro ao gerar",
+                    type: 'error',
+                    message: erro.message || 'Erro gerar backup.',
+                });
+            },
+        })
+    }
 
     useEffect(() => {
         const fetchConfig = async () => {
@@ -221,6 +249,7 @@ export const ConfigBackupModule = () => {
                 </sh.ModuleFormButton>
                 <sh.ModuleFormButton
                     disabled={loading}
+                    onClick={handleDoBackupNow}
                 >
                     Fazer backup agora
                 </sh.ModuleFormButton>

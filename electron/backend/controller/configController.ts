@@ -31,6 +31,9 @@ export const IniciarControladores = () => {
     /* Seleciona uma pasta */
     ipcMain.handle('config:selectFolder', safeHandler(configurationService.SelecionarPasta));
 
+    /* Seleciona uma pasta */
+    ipcMain.handle('config:selectRecoveryArquive', safeHandler(configurationService.SelecionarArquivo));
+
     /* Função executada ao iniciar o app [SISTEMA] * /
         - Verifica a existencia de uma configuração salva;
         - Verifica se é necessário salvar um backup;
