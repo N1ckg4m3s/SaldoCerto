@@ -1,91 +1,31 @@
+import { createGlobalStyle } from 'styled-components'
+import * as Dark from './styles/darkStyle'
+import * as Light from './styles/lightStyle'
 
-export const GlobalBackgroundColor = {
-    BG: '#f4f6f9',
-    Card: '#ffffff',
-    Muted: '#666666',
-    Accent: '#1f2937',
-    Success: '#16a34a',
-    Warn: '#d97706',
-    Danger: '#dc2626',
-    Button: '#007bff',
+const isLightMode: boolean = false
 
-    White: '#ffffff',
-    LightGray: '#f5f6fa',
-    LightPink: '#ffe9e9',
-    LightOrange: '#fff7e6',
-    LightGreen: '#e9ffef',
-    MintGreen: '#e0f8e9',
-    SoftRed: '#fde4e4',
-    GrayLight: '#e7e7e7',
-    GraySoft: '#f1f3f6',
-    AlmostWhite: '#f9f9f9',
-    Silver: '#ecf0f1',
-    GrayNeutral: '#f0f2f5',
-    ModalOverlay: 'rgba(0, 0, 0, 0.3)',
-};
+export const GlobalBackgroundColor = isLightMode ? Light.LightBackgroundColor : Dark.DarkBackgroundColor
 
-export const GlobalBorderColor = {
-    LightGray: '#f0f0f0',
-    Gray: '#eeeeee',
-    MidGray: '#cccccc',
-};
+export const GlobalBorderColor = isLightMode ? Light.LightBorderColor : Dark.DarkBorderColor
 
-export const GlobalTextColor = {
-    Black: '#000000',
-    Accent: '#1f2937',
-    AlmostBlack: '#111111',
-    DarkerGray: '#222222',
-    DarkGray: '#333333',
-    MediumGray: '#555555',
-    Muted: '#666666',
-    Success: '#16a34a',
-    Danger: '#dc2626',
-    Warn: '#d97706',
-    InfoBlue: '#3498db',
-    White: '#ffffff',
+export const GlobalTextColor = isLightMode ? Light.LightTextColor : Dark.DarkTextColor
 
-    MintGreen: '#2e8b57',
-    SoftRed: '#c0392b'
-};
+export const GlobalTextSize = isLightMode ? Light.LightTextSize : Dark.DarkTextSize
 
-export const GlobalTextSize = {
-    XS: '0.85rem',
-    Small: '0.9rem',
-    Base: '0.95rem',
-    Medium: '12px',
-    Normal: '13px',
-    Large: '14px',
-    HeadingSmall: '15px',
-    Heading: '18px',
-    HeadingLarge: '20px',
-    Title: '1.8rem',
-};
+export const GlobalSpacing = isLightMode ? Light.LightSpacing : Dark.DarkSpacing
 
-export const GlobalSpacing = {
-    XS: '4px',
-    Small: '6px',
-    SmallMedium: '8px',
-    Medium: '10px',
-    MediumLarge: '12px',
-    Large: '14px',
-    XL: '16px',
-    XXL: '20px',
-    Huge: '25px',
+export const HeaderTitleButtonColors = isLightMode ? Light.LightHeaderTitleButtonColors : Dark.DarkHeaderTitleButtonColors
 
-    Gap10: '10px',
-    Gap14: '14px',
+export const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, system-ui, Arial;
+  }
 
-    Padding6x10: '6px 10px',
-    Padding8x14: '8px 14px',
-    Padding14x16: '14px 16px',
-};
-
-
-export const HeaderTitleButtonColors = [
-    "#007bff", // azul
-    "#28a745", // verde
-    "#6f42c1", // roxo
-    "#fd7e14", // laranja
-    "#17a2b8", // ciano
-    "#dc3545", // vermelho
-];
+  body {
+    margin: 10px 20px;
+    background-color: ${GlobalBackgroundColor.BG};
+  }
+`

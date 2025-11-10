@@ -15,6 +15,9 @@ import { ApiCaller } from './controler/ApiCaller';
 import LoadingComponent from './components/loading/component';
 import ConfiguracoesDoSistema from './pages/configuracoes/page';
 
+// STYLE
+import { GlobalStyle } from './globalStyleInformations';
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasConfig, setHasConfig] = useState(false);
@@ -49,6 +52,7 @@ const App = () => {
   // Fluxo normal do app.
   return (
     <NotificationProvider>
+      <GlobalStyle />
       {
         !hasConfig ? <ConfiguracoesDoSistema
           onComplete={() => setHasConfig(true)}
