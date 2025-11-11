@@ -31,13 +31,13 @@ const ConfiguracoesDoSistema: React.FC<props> = ({ onComplete }) => {
             url: '/backup/get',
             onSuccess: (response: any) => {
                 if (response) setConfig({
-                    backupIntervalDays: response.backupInterval || 7,
-                    backupHistoryDays: response.movimentacaoExpiraEmDias || 7,
                     backupFolderPath: response.backupFilesPath || '',
-                    maxBackupFiles: response.maxBackups || 1,
-                    lastBackup: response.lastBackup || '',
+                    backupIntervalDays: response.backupInterval || 7,
+                    darkMode: response.darkMode,
                     fontSize: response.fontSize || 'normal',
-                    darkMode: response.darkMode || false
+                    lastBackup: response.lastBackup || '',
+                    maxBackupFiles: response.maxBackups || 1,
+                    backupHistoryDays: response.movimentacaoExpiraEmDias || 7,
                 });
             },
             onError(erro) {

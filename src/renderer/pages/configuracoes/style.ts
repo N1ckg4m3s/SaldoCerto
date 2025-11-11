@@ -1,4 +1,4 @@
-import { GlobalSpacing, GlobalTextColor, GlobalTextSize } from "@renderer/globalStyleInformations";
+import { themeGet } from "@renderer/globalStyleInformations";
 import { cardBrackgroundBase, flexColumn } from "@renderer/sheredStyles";
 import styled, { css } from "styled-components";
 
@@ -6,8 +6,8 @@ const ContainerBase = css`
     ${cardBrackgroundBase};
     ${flexColumn}
     justify-content: space-between;
-    margin-bottom: calc(${GlobalSpacing.Gap10}*2);
-    gap: ${GlobalSpacing.Gap10};
+    margin-bottom: calc(${themeGet(t => t.GlobalSpacing.Gap10)}*2);
+    gap: ${themeGet(t => t.GlobalSpacing.Gap10)};
 `
 
 export const SectionContainer = styled.section`
@@ -21,17 +21,17 @@ export const SectionContainer_Danger = styled.section`
 `
 
 export const SectionTitle = styled.span`
-    font-size: ${GlobalTextSize.Heading};
-    color: ${GlobalTextColor.Black};
+    font-size: ${themeGet(t => t.GlobalTextSize.Heading)};
+    color: ${themeGet(t => t.GlobalTextColor.Black)};
 `
 
 export const SectionTitle_Danger = styled.span`
-    font-size: ${GlobalTextSize.Heading};
-    color: ${GlobalTextColor.SoftRed};
+    font-size: ${themeGet(t => t.GlobalTextSize.Heading)};
+    color: ${themeGet(t => t.GlobalTextColor.SoftRed)};
     font-weight: bold;
 `
 
 export const SectionMessage_Danger = styled.span`
-    font-size: ${GlobalTextSize.HeadingSmall};
-    color: ${GlobalTextColor.SoftRed}
+    font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
+    color: ${themeGet(t => t.GlobalTextColor.SoftRed)}
 `

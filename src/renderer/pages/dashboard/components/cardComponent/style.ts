@@ -1,5 +1,5 @@
+import { themeGet } from "@renderer/globalStyleInformations";
 import { cardBrackgroundBase, flexColumn } from "../../../../sheredStyles";
-import { GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../../../globalStyleInformations";
 import styled, { css } from "styled-components";
 
 interface CardProps {
@@ -19,19 +19,19 @@ export const cardContainer = styled.div<CardProps>`
 `
 
 export const cardTitle = styled.small`
-    color: ${GlobalTextColor.Muted};
-    font-size: ${GlobalTextSize.Normal};
+    color: ${themeGet(t => t.GlobalTextColor.Muted)};
+    font-size: ${themeGet(t => t.GlobalTextSize.Normal)};
 `
 
 export const cardData = styled.div`
-    font-size: ${GlobalTextSize.Heading};
+    font-size: ${themeGet(t => t.GlobalTextSize.Heading)};
     font-weight: 700;
-    margin-top: ${GlobalSpacing.Medium};
-    color: ${GlobalTextColor.Black};
+    margin-top: ${themeGet(t => t.GlobalSpacing.Medium)};
+    color: ${themeGet(t => t.GlobalTextColor.Black)};
 `
 
 export const cardDescription = styled.div`
-    margin-top: ${GlobalSpacing.XS};
-    font-size: ${GlobalTextSize.Normal};
-    color: ${GlobalTextColor.Muted}
+    margin-top: ${themeGet(t => t.GlobalSpacing.XS)};
+    font-size: ${themeGet(t => t.GlobalTextSize.Normal)};
+    color: ${themeGet(t => t.GlobalTextColor.Muted)}
 `

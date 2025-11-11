@@ -1,23 +1,12 @@
-import {
-  GlobalBackgroundColor,
-  GlobalBorderColor,
-  GlobalTextColor,
-  GlobalTextSize
-} from "@renderer/globalStyleInformations";
-import {
-  cardBrackgroundBase,
-  flexCenter,
-  flexColumn,
-  resetButtonStyle,
-  resetInputStyle
-} from "@renderer/sheredStyles";
+import { themeGet } from "@renderer/globalStyleInformations";
+import { cardBrackgroundBase, flexCenter, flexColumn, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
 import styled from "styled-components";
 
 export const BlurBackground = styled.div`
   ${flexCenter}
   width: 100%;
   height: 100%;
-  background-color: ${GlobalBackgroundColor.ModalOverlay}; 
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.ModalOverlay)}; 
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   position: absolute;
@@ -31,11 +20,11 @@ export const InterfaceBackground = styled.main`
   ${cardBrackgroundBase};
   width: clamp(400px, 35vw, 500px);
   height: clamp(400px, 35vw, 500px);
-  background: ${GlobalBackgroundColor.Card};
+  background: ${themeGet(t => t.GlobalBackgroundColor.Card)};
   border-radius: 12px;
   padding: 24px 28px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); /* precisa criar GlobalShadow.Light */
-  border: 1px solid ${GlobalBorderColor.Gray};
+  border: 1px solid ${themeGet(t => t.GlobalBorderColor.Gray)};
 `;
 
 export const HeaderContainer = styled.header`
@@ -47,8 +36,8 @@ export const HeaderContainer = styled.header`
 
 export const TitleContainer = styled.div`
   font-weight: 600;
-  font-size: ${GlobalTextSize.HeadingLarge};
-  color: ${GlobalTextColor.DarkerGray};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingLarge)};
+  color: ${themeGet(t => t.GlobalTextColor.DarkerGray)};
   position: relative;
   width: 100%;
   text-align: center;
@@ -60,8 +49,8 @@ export const CloseButton = styled.button`
   right: 0;
   top: 0;
   transform: translateY(-5%);
-  background-color: ${GlobalBackgroundColor.Danger};
-  color: ${GlobalTextColor.White};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.Danger)};
+  color: ${themeGet(t => t.GlobalTextColor.White)};
   font-weight: bold;
   border-radius: 50%;
   width: 28px;
@@ -72,7 +61,7 @@ export const CloseButton = styled.button`
   transition: background-color 0.15s ease;
 
   &:hover {
-    background-color: ${GlobalBackgroundColor.Warn}; /* pode criar DangerHover */
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.Warn)}; /* pode criar DangerHover */
   }
 `;
 
@@ -97,31 +86,31 @@ export const ModuleFieldRow = styled.div`
 export const ModuleFormLabel = styled.label`
   white-space: nowrap;
   font-weight: 500;
-  color: ${GlobalTextColor.DarkGray};
+  color: ${themeGet(t => t.GlobalTextColor.DarkGray)};
   margin-bottom: 4px;
-  font-size: ${GlobalTextSize.HeadingSmall};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
 `;
 
 export const ModuleFormInput = styled.input`
   ${resetInputStyle};
   width: 100%;
   height: 36px;
-  border: 1px solid ${GlobalBorderColor.MidGray};
+  border: 1px solid ${themeGet(t => t.GlobalBorderColor.MidGray)};
   border-radius: 6px;
   padding: 0 10px;
-  color: ${GlobalTextColor.DarkGray};
-  background-color: ${GlobalBackgroundColor.White};
+  color: ${themeGet(t => t.GlobalTextColor.DarkGray)};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.White)};
   transition: border-color 0.2s, box-shadow 0.2s;
-  font-size: ${GlobalTextSize.HeadingSmall};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
 
   &:focus {
     outline: none;
-    border-color: ${GlobalBackgroundColor.Button}; /* botão padrão */
+    border-color: ${themeGet(t => t.GlobalBackgroundColor.Button)}; /* botão padrão */
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* precisa criar GlobalShadow.Focus */
   }
 
   &::placeholder {
-    color: ${GlobalTextColor.AlmostWhite};
+    color: ${themeGet(t => t.GlobalTextColor.AlmostWhite)};
   }
 `;
 
@@ -129,12 +118,12 @@ export const ModuleFormSelect = styled.select`
   ${resetInputStyle};
   width: 100%;
   height: 36px;
-  border: 1px solid ${GlobalBorderColor.MidGray};
+  border: 1px solid ${themeGet(t => t.GlobalBorderColor.MidGray)};
   border-radius: 6px;
   padding: 0 10px;
-  font-size: ${GlobalTextSize.HeadingSmall};
-  color: ${GlobalTextColor.DarkGray};
-  background-color: ${GlobalBackgroundColor.White};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
+  color: ${themeGet(t => t.GlobalTextColor.DarkGray)};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.White)};
   appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
@@ -145,7 +134,7 @@ export const ModuleFormSelect = styled.select`
 export const FieldTip = styled.span`
   display: inline-block;
   margin-left: 4px;
-  color: ${GlobalTextColor.Muted};
+  color: ${themeGet(t => t.GlobalTextColor.Muted)};
   cursor: pointer;
   font-weight: bold;
   border-radius: 50%;
@@ -153,8 +142,8 @@ export const FieldTip = styled.span`
   height: 16px;
   text-align: center;
   line-height: 16px;
-  font-size: ${GlobalTextSize.Medium};
-  background-color: ${GlobalBackgroundColor.Gray};
+  font-size: ${themeGet(t => t.GlobalTextSize.Medium)};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.Gray)};
   position: relative;
 
   &:hover > span {
@@ -168,10 +157,10 @@ export const FieldTip = styled.span`
     top: 120%;
     left: 25%;
     transform: translateX(-25%);
-    background: ${GlobalTextColor.DarkGray};
-    color: ${GlobalTextColor.White};
+    background: ${themeGet(t => t.GlobalTextColor.DarkGray)};
+    color: ${themeGet(t => t.GlobalTextColor.White)};
     padding: 6px 8px;
-    font-size: ${GlobalTextSize.HeadingSmall};
+    font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
     border-radius: 4px;
     width: max-content;
     white-space: pre-wrap;
@@ -185,22 +174,22 @@ export const ModuleFormButton = styled.button`
   width: 100%;
   padding: 10px 0;
   border-radius: 8px;
-  background-color: ${GlobalBackgroundColor.Success};
-  color: ${GlobalTextColor.White};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.Success)};
+  color: ${themeGet(t => t.GlobalTextColor.White)};
   font-weight: 600;
-  font-size: ${GlobalTextSize.HeadingSmall};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
   letter-spacing: 0.3px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* precisa criar GlobalShadow.Base */
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: ${GlobalBackgroundColor.MintGreen}; /* precisa criar SuccessHover */
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.MintGreen)}; /* precisa criar SuccessHover */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   }
 
   &:active {
-    background-color: ${GlobalBackgroundColor.Accent};
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.Accent)};
     box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
   }
 `;
@@ -216,9 +205,9 @@ export const SelectClientContainer = styled.div`
 export const SelectClientSelect = styled.div`
   position: absolute;
   top: 100%;
-  background: ${GlobalBackgroundColor.White};
+  background: ${themeGet(t => t.GlobalBackgroundColor.White)};
   width: 100%;
-  border: 1px solid ${GlobalBorderColor.MidGray};
+  border: 1px solid ${themeGet(t => t.GlobalBorderColor.MidGray)};
   list-style: none;
   margin: 0;
   padding: 0;
@@ -228,11 +217,11 @@ export const SelectClientSelect = styled.div`
 export const SelectClientOption = styled.div`
   padding: 6px;
   cursor: pointer;
-  color: ${GlobalTextColor.DarkGray};
-  background-color: ${GlobalBackgroundColor.White};
+  color: ${themeGet(t => t.GlobalTextColor.DarkGray)};
+  background-color: ${themeGet(t => t.GlobalBackgroundColor.White)};
 
   &:hover {
-    background-color: ${GlobalBackgroundColor.LightGray}; /* precisa criar HoverGray */
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.LightGray)}; /* precisa criar HoverGray */
   }
 `;
 

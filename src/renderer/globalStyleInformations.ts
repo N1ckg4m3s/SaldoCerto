@@ -1,38 +1,27 @@
 import { createGlobalStyle } from 'styled-components'
-// Cores
-import * as Dark from './styles/darkStyle'
-import * as Light from './styles/lightStyle'
+// globalStyleInformations.ts
+import * as Dark from './styles/darkStyle';
+import * as Light from './styles/lightStyle';
+import * as fontSmall from './styles/font/smallSizes';
+import * as fontNormal from './styles/font/normalSizes';
+import * as fontBig from './styles/font/bigSizes';
 
-// Fontes
-import * as fontSmall from './styles/font/smallSizes'
-import * as fontNormal from './styles/font/normalSizes'
-import * as fontBig from './styles/font/bigSizes'
+/** theme get */
+export const themeGet = (fn: (theme: any) => string) => (props: any) => fn(props.theme);
 
-const isLightMode: boolean = true
-const fontSize: 'small' | 'normal' | 'big' = 'normal'
+const fontBySize = { small: fontSmall.TextSize, normal: fontNormal.TextSize, big: fontBig.TextSize };
+const spacingBySize = { small: fontSmall.Spacing, normal: fontNormal.Spacing, big: fontBig.Spacing };
 
-const fontBySize = {
-  small: fontSmall.TextSize,
-  normal: fontNormal.TextSize,
-  big: fontBig.TextSize,
-}
-const spacingBySize = {
-  small: fontSmall.Spacing,
-  normal: fontNormal.Spacing,
-  big: fontBig.Spacing,
-}
-
-export const GlobalBackgroundColor = isLightMode ? Light.LightBackgroundColor : Dark.DarkBackgroundColor
-
-export const GlobalBorderColor = isLightMode ? Light.LightBorderColor : Dark.DarkBorderColor
-
-export const GlobalTextColor = isLightMode ? Light.LightTextColor : Dark.DarkTextColor
-
-export const GlobalTextSize = fontBySize[fontSize]
-
-export const GlobalSpacing = spacingBySize[fontSize]
-
-export const HeaderTitleButtonColors = isLightMode ? Light.LightHeaderTitleButtonColors : Dark.DarkHeaderTitleButtonColors
+export const getThemeValues = (darkMode: boolean, fontSize: 'small' | 'normal' | 'big') => {
+  return {
+    GlobalBackgroundColor: darkMode ? Dark.DarkBackgroundColor : Light.LightBackgroundColor,
+    GlobalBorderColor: darkMode ? Dark.DarkBorderColor : Light.LightBorderColor,
+    GlobalTextColor: darkMode ? Dark.DarkTextColor : Light.LightTextColor,
+    GlobalTextSize: fontBySize[fontSize],
+    GlobalSpacing: spacingBySize[fontSize],
+    HeaderTitleButtonColors: darkMode ? Dark.DarkHeaderTitleButtonColors : Light.LightHeaderTitleButtonColors
+  }
+};
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -44,6 +33,6 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     margin: 10px 20px;
-    background-color: ${GlobalBackgroundColor.BG};
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.BG)};
   }
 `

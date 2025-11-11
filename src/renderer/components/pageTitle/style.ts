@@ -1,30 +1,30 @@
+import { themeGet } from "@renderer/globalStyleInformations";
 import { resetButtonStyle } from "../../sheredStyles";
-import { GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../globalStyleInformations";
 import styled from "styled-components";
 
 export const TitleContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${GlobalSpacing.Medium};
+  margin-bottom: ${themeGet(t => t.GlobalSpacing.Medium)};
 `
 
 export const TitleH1 = styled.h1`
-  font-size: ${GlobalTextSize.HeadingSmall};
-  color: ${GlobalTextColor.Black};
+  font-size: ${themeGet(t => t.GlobalTextSize.HeadingSmall)};
+  color: ${themeGet(t => t.GlobalTextColor.Black)};
 `
 
 export const HeaderButton = styled.button<{ color: string }>`
   ${resetButtonStyle};
 
   background-color: ${({ color }) => color};
-  color: ${GlobalTextColor.White};
+  color: ${themeGet(t => t.GlobalTextColor.White)};
 
-  padding: ${GlobalSpacing.Padding8x14};
+  padding: ${themeGet(t => t.GlobalSpacing.Padding8x14)};
   border-radius: 8px;
   font-weight: 500;
   transition: 0.2s;
-  font-size: ${GlobalTextSize.Normal};
+  font-size: ${themeGet(t => t.GlobalTextSize.Normal)};
   cursor: pointer;
 
   &:hover {
@@ -34,5 +34,5 @@ export const HeaderButton = styled.button<{ color: string }>`
 
 export const ButtonGroup = styled.div`
     display: flex;
-    gap: ${GlobalSpacing.Gap10};
+    gap: ${themeGet(t => t.GlobalSpacing.Gap10)};
 `;

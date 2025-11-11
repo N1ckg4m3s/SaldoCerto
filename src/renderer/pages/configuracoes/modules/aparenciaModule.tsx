@@ -4,6 +4,7 @@ import * as sh from './sheredModulesStyle'
 import { useState } from 'react';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
+import { useTheme } from '../../../../provider/theme/themeProvider';
 
 interface props {
     config: configsInformations;
@@ -11,35 +12,34 @@ interface props {
 }
 
 export const ConfigAparenciaModule: React.FC<props> = ({ config, update }) => {
+    const { darkMode, fontSize, setDarkMode, setFontSize } = useTheme()
     const { addNotification } = useNotification();
     const [configEditable, setConfig] = useState<configsInformations>(config);
 
     const handleInputChange = (key: keyof typeof configEditable, value: any) => {
         const updated = { ...configEditable, [key]: value }
+
+        if (key == 'darkMode') {
+            setDarkMode(value)
+        } else if (key == 'fontSize') {
+            setFontSize(value)
+        }
+
         setConfig(updated)
-        handleSave(updated)
+        handleSave()
     };
 
-
-    const handleSave = async (updated: configsInformations) => {
+    const handleSave = async () => {
         try {
             const payload = {
-                darkMode: updated.darkMode || false,
-                fontSize: updated.fontSize || 'normal'
+                darkMode: darkMode,
+                fontSize: fontSize
             }
 
             ApiCaller({
                 url: '/backup/setAparence',
                 args: payload,
-                onSuccess: (data: any) => {
-                    addNotification({
-                        id: String(Date.now()),
-                        title: "Aparencia alterada",
-                        type: 'success',
-                        message: 'Configurações de aparencia salvas com sucesso.',
-                    });
-                    update()
-                },
+                onSuccess: (data: any) => update(),
                 onError(erro) {
                     addNotification({
                         id: String(Date.now()),
@@ -66,7 +66,7 @@ export const ConfigAparenciaModule: React.FC<props> = ({ config, update }) => {
             <sh.ModuleFieldRow>
                 <sh.ModuleFormLabel>Tamanho da fonte:</sh.ModuleFormLabel>
                 <sh.ModuleFormSelect
-                    value={configEditable.fontSize}
+                    value={fontSize}
                     onChange={e => handleInputChange('fontSize', e.target.value)}
                 >
                     <option value="small">Pequena</option>
@@ -78,7 +78,7 @@ export const ConfigAparenciaModule: React.FC<props> = ({ config, update }) => {
             <sh.ModuleFieldRow>
                 <sh.ModuleFormLabel>Modo escuro:</sh.ModuleFormLabel>
                 <sh.ModuleFormCheck
-                    checked={!configEditable.darkMode}
+                    checked={darkMode}
                     onChange={e => handleInputChange('darkMode', e.target.checked)}
                     type="checkbox"
                 />

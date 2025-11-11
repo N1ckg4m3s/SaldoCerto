@@ -8,8 +8,10 @@ import ListaDeClientesCadastrados from './pages/listaDeClientesCadastrados/page'
 import TabelaDeClientesEmAtrazo from './pages/TabelaDeClientesEmAtrazo/page';
 import BarraDeNavegacao from './components/navBar/component';
 
-// CONTEXT PROVIDERS
+// CONTEXTS
 import { NotificationProvider } from './components/notificationContainer/notificationContext';
+import { ThemeProvider } from '../provider/theme/themeProvider'; // <- contexto de estado
+import { ThemeProviderWrapper } from '../provider/theme/themeWarper';
 import { useEffect, useState } from 'react';
 import { ApiCaller } from './controler/ApiCaller';
 import LoadingComponent from './components/loading/component';
@@ -21,43 +23,53 @@ import { GlobalStyle } from './globalStyleInformations';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasConfig, setHasConfig] = useState(false);
+  const [themeConfig, setThemeConfig] = useState<{ darkMode: boolean; fontSize: "small" | "normal" | "big" }>({
+    darkMode: true,
+    fontSize: "normal"
+  });
 
-  const initBackgroundProcess = () => ApiCaller({
-    url: '/backup/init',
-    onError(erro) {
-      console.log('Erro ao iniciar processo de background', erro);
-    },
-  })
+  const initBackgroundProcess = () =>
+    ApiCaller({
+      url: '/backup/init',
+      onError(erro) {
+        console.log('Erro ao iniciar processo de background', erro);
+      },
+    });
 
   useEffect(() => {
     ApiCaller({
       url: '/backup/get',
       onSuccess: async (response: any) => {
         if (response?.data !== null && response?.data !== undefined) {
-          setHasConfig(true)
-          await initBackgroundProcess()
+          setThemeConfig({
+            darkMode: response.data.darkMode ?? true,
+            fontSize: response.data.fontSize ?? "normal"
+          });
+
+          setHasConfig(true);
+          await initBackgroundProcess();
         }
         setIsLoading(false);
       },
       onError(erro) {
         console.log('Erro ao obter configuração', erro);
       },
-    })
-  }, [])
+    });
+  }, []);
 
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
+  if (isLoading) return <LoadingComponent />;
 
-  // Fluxo normal do app.
   return (
-    <NotificationProvider>
-      <GlobalStyle />
-      {
-        !hasConfig ? <ConfiguracoesDoSistema
-          onComplete={() => setHasConfig(true)}
-        /> :
-          <>
+    <ThemeProvider
+      defaultDarkMode={themeConfig.darkMode}
+      defaultFontSize={themeConfig.fontSize}
+    >
+      <ThemeProviderWrapper>
+        <NotificationProvider>
+          <GlobalStyle />
+          {!hasConfig ? (
+            <ConfiguracoesDoSistema onComplete={() => setHasConfig(true)} />
+          ) : (
             <HashRouter>
               <BarraDeNavegacao />
               <Routes>
@@ -69,11 +81,11 @@ const App = () => {
                 <Route path='/ConfiguracoesDoSistema' element={<ConfiguracoesDoSistema />} />
               </Routes>
             </HashRouter>
-          </>
-      }
-
-    </NotificationProvider>
-  )
-}
+          )}
+        </NotificationProvider>
+      </ThemeProviderWrapper>
+    </ThemeProvider>
+  );
+};
 
 export default App;

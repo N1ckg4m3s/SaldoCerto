@@ -1,4 +1,4 @@
-import { GlobalBackgroundColor, GlobalTextColor, GlobalTextSize } from "@renderer/globalStyleInformations";
+import { themeGet } from "@renderer/globalStyleInformations";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -11,26 +11,26 @@ export const Container = styled.div`
 
 export const PageButton = styled.button<{ active?: boolean }>`
     padding: 8px 12px;
-    font-size: ${GlobalTextSize.Normal};
+    font-size: ${themeGet(t => t.GlobalTextSize.Normal)};
     border: none;
-    background-color: ${(props) => (props.active ? GlobalBackgroundColor.Button : GlobalBackgroundColor.LightGray)};
-    color: ${(props) => (props.active ? GlobalTextColor.White : GlobalTextColor.Black)};  
+    background-color: ${(props) => (props.active ? themeGet(t => t.GlobalBackgroundColor.Button) : themeGet(t => t.GlobalBackgroundColor.LightGray))};
+    color: ${(props) => (props.active ? themeGet(t => t.GlobalTextColor.White) : themeGet(t => t.GlobalTextColor.Black))};  
     cursor: pointer;
     border-radius: 4px;
     &:hover {
-        background-color: ${(props) => (props.active ? GlobalBackgroundColor.ButtonHold : GlobalBackgroundColor.AlmostGray)};
+        background-color: ${(props) => (props.active ? themeGet(t => t.GlobalBackgroundColor.ButtonHold) : themeGet(t => t.GlobalBackgroundColor.AlmostGray))};
     }
 `;
 
 export const DisabledButton = styled.button`
     padding: 8px 12px;
     border: none;
-    background-color: ${GlobalBackgroundColor.AlmostGray};
-    color: ${GlobalTextColor.AlmostWhite};
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.AlmostGray)};
+    color: ${themeGet(t => t.GlobalTextColor.AlmostWhite)};
     cursor: not-allowed;
     border-radius: 4px;
     &:hover {
-        background-color: ${GlobalBackgroundColor.AlmostGray};
+        background-color: ${themeGet(t => t.GlobalBackgroundColor.AlmostGray)};
     }
 `;
 

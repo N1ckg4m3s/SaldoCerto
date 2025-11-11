@@ -1,5 +1,5 @@
 import { css } from "styled-components";
-import { GlobalBackgroundColor, GlobalSpacing } from "./globalStyleInformations";
+import { themeGet } from "./globalStyleInformations";
 
 export const flexCenter = css`
     display: flex;
@@ -25,8 +25,8 @@ export const resetInputStyle = css`
 `
 
 export const cardBrackgroundBase = css`
-    background-color: ${GlobalBackgroundColor.Card};
-    padding: ${GlobalSpacing.Large};
+    background-color: ${themeGet(t => t.GlobalBackgroundColor.Card)};
+    padding: ${themeGet(t => t.GlobalSpacing.Large)};
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
 `

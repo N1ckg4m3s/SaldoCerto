@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { flexCenter } from "../../sheredStyles";
-import { GlobalBackgroundColor } from "../../globalStyleInformations";
 
 export const LoadingContainer = styled.div`
   ${flexCenter}
