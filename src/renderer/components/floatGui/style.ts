@@ -153,7 +153,7 @@ export const FieldTip = styled.span`
   height: 16px;
   text-align: center;
   line-height: 16px;
-  font-size: ${GlobalTextSize.Medium};
+  font-size: ${GlobalTextSize.Large};
   background-color: ${GlobalBackgroundColor.Gray};
   position: relative;
 

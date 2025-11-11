@@ -24,7 +24,7 @@ export const HeaderButton = styled.button<{ color: string }>`
   border-radius: 8px;
   font-weight: 500;
   transition: 0.2s;
-  font-size: ${GlobalTextSize.Normal};
+  font-size: ${GlobalTextSize.Large};
   cursor: pointer;
 
   &:hover {

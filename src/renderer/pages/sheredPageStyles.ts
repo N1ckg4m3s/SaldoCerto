@@ -111,7 +111,7 @@ export const smallTableButton = styled.button`
     border-radius: 6px;
     padding: ${GlobalSpacing.Padding6x10};
     transition: background 0.2s;
-    font-size: ${GlobalTextSize.Normal};
+    font-size: ${GlobalTextSize.Large};
 
     &:hover{
       background-color: #e2e5ea;
@@ -125,7 +125,7 @@ export const FooterBotao = styled.button`
     color: ${GlobalBackgroundColor.White};
     padding: ${GlobalSpacing.Padding8x14};
     border-radius: 8px;
-    font-size: ${GlobalTextSize.Normal};
+    font-size: ${GlobalTextSize.Large};
     font-weight: 500;
     transition: background 0.2s;
     
@@ -144,7 +144,7 @@ export const AcoesFooter = styled.footer`
 /* FILTRO */
 export const filtrosContainer = styled.form`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
     margin-bottom: ${GlobalSpacing.Large};
     gap: ${GlobalSpacing.Gap10};

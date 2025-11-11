@@ -26,7 +26,7 @@ export const rowItemList = styled.div`
 `
 
 export const rowAditionalInfo = styled.div`
-    font-size: ${GlobalTextSize.Normal};
+    font-size: ${GlobalTextSize.Large};
     color: ${GlobalTextColor.Muted};
 `
 
