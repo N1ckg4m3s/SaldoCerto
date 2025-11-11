@@ -40,6 +40,7 @@ export const rowPill = styled.div<PillProps>`
     padding: ${GlobalSpacing.Padding6x10};
     border-radius: 8px;
     font-weight: 700;
+    font-size: ${GlobalTextSize.HeadingSmall};
 
     ${props => props.bad && css`
         background-color: ${GlobalBackgroundColor.LightPink};
@@ -59,4 +60,5 @@ export const rowPill = styled.div<PillProps>`
 
 export const Title = styled.strong`
     color: ${GlobalTextColor.Black};
+    font-size: ${GlobalTextSize.HeadingSmall};
 `

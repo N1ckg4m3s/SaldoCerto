@@ -1,8 +1,26 @@
 import { createGlobalStyle } from 'styled-components'
+// Cores
 import * as Dark from './styles/darkStyle'
 import * as Light from './styles/lightStyle'
 
-const isLightMode: boolean = false
+// Fontes
+import * as fontSmall from './styles/font/smallSizes'
+import * as fontNormal from './styles/font/normalSizes'
+import * as fontBig from './styles/font/bigSizes'
+
+const isLightMode: boolean = true
+const fontSize: 'small' | 'normal' | 'big' = 'normal'
+
+const fontBySize = {
+  small: fontSmall.TextSize,
+  normal: fontNormal.TextSize,
+  big: fontBig.TextSize,
+}
+const spacingBySize = {
+  small: fontSmall.Spacing,
+  normal: fontNormal.Spacing,
+  big: fontBig.Spacing,
+}
 
 export const GlobalBackgroundColor = isLightMode ? Light.LightBackgroundColor : Dark.DarkBackgroundColor
 
@@ -10,9 +28,9 @@ export const GlobalBorderColor = isLightMode ? Light.LightBorderColor : Dark.Dar
 
 export const GlobalTextColor = isLightMode ? Light.LightTextColor : Dark.DarkTextColor
 
-export const GlobalTextSize = isLightMode ? Light.LightTextSize : Dark.DarkTextSize
+export const GlobalTextSize = fontBySize[fontSize]
 
-export const GlobalSpacing = isLightMode ? Light.LightSpacing : Dark.DarkSpacing
+export const GlobalSpacing = spacingBySize[fontSize]
 
 export const HeaderTitleButtonColors = isLightMode ? Light.LightHeaderTitleButtonColors : Dark.DarkHeaderTitleButtonColors
 

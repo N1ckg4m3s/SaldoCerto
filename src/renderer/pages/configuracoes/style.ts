@@ -32,5 +32,6 @@ export const SectionTitle_Danger = styled.span`
 `
 
 export const SectionMessage_Danger = styled.span`
+    font-size: ${GlobalTextSize.HeadingSmall};
     color: ${GlobalTextColor.SoftRed}
 `

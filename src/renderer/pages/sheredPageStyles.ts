@@ -45,6 +45,7 @@ export const tableTh = styled.th<TableThProps>`
 export const tableRow = styled.tr`
     border-bottom: 1px solid ${GlobalBorderColor.Gray};
     background-color: ${GlobalBackgroundColor.White};
+    font-size: ${GlobalTextSize.Small};
 `
 
 export const tableData = styled.td`
@@ -110,6 +111,7 @@ export const smallTableButton = styled.button`
     border-radius: 6px;
     padding: ${GlobalSpacing.Padding6x10};
     transition: background 0.2s;
+    font-size: ${GlobalTextSize.Normal};
 
     &:hover{
       background-color: #e2e5ea;
@@ -123,6 +125,7 @@ export const FooterBotao = styled.button`
     color: ${GlobalBackgroundColor.White};
     padding: ${GlobalSpacing.Padding8x14};
     border-radius: 8px;
+    font-size: ${GlobalTextSize.Normal};
     font-weight: 500;
     transition: background 0.2s;
     
@@ -156,6 +159,7 @@ export const searchContainer = styled.div`
     padding: ${GlobalSpacing.Padding6x10};
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     color: ${GlobalTextColor.DarkGray};
+    font-size: ${GlobalTextSize.HeadingSmall};
 `
 
 export const svg = styled.svg`

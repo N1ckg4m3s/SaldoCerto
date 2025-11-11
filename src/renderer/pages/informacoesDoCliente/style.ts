@@ -27,4 +27,5 @@ export const InformationsGroup = styled.section`
 
 export const title = styled.h3`
     color: ${GlobalTextColor.AlmostBlack};
+    font-size: ${GlobalTextSize.Heading};
 `

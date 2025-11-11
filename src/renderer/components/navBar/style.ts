@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { flexCenter } from "../../sheredStyles";
 import styled, { css } from "styled-components";
-import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor } from "../../globalStyleInformations";
+import { GlobalBackgroundColor, GlobalSpacing, GlobalTextColor, GlobalTextSize } from "../../globalStyleInformations";
 
 export const NavBarContainer = styled.header`
     width: 100%;
@@ -22,6 +22,8 @@ export const NavLink = styled(Link) <NavLinkProps>`
 
     text-decoration: none;
     font-weight: bold;
+
+    font-size: ${GlobalTextSize.HeadingSmall};
 
     ${props =>
     !props.Selected &&

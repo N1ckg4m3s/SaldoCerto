@@ -11,11 +11,11 @@ export const TitleContainer = styled.header`
 
 export const TitleH1 = styled.h1`
   font-size: ${GlobalTextSize.Heading};
-  color: ${GlobalTextColor.Black}
+  color: ${GlobalTextColor.Black};
 `
 
 export const HeaderButton = styled.button<{ color: string }>`
-  ${resetButtonStyle}
+  ${resetButtonStyle};
 
   background-color: ${({ color }) => color};
   color: ${GlobalTextColor.White};
@@ -24,6 +24,7 @@ export const HeaderButton = styled.button<{ color: string }>`
   border-radius: 8px;
   font-weight: 500;
   transition: 0.2s;
+  font-size: ${GlobalTextSize.Normal};
   cursor: pointer;
 
   &:hover {

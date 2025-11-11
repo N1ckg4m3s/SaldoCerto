@@ -1,4 +1,4 @@
-import { GlobalBackgroundColor, GlobalBorderColor, GlobalTextColor } from "@renderer/globalStyleInformations";
+import { GlobalBackgroundColor, GlobalBorderColor, GlobalTextColor, GlobalTextSize } from "@renderer/globalStyleInformations";
 import { flexCenter, resetButtonStyle, resetInputStyle } from "@renderer/sheredStyles";
 import styled from "styled-components";
 
@@ -29,7 +29,7 @@ export const ModuleFormLabel = styled.label`
   font-weight: 500;
   color: ${GlobalTextColor.DarkGray};
   margin-bottom: 4px;
-  font-size: 0.95rem;
+  font-size: ${GlobalTextSize.HeadingSmall};
 `;
 
 export const ModuleFormInput = styled.input`
@@ -39,7 +39,7 @@ export const ModuleFormInput = styled.input`
   border: 1px solid ${GlobalBorderColor.MidGray};
   border-radius: 6px;
   padding: 0 10px;
-  font-size: 15px;
+  font-size: ${GlobalTextSize.HeadingSmall};
   color: ${GlobalTextColor.DarkGray};
   background-color: ${GlobalBackgroundColor.White};
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -62,7 +62,7 @@ export const ModuleFormSelect = styled.select`
   border: 1px solid ${GlobalBorderColor.MidGray};
   border-radius: 6px;
   padding: 0 10px;
-  font-size: 15px;
+  font-size: ${GlobalTextSize.HeadingSmall};
   color: ${GlobalTextColor.DarkGray};
   background-color: ${GlobalBackgroundColor.White};
   appearance: none;
@@ -83,7 +83,7 @@ export const FieldTip = styled.span`
   height: 16px;
   text-align: center;
   line-height: 16px;
-  font-size: 12px;
+  font-size: ${GlobalTextSize.Medium};
   background-color: ${GlobalBackgroundColor.Gray};
   position: relative;
 
@@ -101,7 +101,7 @@ export const FieldTip = styled.span`
     background: ${GlobalTextColor.DarkGray};
     color: ${GlobalTextColor.White};
     padding: 6px 8px;
-    font-size: 15px;
+    font-size: ${GlobalTextSize.HeadingSmall};
     border-radius: 4px;
     width: max-content;
     white-space: pre-wrap;
@@ -118,7 +118,7 @@ export const ModuleFormButton = styled.button`
   background-color: ${GlobalBackgroundColor.Success};
   color: ${GlobalTextColor.White};
   font-weight: 600;
-  font-size: 1rem;
+  font-size: ${GlobalTextSize.HeadingSmall};
   letter-spacing: 0.3px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* precisa criar GlobalShadow.Base */
@@ -171,5 +171,6 @@ export const FillSpace = styled.div`
 `;
 
 export const span = styled.span`
-  color: ${GlobalBackgroundColor.Black}
+  color: ${GlobalBackgroundColor.Black};
+  font-size: ${GlobalTextSize.HeadingSmall};
 `
