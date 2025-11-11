@@ -1,11 +1,14 @@
 export const TextSize = {
-    XS: '0.75rem',             // 12px  → texto auxiliar / legenda
-    Small: '0.875rem',         // 14px  → texto secundário
-    Base: '1rem',              // 16px  → texto padrão
-    Large: '1.125rem',         // 18px  → destaque / subtítulo
-    HeadingSmall: '1.25rem',   // 20px  → título pequeno
-    Heading: '1.5rem',         // 24px  → título médio
-    HeadingLarge: '1.875rem',  // 30px  → título grande
+    XS: '0.85rem',
+    Small: '0.9rem',
+    Base: '0.95rem',
+    Medium: '0.75rem',        // 12px
+    Normal: '0.8125rem',      // 13px
+    Large: '0.875rem',        // 14px
+    HeadingSmall: '0.9375rem',// 15px
+    Heading: '1.125rem',      // 18px
+    HeadingLarge: '1.25rem',  // 20px
+    Title: '1.8rem',
 };
 
 export const Spacing = {

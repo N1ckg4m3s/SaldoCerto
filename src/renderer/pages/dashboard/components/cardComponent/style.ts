@@ -20,11 +20,11 @@ export const cardContainer = styled.div<CardProps>`
 
 export const cardTitle = styled.small`
     color: ${GlobalTextColor.Muted};
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
 `
 
 export const cardData = styled.div`
-    font-size: ${GlobalTextSize.HeadingLarge};
+    font-size: ${GlobalTextSize.Heading};
     font-weight: 700;
     margin-top: ${GlobalSpacing.Medium};
     color: ${GlobalTextColor.Black};
@@ -32,6 +32,6 @@ export const cardData = styled.div`
 
 export const cardDescription = styled.div`
     margin-top: ${GlobalSpacing.XS};
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
     color: ${GlobalTextColor.Muted}
 `

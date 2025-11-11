@@ -1,7 +1,13 @@
+import type { configsInformations } from '@renderer/shered/types';
 import * as s from '../style'
 import * as sh from './sheredModulesStyle'
+import { formatarDateParaTexto } from '@renderer/controler/auxiliar';
 
-export const ConfigInformacoesModule = () => {
+interface props {
+    config: configsInformations;
+}
+
+export const ConfigInformacoesModule: React.FC<props> = ({ config }) => {
     return (
         <s.SectionContainer>
             <s.SectionTitle> Informações do sistema </s.SectionTitle>
@@ -13,7 +19,7 @@ export const ConfigInformacoesModule = () => {
 
             <sh.ModuleFieldRow>
                 <sh.ModuleFormLabel>Último backup:</sh.ModuleFormLabel>
-                <sh.span> ##/##/##</sh.span>
+                <sh.span>{formatarDateParaTexto(config.lastBackup)}</sh.span>
             </sh.ModuleFieldRow>
         </s.SectionContainer>
     )

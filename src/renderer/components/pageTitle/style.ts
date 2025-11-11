@@ -10,7 +10,7 @@ export const TitleContainer = styled.header`
 `
 
 export const TitleH1 = styled.h1`
-  font-size: ${GlobalTextSize.Heading};
+  font-size: ${GlobalTextSize.HeadingSmall};
   color: ${GlobalTextColor.Black};
 `
 
@@ -24,7 +24,7 @@ export const HeaderButton = styled.button<{ color: string }>`
   border-radius: 8px;
   font-weight: 500;
   transition: 0.2s;
-  font-size: ${GlobalTextSize.Large};
+  font-size: ${GlobalTextSize.Normal};
   cursor: pointer;
 
   &:hover {

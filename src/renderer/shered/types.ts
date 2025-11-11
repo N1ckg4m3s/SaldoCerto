@@ -77,3 +77,13 @@ export interface ApiCallerProps {
     onSuccess?: (response: any) => void;
     onError?: (erro: errorFormat) => void;
 }
+
+export interface configsInformations {
+    backupIntervalDays: number, // backupInterval
+    backupHistoryDays: number, // movimentacaoExpiraEmDias
+    backupFolderPath: string, // backupFilesPath
+    maxBackupFiles: number, // maxBackups
+    lastBackup: string, // lastBackup,
+    fontSize: 'small' | 'normal' | 'big', // fontSize
+    darkMode: boolean, // darkMode
+}

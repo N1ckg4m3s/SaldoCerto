@@ -21,6 +21,12 @@ enum TipoContrato {
   periodo
 }
 
+enum FontSize {
+  small
+  normal
+  big
+}
+
 // --------------------------------------------
 // MODELS
 // --------------------------------------------
@@ -53,4 +59,7 @@ model Configuracao {
   backupInterval            Int         @default(7) // em dias
   movimentacaoExpiraEmDias  Int         @default(7) // em dias
   lastBackup                DateTime?
+  
+  fontSize                  FontSize    @default(normal)
+  darkMode                  Boolean     @default(false)
 }

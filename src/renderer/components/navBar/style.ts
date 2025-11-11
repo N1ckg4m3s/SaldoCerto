@@ -23,7 +23,7 @@ export const NavLink = styled(Link) <NavLinkProps>`
     text-decoration: none;
     font-weight: bold;
 
-    font-size: ${GlobalTextSize.HeadingSmall};
+    font-size: ${GlobalTextSize.Base};
 
     ${props =>
     !props.Selected &&

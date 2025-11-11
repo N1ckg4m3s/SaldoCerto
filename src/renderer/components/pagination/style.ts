@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 export const PageButton = styled.button<{ active?: boolean }>`
     padding: 8px 12px;
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
     border: none;
     background-color: ${(props) => (props.active ? GlobalBackgroundColor.Button : GlobalBackgroundColor.LightGray)};
     color: ${(props) => (props.active ? GlobalTextColor.White : GlobalTextColor.Black)};  

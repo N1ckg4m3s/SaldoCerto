@@ -8,7 +8,7 @@ export const painelContainer = styled.div`
 
 export const painelTitle = styled.h3`
     margin-bottom: ${GlobalSpacing.SmallMedium};
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Base};
     color: ${GlobalTextColor.Accent};
 `
 
@@ -26,7 +26,7 @@ export const rowItemList = styled.div`
 `
 
 export const rowAditionalInfo = styled.div`
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
     color: ${GlobalTextColor.Muted};
 `
 
@@ -40,7 +40,7 @@ export const rowPill = styled.div<PillProps>`
     padding: ${GlobalSpacing.Padding6x10};
     border-radius: 8px;
     font-weight: 700;
-    font-size: ${GlobalTextSize.HeadingSmall};
+    font-size: ${GlobalTextSize.Base};
 
     ${props => props.bad && css`
         background-color: ${GlobalBackgroundColor.LightPink};
@@ -60,5 +60,5 @@ export const rowPill = styled.div<PillProps>`
 
 export const Title = styled.strong`
     color: ${GlobalTextColor.Black};
-    font-size: ${GlobalTextSize.HeadingSmall};
+    font-size: ${GlobalTextSize.Base};
 `

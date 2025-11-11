@@ -3,25 +3,21 @@ import * as s from '../style'
 import * as sh from './sheredModulesStyle'
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
+import type { configsInformations } from '@renderer/shered/types';
 
 interface props {
     onComplete?: () => void
+    config: configsInformations;
 }
 
-export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
+export const ConfigBackupModule: React.FC<props> = ({ onComplete, config }) => {
     const { addNotification } = useNotification()
 
     const [loading, setLoading] = useState(false);
 
-    const [config, setConfig] = useState({
-        backupIntervalDays: 7, // backupInterval
-        backupHistoryDays: 7, // movimentacaoExpiraEmDias
-        backupFolderPath: '', // backupFilesPath
-        maxBackupFiles: 1, // maxBackups
-        lastBackup: '', // lastBackup
-    });
+    const [configEditable, setConfig] = useState<configsInformations>(config);
 
-    const handleInputChange = (key: keyof typeof config, value: any) => {
+    const handleInputChange = (key: keyof typeof configEditable, value: any) => {
         setConfig(prev => ({ ...prev, [key]: value }));
     };
 
@@ -42,31 +38,31 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
 
     const validateConfig = (): boolean => {
         try {
-            if (config.backupIntervalDays == null || isNaN(config.backupIntervalDays)) {
+            if (configEditable.backupIntervalDays == null || isNaN(configEditable.backupIntervalDays)) {
                 throw new Error('O intervalo de backup deve ser um número válido.');
             }
             if
-                (config.backupHistoryDays == null || isNaN(config.backupHistoryDays)) {
+                (configEditable.backupHistoryDays == null || isNaN(configEditable.backupHistoryDays)) {
                 throw new Error('O histórico de backup deve ser um número válido.');
             }
 
-            if (config.maxBackupFiles == null || isNaN(config.maxBackupFiles)) {
+            if (configEditable.maxBackupFiles == null || isNaN(configEditable.maxBackupFiles)) {
                 throw new Error('O número máximo de arquivos de backup deve ser um número válido.');
             }
 
-            if (config.backupIntervalDays < 7) {
+            if (configEditable.backupIntervalDays < 7) {
                 throw new Error('O intervalo de backup deve ser maior que 7.');
             }
 
-            if (config.backupHistoryDays < config.backupIntervalDays) {
+            if (configEditable.backupHistoryDays < configEditable.backupIntervalDays) {
                 throw new Error('O histórico de backup deve ser maior que o intervalo de backup.');
             }
 
-            if (config.maxBackupFiles <= 0) {
+            if (configEditable.maxBackupFiles <= 0) {
                 throw new Error('O número máximo de arquivos de backup deve ser maior que zero.');
             }
 
-            if (!config.backupFolderPath) {
+            if (!configEditable.backupFolderPath) {
                 throw new Error('A pasta de backup deve ser selecionada.');
             }
             return true;
@@ -143,31 +139,9 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
         })
     }
 
-    useEffect(() => {
-        const fetchConfig = async () => {
-            try {
-                ApiCaller({
-                    url: '/backup/get',
-                    onSuccess: (response: any) => {
-                        if (response) setConfig({
-                            backupIntervalDays: response.backupInterval,
-                            backupHistoryDays: response.movimentacaoExpiraEmDias,
-                            backupFolderPath: response.backupFilesPath,
-                            maxBackupFiles: response.maxBackups,
-                            lastBackup: response.lastBackup,
-                        });
-                    }
-                })
-            } catch {
-                /* ignora se ainda não existir config */
-            }
-        };
-        fetchConfig();
-    }, []);
-
     /* Visual */
     const ShowPastaName = (): string => {
-        const caminho = config.backupFolderPath?.trim();
+        const caminho = configEditable.backupFolderPath?.trim();
         if (!caminho) return '-erro-';
 
         const partes = caminho.split(/[/\\]+/); // separa tanto / quanto \
@@ -188,7 +162,7 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
                     type="number"
                     placeholder='Ex: 7'
                     min={7}
-                    value={config.backupIntervalDays}
+                    value={configEditable.backupIntervalDays}
                     onChange={e => handleInputChange('backupIntervalDays', Number(e.target.value))}
                 />
             </sh.ModuleFieldRow>
@@ -204,8 +178,8 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
                 <sh.ModuleFormInput
                     placeholder='Ex: 15'
                     type="number"
-                    min={config.backupIntervalDays}
-                    value={config.backupHistoryDays}
+                    min={configEditable.backupIntervalDays}
+                    value={configEditable.backupHistoryDays}
                     onChange={e => handleInputChange('backupHistoryDays', Number(e.target.value))}
                 />
             </sh.ModuleFieldRow>
@@ -218,7 +192,7 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
                     </span>
                 </sh.FieldTip>
                 <sh.ModuleFormButton type="button" onClick={handleSelectFolder}>
-                    {config.backupFolderPath ?
+                    {configEditable.backupFolderPath ?
                         `Pasta Selecionada: [...\\${ShowPastaName()}]`
                         : 'Selecionar pasta'}
                 </sh.ModuleFormButton>
@@ -235,7 +209,7 @@ export const ConfigBackupModule: React.FC<props> = ({ onComplete }) => {
                     placeholder='Ex: 5'
                     type="number"
                     min={1}
-                    value={config.maxBackupFiles}
+                    value={configEditable.maxBackupFiles}
                     onChange={e => handleInputChange('maxBackupFiles', Number(e.target.value))}
                 />
             </sh.ModuleFieldRow>

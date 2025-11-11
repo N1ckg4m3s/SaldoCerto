@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld('api', {
         restoreFromBackupFile: (args?: any) => ipcRenderer.invoke('config:restoreFromBackupFile', args),
         selectFolder: () => ipcRenderer.invoke('config:selectFolder'),
         selectRecoveryArquive: () => ipcRenderer.invoke('config:selectRecoveryArquive'),
+        setAparence: (args?: any) => ipcRenderer.invoke('config:setAparence', args),
 
         init: () => ipcRenderer.invoke('config:init'),
     },

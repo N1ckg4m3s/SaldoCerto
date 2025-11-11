@@ -111,7 +111,7 @@ export const smallTableButton = styled.button`
     border-radius: 6px;
     padding: ${GlobalSpacing.Padding6x10};
     transition: background 0.2s;
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
 
     &:hover{
       background-color: #e2e5ea;
@@ -125,7 +125,7 @@ export const FooterBotao = styled.button`
     color: ${GlobalBackgroundColor.White};
     padding: ${GlobalSpacing.Padding8x14};
     border-radius: 8px;
-    font-size: ${GlobalTextSize.Large};
+    font-size: ${GlobalTextSize.Normal};
     font-weight: 500;
     transition: background 0.2s;
     

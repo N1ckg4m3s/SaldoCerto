@@ -85,6 +85,29 @@ export const configurationService = {
         return successResponse({});
     },
 
+    setAparence: async (args: any): Promise<IPCResponseFormat> => {
+        const AparenceDTO = {
+            fontSize: args.fontSize || 'normal',
+            darkMode: args.darkMode || false,
+        }
+        
+        const existingConfigResponse = await RepositorioConfiguracoes.obterConfiguracao();
+        if (!existingConfigResponse.success) {
+            return errorResponse("configurationService.setAparence", existingConfigResponse.message);
+        }
+
+        const hasExistingConfig = existingConfigResponse.data !== null && existingConfigResponse.data !== undefined;
+        if (hasExistingConfig) {
+            const repoResponse = await RepositorioConfiguracoes.atualizarConfiguracao({ id: existingConfigResponse.data.id, ...AparenceDTO });
+            if (!repoResponse.success) {
+                return errorResponse("configurationService.setAparence", repoResponse.message);
+            }
+            return successResponse({});
+        } else {
+            return errorResponse("configurationService.setAparence", "Não tem configuração pre salva");
+        }
+    },
+
     GerarNovoBackup: async (): Promise<IPCResponseFormat> => {
         const serviceResponse = await configurationService.ObterConfiguracao();
         if (!serviceResponse.success) return errorResponse("configurationService.GerarNovoBackup", serviceResponse.message);
@@ -102,7 +125,7 @@ export const configurationService = {
             .catch((erro: any) => {
                 return errorResponse("configurationService.GerarNovoBackup", erro.message);
             });
-        
+
         if (savePath && typeof savePath === 'string') {
             const atualizarConfiguracaoResponse = await RepositorioConfiguracoes.atualizarConfiguracao({ id: config.id, lastBackup: new Date().toISOString() });
 
