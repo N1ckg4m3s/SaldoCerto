@@ -32,4 +32,7 @@ contextBridge.exposeInMainWorld('api', {
 
         init: () => ipcRenderer.invoke('config:init'),
     },
+    export:{
+        generate: (args?: any) => ipcRenderer.invoke('export:generate', args),
+    }
 });

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f7fafc;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --text: #111827;
+      --border: #e6e9ef;
+      --row-alt: #fbfcfe;
+      --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      margin: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header.report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .brand .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand .meta h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .brand .meta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .report-meta {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .report-meta .line {
+      margin-bottom: 6px;
+    }
+
+    main.container {
+      background: var(--bg);
+    }
+
+    section.card {
+      background: var(--panel);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    /* PRIMARY area (single object) */
+    .primary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .kv {
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+      border-radius: 6px;
+    }
+
+    .kv .k {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .kv .v {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* table */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    table.data-table thead th {
+      text-align: left;
+      padding: 10px;
+      font-weight: 700;
+      background: #f3f4f6;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.data-table tbody td {
+      padding: 10px;
+      border-bottom: 1px solid #f1f3f6;
+      vertical-align: top;
+    }
+
+    table.data-table tbody tr:nth-child(odd) {
+      background: var(--row-alt);
+    }
+
+    footer.report-footer {
+      margin-top: 18px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* small print */
+    .small {
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="report-header">
+    <div class="brand">
+      <div class="logo">LOGO</div>
+      <div class="meta">
+        <h1>{{TITLE}}</h1>
+        <p class="small">{{SUBTITLE}}</p>
+      </div>
+    </div>
+    <div class="report-meta">
+      <div class="line">Gerado em: {{GEN_DATE}}</div>
+      <div class="line">Registros: {{TOTAL}}</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- se primary for objeto único -->
+    <section class="card" id="primarySection" style="display: {{PRIMARY_SECTION_DISPLAY}};">
+      <div class="primary-grid">
+        <!-- item example: -->
+        {{PRIMARY_KV}}
+      </div>
+    </section>
+
+    <!-- se primary for lista / tabela -->
+    <section class="card" id="tableSection" style="display: {{TABLE_SECTION_DISPLAY}};">
+      <table class="data-table">
+        <thead>
+          <tr>{{TABLE_HEADERS}}</tr>
+        </thead>
+        <tbody>
+          {{TABLE_ROWS}}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- secundary (ex: movimentações) -->
+    <section class="card" id="secundarySection" style="display: {{SECUNDARY_SECTION_DISPLAY}};">
+      <h3>Detalhes / Movimentações</h3>
+      <table class="data-table">
+        <thead>
+          <tr>{{SEC_HEADERS}}</tr>
+        </thead>
+        <tbody>
+          {{SEC_ROWS}}
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="report-footer">
+    <div>Export criado por: {{APP_NAME}}</div>
+    <div class="small">Página 1</div>
+  </footer>
+</body>
+
+</html>

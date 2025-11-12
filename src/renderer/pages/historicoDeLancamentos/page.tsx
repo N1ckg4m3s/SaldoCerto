@@ -10,6 +10,7 @@ import { useNotification } from '@renderer/components/notificationContainer/noti
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
 import { Remover_FloatGuiModule } from '@renderer/components/floatGui/models/remover';
+import { ExportarInformacoes_FloatGuiModule } from '@renderer/components/floatGui/models/export';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -101,6 +102,7 @@ const HistoricoDeLancamentos = () => {
     const floatGuiActions = {
         openAddNewMovimentacao: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
         openRemoveMovimentation: (GuiInformations: any) => floatGui.set({ active: true, type: 'removeThing', GuiInformations }),
+        openExportList: (GuiInformations: any) => floatGui.set({ active: true, type: 'export', GuiInformations }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} }),
     }
 
@@ -112,7 +114,7 @@ const HistoricoDeLancamentos = () => {
                 titulo='Historico de lançamentos'
                 buttons={[
                     { label: 'Adicionar Movimentação', onClick: floatGuiActions.openAddNewMovimentacao },
-                    { label: 'Exportar', onClick: () => { } },
+                    { label: 'Exportar', onClick: floatGuiActions.openExportList },
                 ]}
             />
 
@@ -216,6 +218,31 @@ const HistoricoDeLancamentos = () => {
                                     data: formatarDateParaTexto(floatGui.data.GuiInformations.data),
                                     valor: formatarValorParaTexto(floatGui.data.GuiInformations.valor),
                                     codigo: floatGui.data.GuiInformations.codigo || '-'
+                                }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+
+                    {floatGui.data.type === 'export' && (
+                        <InterfaceFlutuante
+                            title='Exportar informações'
+                            onClose={floatGuiActions.close}
+                        >
+                            <ExportarInformacoes_FloatGuiModule
+                                filters={{
+                                    page: page.data.currentPage,
+                                    limit: 20,
+                                    filters: {
+                                        de: deDataRef.current?.value || '',
+                                        ate: ateDataRef.current?.value || '',
+                                        option: optionRef.current?.value || '',
+                                    },
+                                }}
+                                necessaryPageData={{}}
+                                urlDataOrigin='/movimentacoes/list'
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                    console.log('COMPLETE CALLED :)')
                                 }}
                             />
                         </InterfaceFlutuante>

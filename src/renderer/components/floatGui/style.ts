@@ -78,9 +78,10 @@ export const ModuleContainer = styled.section<{ gap?: number }>`
 
 export const ModuleFieldRow = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   height: 30px;
-  justify-content: space-between;
 `;
 
 export const ModuleFormLabel = styled.label`
@@ -112,6 +113,14 @@ export const ModuleFormInput = styled.input`
   &::placeholder {
     color: ${themeGet(t => t.GlobalTextColor.AlmostWhite)};
   }
+`;
+
+export const ModuleFormCheck = styled.input`
+  background-color: red;
+  height: 30px;
+  background-color: #fff;
+  align-self: flex-start;
+  margin-right: 100%;
 `;
 
 export const ModuleFormSelect = styled.select`

@@ -48,7 +48,7 @@ export type Movimentacao = {
 }
 
 // Modulos da float por pagina
-type FloatTypeInformacoesCliente = 'editCliente' | 'removeThing' | 'addMovimentacao';
+type FloatTypeInformacoesCliente = 'editCliente' | 'removeThing' | 'addMovimentacao' | 'export';
 
 export type FloatGuiProps = {
     active: boolean,

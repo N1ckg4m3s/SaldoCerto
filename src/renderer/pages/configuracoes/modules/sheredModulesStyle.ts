@@ -19,9 +19,10 @@ export const ModuleContainer = styled.section<{ gap?: number }>`
 
 export const ModuleFieldRow = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   height: 30px;
-  justify-content: space-between;
 `;
 
 export const ModuleFormLabel = styled.label`
