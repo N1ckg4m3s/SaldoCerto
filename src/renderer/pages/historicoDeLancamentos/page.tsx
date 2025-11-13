@@ -242,7 +242,6 @@ const HistoricoDeLancamentos = () => {
                                 urlDataOrigin='/movimentacoes/list'
                                 onComplete={() => {
                                     floatGuiActions.close();
-                                    console.log('COMPLETE CALLED :)')
                                 }}
                             />
                         </InterfaceFlutuante>

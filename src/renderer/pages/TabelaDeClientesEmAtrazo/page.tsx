@@ -5,21 +5,31 @@ import type { ClienteAtrazoView, PaginacaoView } from 'src/renderer/shered/viewT
 import { Paginacao } from '@renderer/components/pagination/component';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
 import { useNavigate } from 'react-router-dom';
+import type { FloatGuiProps } from '@renderer/shered/types';
+import { ExportarInformacoes_FloatGuiModule } from '@renderer/components/floatGui/models/export';
+import InterfaceFlutuante from '@renderer/components/floatGui/component';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
+
+    const [floatGui, setFloatGui] = useState<FloatGuiProps>({
+        active: true,
+        type: '',
+        GuiInformations: {},
+    })
 
     const [ClientesEmAtrazo, setClientesEmAtrazo] = useState<ClienteAtrazoView[]>([])
 
     return {
         page: { data: page, set: setPage },
+        floatGui: { data: floatGui, set: setFloatGui },
         ClientesEmAtrazo: { data: ClientesEmAtrazo, set: setClientesEmAtrazo },
     }
 }
 
 const TabelaDeClientesEmAtrazo = () => {
     const navigate = useNavigate();
-    const { page, ClientesEmAtrazo } = useAllStates();
+    const { page, floatGui, ClientesEmAtrazo } = useAllStates();
 
     const handleChangePage = (pageToSet: number) => {
         page.set({ ...page.data, currentPage: pageToSet });
@@ -48,6 +58,11 @@ const TabelaDeClientesEmAtrazo = () => {
         })
     }
 
+    const floatGuiActions = {
+        openExportList: (GuiInformations: any) => floatGui.set({ active: true, type: 'export', GuiInformations }),
+        close: () => floatGui.set({ active: false, type: '', GuiInformations: {} }),
+    }
+
     useEffect(() => { getApiInformations() }, [page.data.currentPage])
 
     return (
@@ -55,7 +70,7 @@ const TabelaDeClientesEmAtrazo = () => {
             <PageTitle
                 titulo='Tabela de clientes em atrazo'
                 buttons={[
-                    { label: 'Exportar', onClick: () => { } },
+                    { label: 'Exportar', onClick: floatGuiActions.openExportList },
                 ]}
             />
 
@@ -91,6 +106,29 @@ const TabelaDeClientesEmAtrazo = () => {
                 onPageChange={handleChangePage}
                 totalPages={page.data.totalPages}
             />
+
+            {floatGui.data.active && (
+                <>
+                    {floatGui.data.type === 'export' && (
+                        <InterfaceFlutuante
+                            title='Exportar informações'
+                            onClose={floatGuiActions.close}
+                        >
+                            <ExportarInformacoes_FloatGuiModule
+                                filters={{
+                                    page: page.data.currentPage,
+                                    limit: 20,
+                                }}
+                                necessaryPageData={{}}
+                                urlDataOrigin='/movimentacoes/getInadimplentesList'
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+                </>
+            )}
 
         </sh.MainPageContainer>
     )

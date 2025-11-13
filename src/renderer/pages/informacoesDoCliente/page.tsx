@@ -13,6 +13,7 @@ import { useNotification } from '@renderer/components/notificationContainer/noti
 import { formatarDateParaTexto, formatarValorParaTexto } from '@renderer/controler/auxiliar';
 import { AdicionarMovimentacao_FloatGuiModule } from '@renderer/components/floatGui/models/adicionarMovimentacao';
 import { Remover_FloatGuiModule } from '@renderer/components/floatGui/models/remover';
+import { ExportarInformacoes_FloatGuiModule } from '@renderer/components/floatGui/models/export';
 
 const useAllStates = () => {
     const [page, setPage] = useState<PaginacaoView>({ currentPage: 0, totalPages: 0 });
@@ -43,6 +44,7 @@ const InformacoesDoCliente = () => {
         openRemove: (data: any) => floatGui.set({ active: true, type: 'removeThing', GuiInformations: data || {} }),
         openAddNewMov: () => floatGui.set({ active: true, type: 'addMovimentacao', GuiInformations: {} }),
         openEditClient: () => floatGui.set({ active: true, type: 'editCliente', GuiInformations: {} }),
+        openExport: () => floatGui.set({ active: true, type: 'export', GuiInformations: {} }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
     };
 
@@ -84,7 +86,7 @@ const InformacoesDoCliente = () => {
     }
 
     const getAllApiMovimentations = () => {
-        const payload={
+        const payload = {
             id: id,
             page: page.data.currentPage,
 
@@ -126,7 +128,7 @@ const InformacoesDoCliente = () => {
                 titulo={`Informações do cliente - ${client.data?.nome || '-'}`}
                 buttons={[
                     { label: 'Registrar movimentação', onClick: floatGuiActions.openAddNewMov },
-                    { label: 'Exportar lista', onClick: () => { } },
+                    { label: 'Exportar lista', onClick: floatGuiActions.openExport },
                     { label: '⚙', onClick: floatGuiActions.openEditClient }, // Ícone de engrenagem para editar
                     {
                         label: '🗑', onClick: () => floatGuiActions.openRemove({
@@ -260,6 +262,24 @@ const InformacoesDoCliente = () => {
                                 }}
                                 onError={() => { }}
                                 dados={floatGui.data.GuiInformations.data}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+
+                    {floatGui.data.type === 'export' && (
+                        <InterfaceFlutuante
+                            title='Exportar informações'
+                            onClose={floatGuiActions.close}
+                        >
+                            <ExportarInformacoes_FloatGuiModule
+                                filters={{
+                                    page: page.data.currentPage,
+                                }}
+                                necessaryPageData={{ id }}
+                                urlDataOrigin='/cliente/getInformationsById'
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                }}
                             />
                         </InterfaceFlutuante>
                     )}

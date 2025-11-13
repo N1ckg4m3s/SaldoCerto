@@ -10,6 +10,7 @@ import InterfaceFlutuante from '@renderer/components/floatGui/component';
 import { CreateEditClient_FloatGuiModule } from '@renderer/components/floatGui/models/createEditClient';
 import { useNotification } from '@renderer/components/notificationContainer/notificationContext';
 import { ApiCaller } from '@renderer/controler/ApiCaller';
+import { ExportarInformacoes_FloatGuiModule } from '@renderer/components/floatGui/models/export';
 
 interface TableHeadFilterProps {
     SomaTotal: NumberFilterType;
@@ -87,6 +88,7 @@ const ListaDeClientesCadastrados = () => {
 
     const floatGuiActions = {
         open: () => floatGui.set({ active: true, type: 'editCliente', GuiInformations: {} }),
+        openExport: () => floatGui.set({ active: true, type: 'export', GuiInformations: {} }),
         close: () => floatGui.set({ active: false, type: '', GuiInformations: {} })
     };
 
@@ -97,7 +99,8 @@ const ListaDeClientesCadastrados = () => {
             <PageTitle
                 titulo='Clientes cadastrados'
                 buttons={[
-                    { label: 'Adicionar Cliente', onClick: floatGuiActions.open }
+                    { label: 'Adicionar Cliente', onClick: floatGuiActions.open },
+                    { label: 'Exportar', onClick: floatGuiActions.openExport }
                 ]}
             />
             <sh.filtrosContainer
@@ -164,19 +167,42 @@ const ListaDeClientesCadastrados = () => {
                 <sh.FooterBotao> Exportar </sh.FooterBotao>
             </sh.AcoesFooter>
 
-            {floatGui.data.active && floatGui.data.type == 'editCliente' &&
-                <InterfaceFlutuante
-                    title='Adicionar Cliente'
-                    onClose={floatGuiActions.close}>
+            {floatGui.data.active && (
+                <>
+                    {floatGui.data.type === 'editCliente' &&
+                        <InterfaceFlutuante
+                            title='Adicionar Cliente'
+                            onClose={floatGuiActions.close}>
 
-                    <CreateEditClient_FloatGuiModule
-                        onComplete={() => {
-                            floatGuiActions.close()
-                            getApiInformations()
-                        }}
-                    />
-                </InterfaceFlutuante>
-            }
+                            <CreateEditClient_FloatGuiModule
+                                onComplete={() => {
+                                    floatGuiActions.close()
+                                    getApiInformations()
+                                }}
+                            />
+                        </InterfaceFlutuante>
+                    }
+                    {floatGui.data.type === 'export' && (
+                        <InterfaceFlutuante
+                            title='Exportar informações'
+                            onClose={floatGuiActions.close}
+                        >
+                            <ExportarInformacoes_FloatGuiModule
+                                filters={{
+                                    page: page.data.currentPage,
+                                    limit: 20,
+                                    search: searchRef.current?.value || '',
+                                }}
+                                necessaryPageData={{}}
+                                urlDataOrigin='/cliente/getList'
+                                onComplete={() => {
+                                    floatGuiActions.close();
+                                }}
+                            />
+                        </InterfaceFlutuante>
+                    )}
+                </>
+            )}
         </sh.MainPageContainer>
     )
 }

@@ -31,6 +31,22 @@ interface handlersProps {
     baseName: string,
     getFormatedData: (args: any) => Promise<{ primary: any, secundary?: any }>
 }
+/* ---------- Viws formater ---------- */
+// Formata datas para DD/MM/AAAA
+const formatacaoData = (valor: any) => {
+    if (!valor) return "-";
+    const date = new Date(valor);
+    if (isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("pt-BR"); // ex: 08/11/2025
+};
+
+// Formata valores como moeda brasileira
+const formatacaoValor = (valor: any) => {
+    if (valor == null) return "-";
+    const num = Number(valor);
+    if (isNaN(num)) return "-";
+    return num.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); // ex: R$ 218,59
+};
 
 /* ---------- Handlers ---------- */
 const handles: Record<string, handlersProps> = {
@@ -43,10 +59,17 @@ const handles: Record<string, handlersProps> = {
             if (!serviceReturn.success) return serviceReturn;
 
             return successResponse({
-                primary: serviceReturn.data.movimentacoes
+                list: serviceReturn.data.movimentacoes.map((e: any) => ({
+                    nome: e.nome,
+                    tipo: e.tipo,
+                    data: formatacaoData(e.data),
+                    valor: formatacaoValor(e.valor),
+                    codigo: e.codigo || "-"
+                }))
             })
         }
     },
+
     '/movimentacoes/getInadimplentesList': {
         requiredArgs: [],
         baseName: 'lista-de-clientes-inadimplantes',
@@ -56,10 +79,16 @@ const handles: Record<string, handlersProps> = {
             if (!serviceReturn.success) return serviceReturn;
 
             return successResponse({
-                primary: serviceReturn.data.inadimplentes
+                list: serviceReturn.data.inadimplentes.map((e: any) => ({
+                    nome: e.nome,
+                    DiasDeAtrazo: e.DiasDeAtrazo,
+                    ValorVencido: formatacaoValor(e.ValorVencido),
+                    NumeroDeNotas: e.NumeroDeNotas
+                }))
             })
         }
     },
+
     '/cliente/getList': {
         requiredArgs: [],
         baseName: 'lista-de-clientes',
@@ -69,10 +98,17 @@ const handles: Record<string, handlersProps> = {
             if (!serviceReturn.success) return serviceReturn;
 
             return successResponse({
-                primary: serviceReturn.data.clients
+                list: serviceReturn.data.clients.map((e: any) => ({
+                    nome: e.nome,
+                    SomaTotal: formatacaoValor(e.SomaTotal),
+                    ProximoPagamento: formatacaoData(e.ProximoPagamento),
+                    ValorProximaNota: formatacaoValor(e.ValorProximaNota),
+                    Situacao: e.Situacao
+                }))
             })
         }
     },
+
     '/cliente/getInformationsById': {
         requiredArgs: ['id'],
         baseName: 'lista-de-informacoes-do-cliente',
@@ -87,8 +123,20 @@ const handles: Record<string, handlersProps> = {
             if (!service2Return.success) return service2Return;
 
             return successResponse({
-                primary: service1Return.data,
-                secundary: service2Return.data.movimentacoes,
+                list: service2Return.data.movimentacoes.map((e: any) => ({
+                    nome: e.nome,
+                    tipo: e.tipo,
+                    data: formatacaoData(e.data),
+                    valor: formatacaoValor(e.valor),
+                    codigo: e.codigo || "-"
+                })),
+                information: {
+                    CLIENT_CONTATO: service1Return.data.telefone,
+                    CLIENT_CONTRATO: `${service1Return.data.tipoContrato || '#'} - ${service1Return.data.diaContrato || '#'}`,
+                    CLIENT_DIVIDA: formatacaoValor(service1Return.data.SomaTotal),
+                    CLIENT_PROX_PAG: formatacaoData(service1Return.data.ProximoPagamento),
+                    CLIENT_VALOR_PAG: formatacaoValor(service1Return.data.ValorProximaNota),
+                },
             })
         }
     },
@@ -189,23 +237,26 @@ export const exportService = {
         const { data } = dataResponse;
 
         const handler = handles[dados.urlDataOrigin];
-        let rows: any[] = [];
 
-        if (Array.isArray(data.data.primary)) {
-            rows = [...data.data.primary];
-        } else if (data.data.primary) {
-            rows = [data.data.primary];
-        }
+        // Primary → objeto único
+        const listData = data.data.list ?? null;
 
-        if (data.data.secundary) {
-            if (Array.isArray(data.data.secundary)) {
-                rows = [...rows, ...data.data.secundary];
+        // Secundary → array de movimentações
+        let informationData: any[] = [];
+        if (data.data.information) {
+            if (Array.isArray(data.data.information)) {
+                informationData = data.data.information;
             } else {
-                rows.push(data.data.secundary);
+                informationData = [data.data.information];
             }
         }
 
-        const { filePath, total } = await saveAsPDF(rows, handler?.baseName || 'NoBaseName');
+        // Gera PDF separando list e information
+        const { filePath, total } = await saveAsPDF({
+            baseName: handler?.baseName || 'NoBaseName',
+            list: listData,
+            information: informationData,
+        });
 
         return successResponse({ filePath, total });
     },

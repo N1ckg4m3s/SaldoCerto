@@ -38,14 +38,17 @@ async function createWindow() {
 
     iniciarTodosControladores();
 
-    // Gerando 30 clientes de teste
-    // const { gerarClientesDeTeste } = await import(pathToFileURL(path.join(__dirname, 'utilits', 'gerarClientesDeTeste.js')).href);
-    // await gerarClientesDeTeste(30);
-    
-    // Gerarndo 100 movimentações de teste
-    // const { gerarMovimentacoesDeTeste } = await import(pathToFileURL(path.join(__dirname, 'utilits', 'gerarMovimentacoesDeTeste.js')).href);
-    // await gerarMovimentacoesDeTeste(100);
+    /* FAST - TESTS */
+    const { exportService } = await import(pathToFileURL(path.join(__dirname, 'backend', 'services', 'exportService.js')).href)
 
+    /* Gera um PDF com as informações do cliente e suas movimentações */
+    exportService.exportarDados({
+        urlDataOrigin: '/cliente/getInformationsById',
+        necessaryPageData: { id: 'cmhqf3cyj0003vv04cy80g77p' },
+        filters: {},
+        onlyCurrentPage: true,
+        tipo: 'pdf',
+    })
 }
 
 app.on('ready', createWindow);

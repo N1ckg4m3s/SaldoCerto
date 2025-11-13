@@ -37,19 +37,6 @@
       align-items: center;
     }
 
-    .brand .logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 18px;
-    }
-
     .brand .meta h1 {
       margin: 0;
       font-size: 18px;
@@ -83,7 +70,6 @@
       margin-bottom: 14px;
     }
 
-    /* PRIMARY area (single object) */
     .primary-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -108,7 +94,6 @@
       font-weight: 600;
     }
 
-    /* table */
     table.data-table {
       width: 100%;
       border-collapse: collapse;
@@ -142,7 +127,18 @@
       justify-content: space-between;
     }
 
-    /* small print */
+    .primary-grid {
+      display: flex;
+      gap: 24px;
+    }
+
+    .kv-column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
     .small {
       font-size: 11px;
       color: var(--muted);
@@ -153,10 +149,8 @@
 <body>
   <header class="report-header">
     <div class="brand">
-      <div class="logo">LOGO</div>
       <div class="meta">
         <h1>{{TITLE}}</h1>
-        <p class="small">{{SUBTITLE}}</p>
       </div>
     </div>
     <div class="report-meta">
@@ -166,28 +160,42 @@
   </header>
 
   <main class="container">
-    <!-- se primary for objeto único -->
-    <section class="card" id="primarySection" style="display: {{PRIMARY_SECTION_DISPLAY}};">
+    <!-- SEÇÃO DE INFORMAÇÕES DO CLIENTE -->
+    <section class="card" id="clientInfoSection" {{SHOW_CLIENT_INFO_DISPLAY}}>
+      <h3>Informações do Cliente</h3>
       <div class="primary-grid">
-        <!-- item example: -->
-        {{PRIMARY_KV}}
+        <!-- Coluna 1: Informações do cliente -->
+        <div class="kv-column">
+          <div class="kv">
+            <div class="k">Contato adicionado</div>
+            <div class="v">{{CLIENT_CONTATO}}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Contrato</div>
+            <div class="v">{{CLIENT_CONTRATO}}</div>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Informações financeiras -->
+        <div class="kv-column">
+          <div class="kv">
+            <div class="k">Divida Total</div>
+            <div class="v">{{CLIENT_DIVIDA}}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Próximo pagamento</div>
+            <div class="v">{{CLIENT_PROX_PAG}}</div>
+          </div>
+          <div class="kv">
+            <div class="k">Valor de pagamento</div>
+            <div class="v">{{CLIENT_VALOR_PAG}}</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- se primary for lista / tabela -->
-    <section class="card" id="tableSection" style="display: {{TABLE_SECTION_DISPLAY}};">
-      <table class="data-table">
-        <thead>
-          <tr>{{TABLE_HEADERS}}</tr>
-        </thead>
-        <tbody>
-          {{TABLE_ROWS}}
-        </tbody>
-      </table>
-    </section>
-
-    <!-- secundary (ex: movimentações) -->
-    <section class="card" id="secundarySection" style="display: {{SECUNDARY_SECTION_DISPLAY}};">
+    <!-- TABELAS -->
+    <section class="card" id="secundarySection">
       <h3>Detalhes / Movimentações</h3>
       <table class="data-table">
         <thead>
@@ -199,11 +207,6 @@
       </table>
     </section>
   </main>
-
-  <footer class="report-footer">
-    <div>Export criado por: {{APP_NAME}}</div>
-    <div class="small">Página 1</div>
-  </footer>
 </body>
 
 </html>

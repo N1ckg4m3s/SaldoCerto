@@ -16,7 +16,10 @@ export const saveAsCSV = async (
     const exportDir = path.join(__dirname, "exports");
     if (!fs.existsSync(exportDir)) fs.mkdirSync(exportDir, { recursive: true });
 
-    const filePath = path.join(exportDir, `${baseName}-${Date.now()}.csv`);
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+    const filePath = path.join(exportDir, `${baseName}-${dateStr}.csv`);
+    
     if (!rows.length) {
         fs.writeFileSync(filePath, "\uFEFF", "utf8"); // cria arquivo vazio com BOM
         return { filePath, total: 0 };
