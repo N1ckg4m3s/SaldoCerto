@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
@@ -26,6 +27,9 @@ const { validateBancoRestore } = await import(
 
 const { existsFile, copyFile } = await import(
     pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "fileHandler.js")).href
+);
+const { listarArquivosDaPasta } = await import(
+    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "listarArquivosDaPasta.js")).href
 );
 
 interface IPCResponseFormat {
@@ -90,7 +94,7 @@ export const configurationService = {
             fontSize: args.fontSize || 'normal',
             darkMode: args.darkMode || false,
         }
-        
+
         const existingConfigResponse = await RepositorioConfiguracoes.obterConfiguracao();
         if (!existingConfigResponse.success) {
             return errorResponse("configurationService.setAparence", existingConfigResponse.message);
@@ -183,15 +187,32 @@ export const configurationService = {
     },
 
     ListarArquivosDeBackup: async (args: any): Promise<IPCResponseFormat> => {
-        return successResponse({});
+        const existingConfigResponse = await RepositorioConfiguracoes.obterConfiguracao();
+        if (!existingConfigResponse.success) {
+            return errorResponse("configurationService.SalvarConfiguracao", existingConfigResponse.message);
+        }
+
+        const backupFilesPath = existingConfigResponse.data?.backupFolderPath
+        const arquivosDaPasta = await listarArquivosDaPasta({ backupFilesPath });
+
+        if (!arquivosDaPasta.success) return arquivosDaPasta;
+        return successResponse(arquivosDaPasta.data.arquivos);
     },
 
     DeletarArquivoDeBackup: async (args: any): Promise<IPCResponseFormat> => {
-        if (!args || !args.fileName) {
-            return errorResponse("configurationService.DeletarArquivoDeBackup", "Nome do arquivo não fornecido.");
-        }
+        try {
+            const { fileName, backupFolderPath } = args;
+            if (!fileName) return errorResponse("DeletarArquivoDeBackup", "Nome do arquivo não fornecido.");
+            if (!backupFolderPath) return errorResponse("DeletarArquivoDeBackup", "Caminho da pasta não informado.");
 
-        return successResponse({});
+            const filePath = path.join(backupFolderPath, fileName);
+            if (!fs.existsSync(filePath)) return errorResponse("DeletarArquivoDeBackup", "Arquivo não encontrado.");
+
+            await fs.promises.unlink(filePath);
+            return successResponse({ message: "Arquivo excluído com sucesso." });
+        } catch (err) {
+            return errorResponse("DeletarArquivoDeBackup", err);
+        }
     },
 
     RodarLimpeza: async (args: any): Promise<IPCResponseFormat> => {

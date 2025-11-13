@@ -42,15 +42,19 @@ export const onInitApp = async (): Promise<boolean> => {
     // Verifica se é necessário remover arquivos de backup exedentes
     const ListarArquivosDeBackupResponse = await configurationService.ListarArquivosDeBackup();
     if (!ListarArquivosDeBackupResponse.success || !ListarArquivosDeBackupResponse.data) return false;
+
     const backupFiles = ListarArquivosDeBackupResponse.data as Array<any>;
     const maxBackups = config.maxBackups;
 
     if (backupFiles.length > maxBackups) {
-        backupFiles.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        backupFiles.sort((a, b) => new Date(a.lastModified).getTime() - new Date(b.lastModified).getTime());
 
         const filesToDelete = backupFiles.slice(0, backupFiles.length - maxBackups);
         for (const file of filesToDelete) {
-            await configurationService.DeletarArquivoDeBackup({ fileName: file.name });
+            await configurationService.DeletarArquivoDeBackup({
+                fileName: file.name,
+                backupFolderPath: config.backupFilesPath
+            });
         }
     }
 
