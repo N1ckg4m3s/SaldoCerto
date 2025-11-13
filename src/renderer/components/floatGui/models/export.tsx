@@ -1,3 +1,4 @@
+import LoadingComponent from '@renderer/components/loading/component';
 import * as s from '../style'
 import { useNotification } from "@renderer/components/notificationContainer/notificationContext";
 import { ApiCaller } from "@renderer/controler/ApiCaller";
@@ -13,6 +14,7 @@ interface Props {
 
 export const ExportarInformacoes_FloatGuiModule: React.FC<Props> = ({ onComplete, onError, urlDataOrigin, necessaryPageData, filters }) => {
     const { addNotification } = useNotification();
+    const [loading, setLoading] = useState<boolean>(false)
 
     const [informations, setInformations] = useState({
         tipoExportacao: '',
@@ -41,7 +43,7 @@ export const ExportarInformacoes_FloatGuiModule: React.FC<Props> = ({ onComplete
             onlyCurrentPage: informations.ApenasAPaginaVisivel,
             tipo: informations.tipoExportacao,
         }
-
+        setLoading(true)
         ApiCaller({
             url: '/export/generate',
             args: payload,
@@ -52,6 +54,7 @@ export const ExportarInformacoes_FloatGuiModule: React.FC<Props> = ({ onComplete
                     message: `O arquivo esta em: ${data.filePath}, tamanho: ${data.total}`,
                     type: 'success',
                 });
+                setLoading(false)
                 onComplete?.();
             },
             onError(erro) {
@@ -61,10 +64,13 @@ export const ExportarInformacoes_FloatGuiModule: React.FC<Props> = ({ onComplete
                     message: erro.message || '- No Message -',
                     type: 'error',
                 });
+                setLoading(false)
                 onComplete?.();
             },
         });
     };
+
+    if (loading) return <LoadingComponent />
 
     return (
         <s.ModuleContainer gap={10}>

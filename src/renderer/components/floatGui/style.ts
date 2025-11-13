@@ -9,7 +9,7 @@ export const BlurBackground = styled.div`
   background-color: ${themeGet(t => t.GlobalBackgroundColor.ModalOverlay)}; 
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  position: absolute;
+  position: fixed;
   z-index: 2;
   top: 0;
   left: 0;
