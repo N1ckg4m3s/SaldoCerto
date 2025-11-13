@@ -11,16 +11,13 @@ const __dirname = path.dirname(__filename);
 const templatePath = path.join(__dirname, "..", "..", "..", "assets", "template.html");
 
 // Formatação
-const formatacaoData = (d: any) => {
-    if (!d) return "-";
-    const date = new Date(d);
-    return date.toLocaleDateString("pt-BR") + " " + date.toLocaleTimeString("pt-BR");
-};
-
-const formatacaoValor = (v: any) => {
-    if (v == null) return "-";
-    return Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-};
+const custom_SEC_TITLE_name = {
+    'lista-de-movimentacoes': 'Movimentações',
+    'lista-de-clientes-inadimplantes': 'Clientes vencidos',
+    'lista-de-clientes': 'Clientes cadastrados',
+    'lista-de-informacoes-do-cliente': 'Movimentacoes do cliente',
+    'Relatorio': 'error name'
+}
 
 interface props {
     baseName: string,
@@ -47,6 +44,10 @@ export const saveAsPDF = async ({
             .replace(/\{\{TOTAL\}\}/g, list.length.toString())
             .replace(/\{\{APP_NAME\}\}/g, appName)
 
+        const secTitleKey = (baseName as keyof typeof custom_SEC_TITLE_name) || 'Relatorio';
+        filledHTML = filledHTML
+            .replace(/\{\{SEC_TITLE\}\}/g, custom_SEC_TITLE_name[secTitleKey])
+
         // 2️⃣ [Insersão de informação de cliente -information-]
         const hasInfo = Array.isArray(information) && information.length > 0;
         const client = hasInfo ? information[0] : null;
@@ -54,6 +55,7 @@ export const saveAsPDF = async ({
 
         if (hasInfo) {
             filledHTML = filledHTML
+                .replace(/\{\{CLIENT_NOME\}\}/g, client?.CLIENT_NOME || "-")
                 .replace(/\{\{CLIENT_CONTATO\}\}/g, client?.CLIENT_CONTATO || "-")
                 .replace(/\{\{CLIENT_CONTRATO\}\}/g, client?.CLIENT_CONTRATO)
                 .replace(/\{\{CLIENT_DIVIDA\}\}/g, client?.CLIENT_DIVIDA)
@@ -70,7 +72,7 @@ export const saveAsPDF = async ({
 
         const secRowsHtml = list
             .map((row: any) =>
-                `<tr>${secHeaders.map(h => `<td>${row[h] ?? "-"}</td>`).join("")}</tr>`
+                `<tr>${secHeaders.map(h => `<td>${row[h].replace('_', ' ') ?? "-"}</td>`).join("")}</tr>`
             )
             .join("");
 
@@ -97,7 +99,7 @@ export const saveAsPDF = async ({
         await fs.promises.writeFile(filePath, pdfBuffer);
 
         win.destroy();
-        shell.showItemInFolder(filePath);
+        shell.openPath(filePath);
 
         return { filePath, total: information.length };
     } catch (err) {

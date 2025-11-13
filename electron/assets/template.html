@@ -7,20 +7,29 @@
   <title>{{TITLE}}</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --panel: #f7fafc;
-      --muted: #6b7280;
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --gray-soft: #f3f4f6;
+      --gray-light: #e5e7eb;
+      --gray-medium: #6b7280;
+      --text-dark: #111827;
+      --text-muted: #4b5563;
       --accent: #2563eb;
-      --text: #111827;
-      --border: #e6e9ef;
-      --row-alt: #fbfcfe;
-      --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+      --mint-green: #dcfce7;
+      --mint-text: #15803d;
+      --soft-red: #fee2e2;
+      --soft-red-text: #b91c1c;
+      --border: #e5e7eb;
+      --radius: 10px;
+      --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      --font: "Inter", "Helvetica Neue", Arial, sans-serif;
     }
 
     body {
-      font-family: var(--font-sans);
-      color: var(--text);
-      margin: 24px;
+      font-family: var(--font);
+      color: var(--text-dark);
+      background: var(--bg);
+      margin: 32px;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -28,120 +37,111 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
-    .brand {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .brand .meta h1 {
+    .brand h1 {
+      font-size: 20px;
       margin: 0;
-      font-size: 18px;
-    }
-
-    .brand .meta p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
+      font-weight: 600;
     }
 
     .report-meta {
       text-align: right;
       font-size: 12px;
-      color: var(--muted);
-    }
-
-    .report-meta .line {
-      margin-bottom: 6px;
-    }
-
-    main.container {
-      background: var(--bg);
+      color: var(--text-muted);
     }
 
     section.card {
-      background: var(--panel);
-      padding: 16px;
-      border-radius: 8px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       border: 1px solid var(--border);
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    h3.section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-dark);
       margin-bottom: 14px;
+      text-transform: capitalize;
     }
 
-    .primary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+
+    .info-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      color: var(--text-dark);
     }
 
-    .kv {
+    .info-group {
+      flex: 1;
+      min-width: 250px;
       display: flex;
       flex-direction: column;
-      padding: 8px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
-      border-radius: 6px;
+      gap: 8px;
     }
 
-    .kv .k {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .kv .v {
+    .info-item {
       font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .info-item strong {
+      color: var(--text-muted);
       font-weight: 600;
     }
 
     table.data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 8px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
     table.data-table thead th {
+      background: var(--gray-soft);
+      color: var(--text-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
       text-align: left;
-      padding: 10px;
-      font-weight: 700;
-      background: #f3f4f6;
       border-bottom: 1px solid var(--border);
     }
 
     table.data-table tbody td {
-      padding: 10px;
-      border-bottom: 1px solid #f1f3f6;
-      vertical-align: top;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
     }
 
     table.data-table tbody tr:nth-child(odd) {
-      background: var(--row-alt);
+      background: #fafafa;
     }
 
-    footer.report-footer {
-      margin-top: 18px;
+    .badge {
+      display: inline-block;
       font-size: 11px;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
     }
 
-    .primary-grid {
-      display: flex;
-      gap: 24px;
+    .badge.pedido {
+      background-color: var(--soft-red);
+      color: var(--soft-red-text);
     }
 
-    .kv-column {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-
-    .small {
-      font-size: 11px;
-      color: var(--muted);
+    .badge.pagamento {
+      background-color: var(--mint-green);
+      color: var(--mint-text);
     }
   </style>
 </head>
@@ -149,64 +149,41 @@
 <body>
   <header class="report-header">
     <div class="brand">
-      <div class="meta">
-        <h1>{{TITLE}}</h1>
-      </div>
+      <h1>{{TITLE}}</h1>
     </div>
     <div class="report-meta">
-      <div class="line">Gerado em: {{GEN_DATE}}</div>
-      <div class="line">Registros: {{TOTAL}}</div>
+      <div>Gerado em: {{GEN_DATE}}</div>
+      <div>Registros: {{TOTAL}}</div>
     </div>
   </header>
 
-  <main class="container">
-    <!-- SEÇÃO DE INFORMAÇÕES DO CLIENTE -->
-    <section class="card" id="clientInfoSection" {{SHOW_CLIENT_INFO_DISPLAY}}>
-      <h3>Informações do Cliente</h3>
-      <div class="primary-grid">
-        <!-- Coluna 1: Informações do cliente -->
-        <div class="kv-column">
-          <div class="kv">
-            <div class="k">Contato adicionado</div>
-            <div class="v">{{CLIENT_CONTATO}}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Contrato</div>
-            <div class="v">{{CLIENT_CONTRATO}}</div>
-          </div>
-        </div>
-
-        <!-- Coluna 2: Informações financeiras -->
-        <div class="kv-column">
-          <div class="kv">
-            <div class="k">Divida Total</div>
-            <div class="v">{{CLIENT_DIVIDA}}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Próximo pagamento</div>
-            <div class="v">{{CLIENT_PROX_PAG}}</div>
-          </div>
-          <div class="kv">
-            <div class="k">Valor de pagamento</div>
-            <div class="v">{{CLIENT_VALOR_PAG}}</div>
-          </div>
-        </div>
+  <!-- Informações -->
+  <section class="card" id="clientInfoSection" {{SHOW_CLIENT_INFO_DISPLAY}}>
+    <h3 class="section-title">Informações do Cliente</h3>
+    <div class="info-container">
+      <div class="info-group">
+        <div class="info-item"><strong>Contato adicionado: </strong>{{CLIENT_NOME}}</div>
+        <div class="info-item"><strong>Contato adicionado: </strong>{{CLIENT_CONTATO}}</div>
+        <div class="info-item"><strong>Contrato: </strong>{{CLIENT_CONTRATO}}</div>
       </div>
-    </section>
+      <div class="info-group">
+        <div class="info-item"><strong>Dívida Total: </strong>{{CLIENT_DIVIDA}}</div>
+        <div class="info-item"><strong>Próximo pagamento: </strong>{{CLIENT_PROX_PAG}}</div>
+        <div class="info-item"><strong>Valor de pagamento: </strong>{{CLIENT_VALOR_PAG}}</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- TABELAS -->
-    <section class="card" id="secundarySection">
-      <h3>Detalhes / Movimentações</h3>
-      <table class="data-table">
-        <thead>
-          <tr>{{SEC_HEADERS}}</tr>
-        </thead>
-        <tbody>
-          {{SEC_ROWS}}
-        </tbody>
-      </table>
-    </section>
-  </main>
+  <!-- Histórico -->
+  <section class="card" id="secundarySection">
+    <h3 class="section-title">{{SEC_TITLE}}</h3>
+    <table class="data-table">
+      <thead>
+        <tr>{{SEC_HEADERS}}</tr>
+      </thead>
+      <tbody>{{SEC_ROWS}}</tbody>
+    </table>
+  </section>
 </body>
 
 </html>

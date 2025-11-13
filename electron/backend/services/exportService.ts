@@ -60,11 +60,11 @@ const handles: Record<string, handlersProps> = {
 
             return successResponse({
                 list: serviceReturn.data.movimentacoes.map((e: any) => ({
-                    nome: e.nome,
-                    tipo: e.tipo,
-                    data: formatacaoData(e.data),
-                    valor: formatacaoValor(e.valor),
-                    codigo: e.codigo || "-"
+                    Nome: e.nome,
+                    Tipo: e.tipo,
+                    Data: formatacaoData(e.data),
+                    Valor: formatacaoValor(e.valor),
+                    Codigo: e.codigo || "-"
                 }))
             })
         }
@@ -80,10 +80,10 @@ const handles: Record<string, handlersProps> = {
 
             return successResponse({
                 list: serviceReturn.data.inadimplentes.map((e: any) => ({
-                    nome: e.nome,
-                    DiasDeAtrazo: e.DiasDeAtrazo,
-                    ValorVencido: formatacaoValor(e.ValorVencido),
-                    NumeroDeNotas: e.NumeroDeNotas
+                    Nome: e.nome,
+                    Atrazo: e.DiasDeAtrazo,
+                    Valor: formatacaoValor(e.ValorVencido),
+                    Notas: e.NumeroDeNotas
                 }))
             })
         }
@@ -99,10 +99,10 @@ const handles: Record<string, handlersProps> = {
 
             return successResponse({
                 list: serviceReturn.data.clients.map((e: any) => ({
-                    nome: e.nome,
-                    SomaTotal: formatacaoValor(e.SomaTotal),
-                    ProximoPagamento: formatacaoData(e.ProximoPagamento),
-                    ValorProximaNota: formatacaoValor(e.ValorProximaNota),
+                    Nome: e.nome,
+                    Total: formatacaoValor(e.SomaTotal),
+                    Proximo_Pagamento: formatacaoData(e.ProximoPagamento),
+                    Valor_Proxima_Nota: formatacaoValor(e.ValorProximaNota),
                     Situacao: e.Situacao
                 }))
             })
@@ -124,13 +124,13 @@ const handles: Record<string, handlersProps> = {
 
             return successResponse({
                 list: service2Return.data.movimentacoes.map((e: any) => ({
-                    nome: e.nome,
-                    tipo: e.tipo,
-                    data: formatacaoData(e.data),
-                    valor: formatacaoValor(e.valor),
-                    codigo: e.codigo || "-"
+                    Tipo: e.tipo,
+                    Data: formatacaoData(e.data),
+                    Valor: formatacaoValor(e.valor),
+                    Codigo: e.codigo || "-"
                 })),
                 information: {
+                    CLIENT_NOME: service1Return.data.nome || '-',
                     CLIENT_CONTATO: service1Return.data.telefone,
                     CLIENT_CONTRATO: `${service1Return.data.tipoContrato || '#'} - ${service1Return.data.diaContrato || '#'}`,
                     CLIENT_DIVIDA: formatacaoValor(service1Return.data.SomaTotal),
