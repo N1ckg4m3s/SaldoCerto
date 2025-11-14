@@ -8,6 +8,8 @@ const { RepositorioCliente } = await import(
     pathToFileURL(path.join(__dirname, "..", "repositories", "clientRepo.js")).href
 );
 
+const { logService } = await import(pathToFileURL(path.join(__dirname, "logService.js")).href);
+
 interface IPCResponseFormat {
     success: boolean;
     message?: string;
@@ -18,10 +20,17 @@ interface IPCResponseFormat {
 /* ---------- Utils ---------- */
 
 const successResponse = (data?: any): IPCResponseFormat => ({ success: true, data });
-const errorResponse = (context: string, message: any): IPCResponseFormat => ({
-    success: false,
-    message: `[${context}]: ${message}`,
-});
+const errorResponse = (context: string, message: any): IPCResponseFormat => {
+    logService.adicionarLog({
+        title: context,
+        mensagem: message,
+        type: 'error'
+    })
+    return {
+        success: false,
+        message: `[${context}]: ${message}`,
+    }
+}
 
 const validateClientData = (dado: any): IPCResponseFormat => {
     const required = [

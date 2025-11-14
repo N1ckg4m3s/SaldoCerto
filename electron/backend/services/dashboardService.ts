@@ -18,13 +18,22 @@ const { clientService } = await import(
     pathToFileURL(path.join(__dirname, "clientService.js")).href
 );
 
+const { logService } = await import(pathToFileURL(path.join(__dirname, "logService.js")).href);
+
 /* ---------- Utilidades ---------- */
 
 const successResponse = (data?: any): IPCResponseFormat => ({ success: true, data });
-const errorResponse = (context: string, e: any): IPCResponseFormat => ({
-    success: false,
-    message: `[${context}]: ${e}`,
-});
+const errorResponse = (context: string, message: any): IPCResponseFormat => {
+    logService.adicionarLog({
+        title: context,
+        mensagem: message,
+        type: 'error'
+    })
+    return {
+        success: false,
+        message: `[${context}]: ${message}`,
+    }
+}
 
 /** Calcula valores financeiros agregados das movimentações */
 const calcularTotais = (movs: any[], hoje: Date) => {

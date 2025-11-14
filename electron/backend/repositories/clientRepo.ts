@@ -11,10 +11,17 @@ interface IPCResponseFormat {
 
 /* 🔧 Utilidades comuns */
 const ok = (data?: any): IPCResponseFormat => ({ success: true, data });
-const fail = (ctx: string, e: unknown): IPCResponseFormat => ({
-    success: false,
-    message: `[${ctx}]: ${e}`,
-});
+const fail = (context: string, message: any): IPCResponseFormat => {
+    logService.adicionarLog({
+        title: context,
+        mensagem: message,
+        type: 'error'
+    })
+    return {
+        success: false,
+        message: `[${context}]: ${message}`,
+    }
+}
 
 async function safe<T>(
     ctx: string,
@@ -34,6 +41,8 @@ const __dirname = path.dirname(__filename);
 const { prisma } = await import(
     pathToFileURL(path.join(__dirname, "..", "prismaConnection.js")).href
 );
+
+const { logService } = await import(pathToFileURL(path.join(__dirname, "..", "services", "logService.js")).href);
 
 /* 💼 Repositório de Clientes */
 export const RepositorioCliente = {

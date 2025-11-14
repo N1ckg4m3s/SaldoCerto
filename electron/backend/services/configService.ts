@@ -32,6 +32,8 @@ const { listarArquivosDaPasta } = await import(
     pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "listarArquivosDaPasta.js")).href
 );
 
+const { logService } = await import(pathToFileURL(path.join(__dirname, "logService.js")).href);
+
 interface IPCResponseFormat {
     success: boolean;
     message?: string;
@@ -41,10 +43,17 @@ interface IPCResponseFormat {
 
 /* ---------- Utils ---------- */
 const successResponse = (data?: any): IPCResponseFormat => ({ success: true, data });
-const errorResponse = (context: string, message: any): IPCResponseFormat => ({
-    success: false,
-    message: `[${context}]: ${message}`,
-});
+const errorResponse = (context: string, message: any): IPCResponseFormat => {
+    logService.adicionarLog({
+        title: context,
+        mensagem: message,
+        type: 'error'
+    })
+    return {
+        success: false,
+        message: `[${context}]: ${message}`,
+    }
+}
 
 /* ---------- Serviço Principal ---------- */
 export const configurationService = {

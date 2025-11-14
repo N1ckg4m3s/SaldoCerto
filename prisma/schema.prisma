@@ -27,6 +27,12 @@ enum FontSize {
   big
 }
 
+enum TipoLog {
+  error
+  warning
+  success
+}
+
 // --------------------------------------------
 // MODELS
 // --------------------------------------------
@@ -62,4 +68,12 @@ model Configuracao {
   
   fontSize                  FontSize    @default(normal)
   darkMode                  Boolean     @default(false)
+}
+
+model Logs {
+    id          Int         @id @default(autoincrement())
+    data        DateTime
+    title       String?
+    mensagem    String?
+    type        TipoLog
 }

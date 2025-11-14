@@ -48,7 +48,7 @@ export type Movimentacao = {
 }
 
 // Modulos da float por pagina
-type FloatTypeInformacoesCliente = 'editCliente' | 'removeThing' | 'addMovimentacao' | 'export';
+type FloatTypeInformacoesCliente = 'editCliente' | 'removeThing' | 'addMovimentacao' | 'export' | 'logView';
 
 export type FloatGuiProps = {
     active: boolean,
@@ -86,4 +86,13 @@ export interface configsInformations {
     lastBackup: string, // lastBackup,
     fontSize: 'small' | 'normal' | 'big', // fontSize
     darkMode: boolean, // darkMode
+}
+
+// Log Data
+export interface logs {
+    id: string,
+    data: string,
+    message?: string,
+    title?: string,
+    type?: 'error' | 'warning' | 'success',
 }

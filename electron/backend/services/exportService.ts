@@ -6,6 +6,7 @@ const __dirname = path.dirname(__filename);
 
 const { movimentacoesService } = await import(pathToFileURL(path.join(__dirname, "movimentacoesService.js")).href);
 const { clientService } = await import(pathToFileURL(path.join(__dirname, "clientService.js")).href);
+const { logService } = await import(pathToFileURL(path.join(__dirname, "logService.js")).href);
 
 // Save methods
 const { saveAsCSV } = await import(pathToFileURL(path.join(__dirname, '..', 'infrastructure', 'exportSystem', 'saveAsCSV.js')).href);
@@ -144,7 +145,17 @@ const handles: Record<string, handlersProps> = {
 
 /* ---------- Utils ---------- */
 const successResponse = (data?: any): IPCResponseFormat => ({ success: true, data });
-const errorResponse = (context: string, message: any): IPCResponseFormat => ({ success: false, message: `[${context}]: ${message}`, });
+const errorResponse = (context: string, message: any): IPCResponseFormat => {
+    logService.adicionarLog({
+        title: context,
+        mensagem: message,
+        type: 'error'
+    })
+    return {
+        success: false,
+        message: `[${context}]: ${message}`,
+    }
+}
 
 const getDataFromService = async <T = any>(dados: any): Promise<IPCResponseFormat> => {
     const handlerRespectivo = handles[dados.urlDataOrigin];
@@ -176,6 +187,10 @@ export const exportService = {
         if (!dados.urlDataOrigin) return errorResponse('exportService.exportarDados', 'Origem dos dados não informado');
         if (!dados.tipo) return errorResponse('exportService.exportarDados', 'Tipo de exportação não informado');
 
+        if (!(dados.tipo === 'csv' ||
+            dados.tipo === 'pdf' ||
+            dados.tipo === 'json')) return errorResponse('exportService.exportarDados', 'Tipo de exportação incorreto');
+
         const handlerRespectivo = handles[dados.urlDataOrigin]
         if (!handlerRespectivo) return errorResponse('exportService.exportarDados', 'Url de origem não identificada');
 
@@ -205,87 +220,98 @@ export const exportService = {
     },
 
     __exportAsCSV: async (dados: any): Promise<IPCResponseFormat> => {
-        const dataResponse = await getDataFromService(dados);
-        if (!dataResponse.success) return dataResponse;
-        const { data } = dataResponse; // contém { data: { primary, secundary } }
+        try {
+            const dataResponse = await getDataFromService(dados);
+            if (!dataResponse.success) return dataResponse;
+            const { data } = dataResponse; // contém { data: { primary, secundary } }
 
-        const handler = handles[dados.urlDataOrigin];
-        let rows: any[] = [];
+            const handler = handles[dados.urlDataOrigin];
+            let rows: any[] = [];
 
-        if (Array.isArray(data.data.primary)) {
-            rows = [...data.data.primary];
-        } else if (data.data.primary) {
-            rows = [data.data.primary];
-        }
-
-        if (data.data.secundary) {
-            if (Array.isArray(data.data.secundary)) {
-                rows = [...rows, ...data.data.secundary];
-            } else {
-                rows.push(data.data.secundary);
+            if (Array.isArray(data.data.primary)) {
+                rows = [...data.data.primary];
+            } else if (data.data.primary) {
+                rows = [data.data.primary];
             }
+
+            if (data.data.secundary) {
+                if (Array.isArray(data.data.secundary)) {
+                    rows = [...rows, ...data.data.secundary];
+                } else {
+                    rows.push(data.data.secundary);
+                }
+            }
+
+            const { filePath, total } = await saveAsCSV(rows, handler?.baseName || "NoBaseName");
+
+            return successResponse({ filePath, total });
+        } catch (e) {
+            return errorResponse('exportService.__exportAsCSV', e)
         }
-
-        const { filePath, total } = await saveAsCSV(rows, handler?.baseName || "NoBaseName");
-
-        return successResponse({ filePath, total });
     },
 
     __exportAsPDF: async (dados: any): Promise<IPCResponseFormat> => {
-        const dataResponse = await getDataFromService(dados);
-        if (!dataResponse.success) return dataResponse;
-        const { data } = dataResponse;
+        try {
+            const dataResponse = await getDataFromService(dados);
+            if (!dataResponse.success) return dataResponse;
+            const { data } = dataResponse;
 
-        const handler = handles[dados.urlDataOrigin];
+            const handler = handles[dados.urlDataOrigin];
 
-        // Primary → objeto único
-        const listData = data.data.list ?? null;
+            // Primary → objeto único
+            const listData = data.data.list ?? null;
 
-        // Secundary → array de movimentações
-        let informationData: any[] = [];
-        if (data.data.information) {
-            if (Array.isArray(data.data.information)) {
-                informationData = data.data.information;
-            } else {
-                informationData = [data.data.information];
+            // Secundary → array de movimentações
+            let informationData: any[] = [];
+            if (data.data.information) {
+                if (Array.isArray(data.data.information)) {
+                    informationData = data.data.information;
+                } else {
+                    informationData = [data.data.information];
+                }
             }
+
+            // Gera PDF separando list e information
+            const { filePath, total } = await saveAsPDF({
+                baseName: handler?.baseName || 'NoBaseName',
+                list: listData,
+                information: informationData,
+            });
+
+            return successResponse({ filePath, total });
+        } catch (e) {
+            return errorResponse('exportService.__exportAsPDF', e)
         }
-
-        // Gera PDF separando list e information
-        const { filePath, total } = await saveAsPDF({
-            baseName: handler?.baseName || 'NoBaseName',
-            list: listData,
-            information: informationData,
-        });
-
-        return successResponse({ filePath, total });
     },
 
     __exportAsJSON: async (dados: any): Promise<IPCResponseFormat> => {
-        const dataResponse = await getDataFromService(dados);
-        if (!dataResponse.success) return dataResponse;
-        const { data } = dataResponse;
+        try {
+            const dataResponse = await getDataFromService(dados);
+            if (!dataResponse.success) return dataResponse;
+            const { data } = dataResponse;
 
-        const handler = handles[dados.urlDataOrigin];
-        let rows: any[] = [];
+            const handler = handles[dados.urlDataOrigin];
+            let rows: any[] = [];
 
-        if (Array.isArray(data.data.primary)) {
-            rows = [...data.data.primary];
-        } else if (data.data.primary) {
-            rows = [data.data.primary];
-        }
-
-        if (data.data.secundary) {
-            if (Array.isArray(data.data.secundary)) {
-                rows = [...rows, ...data.data.secundary];
-            } else {
-                rows.push(data.data.secundary);
+            if (Array.isArray(data.data.primary)) {
+                rows = [...data.data.primary];
+            } else if (data.data.primary) {
+                rows = [data.data.primary];
             }
+
+            if (data.data.secundary) {
+                if (Array.isArray(data.data.secundary)) {
+                    rows = [...rows, ...data.data.secundary];
+                } else {
+                    rows.push(data.data.secundary);
+                }
+            }
+
+            const { filePath, total } = await saveAsJSON(rows, handler?.baseName || 'NoBaseName');
+
+            return successResponse({ filePath, total });
+        } catch (e) {
+            return errorResponse('exportService.__exportAsJSON', e)
         }
-
-        const { filePath, total } = await saveAsJSON(rows, handler?.baseName || 'NoBaseName');
-
-        return successResponse({ filePath, total });
     },
-
 };

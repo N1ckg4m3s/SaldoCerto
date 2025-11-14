@@ -19,6 +19,7 @@ import ConfiguracoesDoSistema from './pages/configuracoes/page';
 
 // STYLE
 import { GlobalStyle } from './globalStyleInformations';
+import TabelaDeLogsDoSistema from './pages/logger/page';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -79,6 +80,7 @@ const App = () => {
                 <Route path='/ListaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
                 <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
                 <Route path='/ConfiguracoesDoSistema' element={<ConfiguracoesDoSistema />} />
+                <Route path='/TabelaDeLogsDoSistema' element={<TabelaDeLogsDoSistema />} />
               </Routes>
             </HashRouter>
           )}
