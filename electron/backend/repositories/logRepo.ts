@@ -11,10 +11,13 @@ interface IPCResponseFormat {
 
 /* 🔧 Utilidades comuns */
 const ok = (data?: any): IPCResponseFormat => ({ success: true, data });
-const fail = (ctx: string, e: unknown): IPCResponseFormat => ({
-    success: false,
-    message: `[${ctx}]: ${e}`,
-});
+const fail = (ctx: string, e: unknown): IPCResponseFormat => {
+    console.error(ctx, e)
+    return {
+        success: false,
+        message: `[${ctx}]: ${e}`,
+    }
+};
 
 async function safe<T>(
     ctx: string,

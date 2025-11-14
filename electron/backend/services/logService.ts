@@ -71,4 +71,14 @@ export const logService = {
 
         return successResponse();
     },
+
+    limparLogsAntigos: async (): Promise<IPCResponseFormat> => {
+        const dataLimite = new Date();
+        dataLimite.setUTCDate(dataLimite.getUTCDate() - 50);
+
+        const ServiceReturn = await RepositorioLogs.limparLogsAntigos(dataLimite);
+        if (!ServiceReturn.sucess) return ServiceReturn;
+
+        return successResponse()
+    }
 };

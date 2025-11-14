@@ -81,7 +81,7 @@ export const ModuleFieldRow = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  height: 30px;
+  min-height: 30px;
 `;
 
 export const ModuleFormLabel = styled.label`

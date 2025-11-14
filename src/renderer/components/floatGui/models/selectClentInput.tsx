@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ApiCaller } from "@renderer/controler/ApiCaller";
 import * as s from '../style'
 
@@ -23,6 +23,8 @@ export const SelectClient: React.FC<SelectClientProps> = ({ onSelect, showSelect
 
     const isEqualTheOnly: boolean = results.length == 1 && results[0]?.nome == query;
 
+    const hasAnEqual = useMemo(() => results.some(e => e.nome === query), [query, results]);
+
     useEffect(() => {
         const timeout = setTimeout(async () => {
             if (!query || isEqualTheOnly) return setResults([]);
@@ -40,7 +42,7 @@ export const SelectClient: React.FC<SelectClientProps> = ({ onSelect, showSelect
                 placeholder="Buscar cliente..."
                 onFocus={refreshOptions}
             />
-            {!isEqualTheOnly && results.length > 0 && (
+            {!(isEqualTheOnly || hasAnEqual) && results.length > 0 && (
                 <s.SelectClientSelect>
                     {results.map((c) => (
                         <s.SelectClientOption

@@ -140,6 +140,15 @@ export const movimentacoesService = {
             if (!movRes.success) return errorResponse('RegistrarPagamentoEmNota', 'Erro ao adicionar movimentação');
 
             if (valorUtilizado > 0) {
+                logService.adicionarLog({
+                    type: 'warning',
+                    title: 'Efetuado um pagamneto maior que a divida',
+                    mensagem: (
+                        'Pagamento registrado com sucesso \n' +
+                        ' Valor utilizado: R$ ' + valorUtilizado.toFixed(2) + '\n' +
+                        ' Valor restante: R$ ' + valorDePagamento.toFixed(2)),
+                })
+
                 return successResponse({
                     mensagem: ('Pagamento registrado com sucesso \n' +
                         ' Valor utilizado: R$ ' + valorUtilizado.toFixed(2) + '\n' +
