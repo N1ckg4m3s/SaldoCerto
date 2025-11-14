@@ -8,6 +8,7 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist'),
   },
+  base: './',
   resolve: {
     alias: {
       '@renderer': path.resolve(__dirname, 'src/renderer'),

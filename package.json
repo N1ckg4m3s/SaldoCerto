@@ -9,7 +9,21 @@
     "dev": "concurrently \"vite\" \"npm run build:electron && wait-on http://localhost:5173 && electron build/electron/main.js\"",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
-    "build": "vite build && tsc -p tsconfig.electron.json && electron-builder"
+    "build": "vite build && tsc -p tsconfig.electron.json && electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.saldocerto.app",
+    "files": [
+      "dist/**/*",
+      "build/electron/**/*",
+      "electron/assets/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "icon": "electron/assets/IconeSaldoCerto.ico",
+      "forceCodeSigning": false
+    }
   },
   "keywords": [],
   "author": "",
