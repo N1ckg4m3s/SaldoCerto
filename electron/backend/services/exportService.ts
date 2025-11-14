@@ -141,6 +141,26 @@ const handles: Record<string, handlersProps> = {
             })
         }
     },
+
+    '/logs/get': {
+        requiredArgs: [],
+        baseName: 'logs-do-sistema',
+        getFormatedData: async (args: any) => {
+            const service = await logService.obterLogs // obtem com: logs
+
+            const serviceReturn = await service(args);
+            if (!serviceReturn.success) return serviceReturn;
+
+            return successResponse({
+                list: serviceReturn.data.logs.map((e: any) => ({
+                    Tipo: e.type,
+                    Data: formatacaoData(e.data),
+                    Titulo: e.title,
+                    Mensagem: e.mensagem
+                })),
+            })
+        }
+    },
 }
 
 /* ---------- Utils ---------- */
@@ -245,8 +265,8 @@ export const exportService = {
             const { filePath, total } = await saveAsCSV(rows, handler?.baseName || "NoBaseName");
 
             return successResponse({ filePath, total });
-        } catch (e) {
-            return errorResponse('exportService.__exportAsCSV', e)
+        } catch (e: any) {
+            return errorResponse('exportService.__exportAsCSV', (e as Error).message || '- no erro message -')
         }
     },
 
@@ -279,8 +299,8 @@ export const exportService = {
             });
 
             return successResponse({ filePath, total });
-        } catch (e) {
-            return errorResponse('exportService.__exportAsPDF', e)
+        } catch (e: any) {
+            return errorResponse('exportService.__exportAsPDF', (e as Error).message || '- no erro message -')
         }
     },
 
@@ -310,8 +330,8 @@ export const exportService = {
             const { filePath, total } = await saveAsJSON(rows, handler?.baseName || 'NoBaseName');
 
             return successResponse({ filePath, total });
-        } catch (e) {
-            return errorResponse('exportService.__exportAsJSON', e)
+        } catch (e: any) {
+            return errorResponse('exportService.__exportAsJSON', (e as Error).message || '- no erro message -')
         }
     },
 };

@@ -39,16 +39,16 @@ async function createWindow() {
     iniciarTodosControladores();
 
     /* FAST - TESTS */
-    const { exportService } = await import(pathToFileURL(path.join(__dirname, 'backend', 'services', 'exportService.js')).href)
+    // const { exportService } = await import(pathToFileURL(path.join(__dirname, 'backend', 'services', 'exportService.js')).href)
 
     // /* Gera um PDF com as informações do cliente e suas movimentações */
-    exportService.exportarDados({
-        urlDataOrigin: '/cliente/getInformationsById',
-        necessaryPageData: { id: 'cmhqf3cyj0003vv04cy80g77p' },
-        filters: {},
-        onlyCurrentPage: true,
-        tipo: 'Sem tipo',
-    })
+    // exportService.exportarDados({
+    //     urlDataOrigin: '/cliente/getInformationsById',
+    //     necessaryPageData: { id: 'cmhqf3cyj0003vv04cy80g77p' },
+    //     filters: {},
+    //     onlyCurrentPage: true,
+    //     tipo: 'Sem tipo',
+    // })
 }
 
 app.on('ready', createWindow);

@@ -318,9 +318,7 @@ const renderHistoricoRow = (value: HistoricoDeLancamentoDoClienteView, index: nu
             <sh.tableData>{valorAbatido}</sh.tableData>
             <sh.tableData>{value.codigo}</sh.tableData>
             <sh.tableData>
-                <sh.tableData>
-                    <sh.smallTableButton onClick={() => buttonAction(value)}>❌</sh.smallTableButton>
-                </sh.tableData>
+                <sh.smallTableButton onClick={() => buttonAction(value)}>❌</sh.smallTableButton>
             </sh.tableData>
         </sh.tableRow>
     );

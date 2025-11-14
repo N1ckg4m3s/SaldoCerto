@@ -39,7 +39,7 @@ export const logService = {
             if (filters.tipoLog) filtros.type = filters.tipoLog;
 
             const serviceResponse = await RepositorioLogs.obterLogs({ page, limit, filtros })
-            if (!serviceResponse.sucesso) return serviceResponse
+            if (!serviceResponse.sucesso) return serviceResponse;
 
             return successResponse(serviceResponse.data)
         } catch (e) {
