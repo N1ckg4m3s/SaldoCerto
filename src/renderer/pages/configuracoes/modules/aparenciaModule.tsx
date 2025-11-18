@@ -32,7 +32,7 @@ export const ConfigAparenciaModule: React.FC<props> = ({ config, update }) => {
     const handleSave = async () => {
         try {
             const payload = {
-                darkMode: darkMode,
+                darkMode: !darkMode, // o contrario.
                 fontSize: fontSize
             }
 

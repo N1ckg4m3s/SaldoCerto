@@ -12,9 +12,10 @@ import { ApiCaller } from '@renderer/controler/ApiCaller';
 
 interface props {
     onComplete?: () => void;
+    onlyBasicConfigs?: boolean
 }
 
-const ConfiguracoesDoSistema: React.FC<props> = ({ onComplete }) => {
+const ConfiguracoesDoSistema: React.FC<props> = ({ onComplete, onlyBasicConfigs }) => {
     const { addNotification } = useNotification();
     const [config, setConfig] = useState<configsInformations>({
         backupIntervalDays: 7, // backupInterval
@@ -61,16 +62,22 @@ const ConfiguracoesDoSistema: React.FC<props> = ({ onComplete }) => {
                 onComplete={() => onComplete?.()}
             />
 
-            <ConfigRestauracaoModule />
+            {!onlyBasicConfigs && (
+                <>
+                    <ConfigRestauracaoModule />
 
-            <ConfigAparenciaModule
-                update={fetchApiConfigs}
-                config={config}
-            />
+                    <ConfigAparenciaModule
+                        update={fetchApiConfigs}
+                        config={config}
+                    />
 
-            <ConfigInformacoesModule
-                config={config}
-            />
+                    <ConfigInformacoesModule
+                        config={config}
+                    />
+                </>
+            )}
+
+
         </sh.MainPageContainer>
     )
 }

@@ -98,7 +98,7 @@ export const configurationService = {
             if (!repoResponse.success) {
                 return errorResponse("configurationService.setAparence", repoResponse.message);
             }
-            return successResponse({});
+            return repoResponse;
         } else {
             return errorResponse("configurationService.setAparence", "Não tem configuração pre salva");
         }

@@ -5,30 +5,34 @@ import fs from 'fs';  // Importando o módulo fs para verificar a existência do
 import dotenv from "dotenv";
 
 /** .ENV SISTEM **/
-const envPath = path.join(process.resourcesPath, "app.env");
-dotenv.config({ path: envPath });
+let isDev = process.env.NODE_ENV === 'development';
 
-/** LOGS SISTEM **/
-app.setAppLogsPath(); // deixa o Electron decidir onde salvar logs
-
-const logFile = path.join(app.getPath("logs"), "main.log");
-
-function log(...args: any[]) {
-    const line = `[${new Date().toISOString()}] ${args.join(" ")}\n`;
-    fs.appendFileSync(logFile, line);
+if (!isDev) {
+    const envPath = path.join(process.resourcesPath, "app.env");
+    dotenv.config({ path: envPath });
+    isDev = process.env.NODE_ENV === 'development'; // re-checa depois de carregar app.env
 }
 
-global.console.log = (...args: any[]) => log("[LOG]", ...args);
-global.console.error = (...args: any[]) => log("[ERROR]", ...args);
+/** LOGS SISTEM **/
+if (!isDev) {
+    app.setAppLogsPath();
+
+    const logFile = path.join(app.getPath("logs"), "main.log");
+
+    function log(...args: any[]) {
+        const line = `[${new Date().toISOString()}] ${args.join(" ")}\n`;
+        fs.appendFileSync(logFile, line);
+    }
+
+    global.console.log = (...args: any[]) => log("[LOG]", ...args);
+    global.console.error = (...args: any[]) => log("[ERROR]", ...args);
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Importando o iniciador dos controladores
-const ControllerStartPath = path.join(__dirname, 'utilits', 'startControllers.js');
-const ControllerStartURL = pathToFileURL(ControllerStartPath).href;
-
-const { iniciarTodosControladores } = await import(ControllerStartURL);
+const { iniciarTodosControladores } = await import(pathToFileURL(path.join(__dirname, 'utilits', 'startControllers.js')).href);
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -40,14 +44,10 @@ function fileExists(filePath: string): boolean {
     return fs.existsSync(filePath);  // Verifica se o arquivo existe de forma síncrona
 }
 
-console.log("[DEBUG] __dirname:", __dirname);
-console.log("[DEBUG] ControllerStartPath:", ControllerStartPath);
-console.log("[DEBUG] Existe startControllers:", fs.existsSync(ControllerStartPath));
-
 async function createWindow() {
     try {
         await iniciarTodosControladores();
-        console.log("Controladores iniciados :)")
+        console.log("Controladores iniciados ☑")
     } catch (e) {
         console.error('Erro ao iniciar controladores', e)
     }
@@ -64,12 +64,9 @@ async function createWindow() {
         },
     });
 
-    const isDev = process.env.NODE_ENV === 'development';
-
     const appInterfaceExists = fileExists(AppInterface);
 
     if (isDev || !appInterfaceExists) {
-        console.log('using Url Mode')
         mainWindow.loadURL('http://localhost:5173');
     } else {
         mainWindow.loadFile(AppInterface);

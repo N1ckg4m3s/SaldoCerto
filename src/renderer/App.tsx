@@ -25,7 +25,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasConfig, setHasConfig] = useState(false);
   const [themeConfig, setThemeConfig] = useState<{ darkMode: boolean; fontSize: "small" | "normal" | "big" }>({
-    darkMode: true,
+    darkMode: false,
     fontSize: "normal"
   });
 
@@ -33,7 +33,7 @@ const App = () => {
     ApiCaller({
       url: '/backup/init',
       onError(erro) {
-        console.log('Erro ao iniciar processo de background', erro);
+        console.error('Erro ao iniciar processo de background', erro);
       },
     });
 
@@ -43,7 +43,7 @@ const App = () => {
       onSuccess: async (response: any) => {
         if (response?.data !== null && response?.data !== undefined) {
           setThemeConfig({
-            darkMode: response.data.darkMode ?? true,
+            darkMode: response.data.darkMode ?? false,
             fontSize: response.data.fontSize ?? "normal"
           });
 
@@ -53,7 +53,7 @@ const App = () => {
         setIsLoading(false);
       },
       onError(erro) {
-        console.log('Erro ao obter configuração', erro);
+        console.error('Erro ao obter configuração', erro);
       },
     });
   }, []);
@@ -61,32 +61,34 @@ const App = () => {
   if (isLoading) return <LoadingComponent />;
 
   return (
-    <ThemeProvider
-      defaultDarkMode={themeConfig.darkMode}
-      defaultFontSize={themeConfig.fontSize}
-    >
-      <ThemeProviderWrapper>
-        <NotificationProvider>
-          <GlobalStyle />
-          {!hasConfig ? (
-            <ConfiguracoesDoSistema onComplete={() => setHasConfig(true)} />
-          ) : (
-            <HashRouter>
-              <BarraDeNavegacao />
-              <Routes>
-                <Route path='/' element={<Dashboard />} />
-                <Route path='/HistoricoDeLancamentos' element={<HistoricoDeLancamentos />} />
-                <Route path='/informacoesDoCliente/:id' element={<InformacoesDoCliente />} />
-                <Route path='/ListaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
-                <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
-                <Route path='/ConfiguracoesDoSistema' element={<ConfiguracoesDoSistema />} />
-                <Route path='/TabelaDeLogsDoSistema' element={<TabelaDeLogsDoSistema />} />
-              </Routes>
-            </HashRouter>
-          )}
-        </NotificationProvider>
-      </ThemeProviderWrapper>
-    </ThemeProvider>
+    <HashRouter>
+      <ThemeProvider
+        defaultDarkMode={themeConfig.darkMode}
+        defaultFontSize={themeConfig.fontSize}
+      >
+        <ThemeProviderWrapper>
+          <NotificationProvider>
+            <GlobalStyle />
+            {!hasConfig ? (
+              <ConfiguracoesDoSistema onComplete={() => setHasConfig(true)} onlyBasicConfigs/>
+            ) : (
+              <>
+                <BarraDeNavegacao />
+                <Routes>
+                  <Route path='/' element={<Dashboard />} />
+                  <Route path='/HistoricoDeLancamentos' element={<HistoricoDeLancamentos />} />
+                  <Route path='/informacoesDoCliente/:id' element={<InformacoesDoCliente />} />
+                  <Route path='/ListaDeClientesCadastrados' element={<ListaDeClientesCadastrados />} />
+                  <Route path='/TabelaDeClientesEmAtrazo' element={<TabelaDeClientesEmAtrazo />} />
+                  <Route path='/ConfiguracoesDoSistema' element={<ConfiguracoesDoSistema />} />
+                  <Route path='/TabelaDeLogsDoSistema' element={<TabelaDeLogsDoSistema />} />
+                </Routes>
+              </>
+            )}
+          </NotificationProvider>
+        </ThemeProviderWrapper>
+      </ThemeProvider>
+    </HashRouter>
   );
 };
 
