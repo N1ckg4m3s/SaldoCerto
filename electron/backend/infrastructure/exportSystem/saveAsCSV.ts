@@ -45,6 +45,6 @@ export const saveAsCSV = async (
     fs.writeFileSync(filePath, "\uFEFF" + csvLines.join("\n"), "utf8");
 
     // salva cópia final (ex: em Downloads)
-    const destino = await salvarArquivoDeExportacao(filePath, baseName);
+    const destino = await salvarArquivoDeExportacao(filePath);
     return { filePath: destino, total: rows.length };
 };

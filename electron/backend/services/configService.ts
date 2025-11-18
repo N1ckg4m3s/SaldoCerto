@@ -5,32 +5,15 @@ import { fileURLToPath, pathToFileURL } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const { RepositorioConfiguracoes } = await import(
-    pathToFileURL(path.join(__dirname, "..", "repositories", "configRepo.js")).href
-);
+const { RepositorioConfiguracoes } = await import(pathToFileURL(path.join(__dirname, "..", "repositories", "configRepo.js")).href);
+const { SelecionarPasta } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarPasta.js")).href);
+const { SelecionarArquivo } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarArquivo.js")).href);
+const { criarArquivoDeBackup } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "criarArquivoDeBackup.js")).href);
+const { validateBancoRestore } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "validateBancoRestore.js")).href);
+const { existsFile, copyFile } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "fileHandler.js")).href);
+const { listarArquivosDaPasta } = await import(pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "listarArquivosDaPasta.js")).href);
 
-const { SelecionarPasta } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarPasta.js")).href
-);
-
-const { SelecionarArquivo } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "selecionarArquivo.js")).href
-);
-
-const { criarArquivoDeBackup } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "criarArquivoDeBackup.js")).href
-);
-
-const { validateBancoRestore } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "validateBancoRestore.js")).href
-);
-
-const { existsFile, copyFile } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "fileHandler.js")).href
-);
-const { listarArquivosDaPasta } = await import(
-    pathToFileURL(path.join(__dirname, "..", "infrastructure", "fileSystem", "listarArquivosDaPasta.js")).href
-);
+const dbPath = (await import(pathToFileURL(path.join(__dirname, '..', 'dataBasePath.js')).href)).default;
 
 const { logService } = await import(pathToFileURL(path.join(__dirname, "logService.js")).href);
 
@@ -167,12 +150,11 @@ export const configurationService = {
             return errorResponse('configurationService.RestaurarDeArquivoDeBackup', erro);
 
         // 1️⃣ Localiza o banco ativo via .env
-        const dbUrl = process.env.DATABASE_URL;
-        if (!dbUrl || !dbUrl.startsWith("file:")) {
-            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'DATABASE_URL inválida ou ausente no .env');
+        if (!dbPath || !dbPath.startsWith("file:")) {
+            return errorResponse('configurationService.RestaurarDeArquivoDeBackup', 'dbPath inválida ou ausente no .env');
         }
 
-        const caminhoBancoAtual = path.resolve('prisma', dbUrl.replace("file:", ""));
+        const caminhoBancoAtual = path.resolve('prisma', dbPath.replace("file:", ""));
 
         if (!await existsFile(caminhoBancoAtual)) {
             return errorResponse('configurationService.RestaurarDeArquivoDeBackup', `Banco atual não encontrado: ${caminhoBancoAtual}`);

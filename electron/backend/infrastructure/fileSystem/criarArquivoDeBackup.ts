@@ -7,6 +7,8 @@ import { fileURLToPath, pathToFileURL } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const dbPath = (await import(pathToFileURL(path.join(__dirname, '..', '..', 'dataBasePath.js')).href)).default;
+
 dotenv.config();
 
 const mkdir = promisify(fs.mkdir);
@@ -34,15 +36,14 @@ export const criarArquivoDeBackup = async (backupDir: string): Promise<string> =
     }
 
     // Pega o caminho do banco a partir do .env
-    const dbUrl = process.env.DATABASE_URL;
-    if (!dbUrl || !dbUrl.startsWith("file:")) {
+    if (!dbPath || !dbPath.startsWith("file:")) {
         throw new Error("DATABASE_URL inválida ou ausente no .env");
     }
 
     // Extrai o caminho físico do arquivo SQLite
-    const dbPath = path.resolve('prisma', dbUrl.replace("file:", ""));
-    if (!(await existsFile(dbPath))) {
-        throw new Error(`Banco de dados não encontrado em: ${dbPath}`);
+    const dbSolvedPath = path.resolve('prisma', dbPath.replace("file:", ""));
+    if (!(await existsFile(dbSolvedPath))) {
+        throw new Error(`Banco de dados não encontrado em: ${dbSolvedPath}`);
     }
 
     // Cria nome do arquivo de backup com timestamp
@@ -51,7 +52,7 @@ export const criarArquivoDeBackup = async (backupDir: string): Promise<string> =
     const backupPath = path.join(backupDir, backupName);
 
     // Copia o arquivo físico
-    await copyFile(dbPath, backupPath);
+    await copyFile(dbSolvedPath, backupPath);
 
     return backupPath;
 }
